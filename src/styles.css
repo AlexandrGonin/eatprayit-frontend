@@ -1,0 +1,178 @@
+/* Сброс стилей */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Основные стили тела */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    min-height: 100vh;
+    padding: 20px;
+    color: #333;
+}
+
+/* Контейнер приложения */
+.app {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+/* Шапка */
+.header {
+    text-align: center;
+    margin-bottom: 30px;
+    color: white;
+}
+
+.header-title {
+    font-size: 28px;
+    margin-bottom: 8px;
+}
+
+.header-subtitle {
+    font-size: 16px;
+    opacity: 0.9;
+}
+
+/* Карточка профиля */
+.profile-card {
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.profile-title {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 20px;
+}
+
+/* Аватар */
+.avatar-block {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.avatar-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 3px solid #667eea;
+}
+
+.avatar-placeholder {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: #667eea;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+/* Информация пользователя */
+.user-info {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.user-name {
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+.user-username {
+    color: #666;
+    font-size: 14px;
+}
+
+/* Блок био */
+.bio-block {
+    margin-bottom: 20px;
+}
+
+.bio-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.bio-textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-family: inherit;
+    resize: vertical;
+}
+
+.bio-textarea:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+/* Кнопка */
+.save-button {
+    width: 100%;
+    background: #667eea;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.save-button:hover {
+    background: #5a6fd8;
+}
+
+.save-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Загрузка */
+.loading-section {
+    text-align: center;
+    color: white;
+    display: none;
+}
+
+.loading-section.show {
+    display: block;
+}
+
+.loading-spinner {
+    width: 30px;
+    height: 30px;
+    border: 3px solid rgba(255,255,255,0.3);
+    border-top: 3px solid white;
+    border-radius: 50%;
+    margin: 0 auto 10px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Адаптивность */
+@media (max-width: 480px) {
+    body {
+        padding: 15px;
+    }
+    
+    .profile-card {
+        padding: 15px;
+    }
+}
