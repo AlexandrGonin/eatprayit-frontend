@@ -1,6 +1,6 @@
 // Конфигурация
 const CONFIG = {
-    BACKEND_URL: import.meta.env.VITE_BACKEND_URL || 'http://localhost:3001'
+    BACKEND_URL: 'https://eatprayit-backend.onrender.com/'
 };
 
 // Элементы DOM
