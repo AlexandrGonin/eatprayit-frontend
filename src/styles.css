@@ -5,145 +5,201 @@
     box-sizing: border-box;
 }
 
-/* Основные стили тела */
+/* Основные стили */
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: linear-gradient(135deg, #667eea, #764ba2);
+    background-color: #f8f9fa;
     min-height: 100vh;
-    padding: 20px;
     color: #333;
 }
 
-/* Контейнер приложения */
 .app {
-    max-width: 400px;
-    margin: 0 auto;
+    min-height: 100vh;
 }
 
 /* Шапка */
 .header {
-    text-align: center;
-    margin-bottom: 30px;
-    color: white;
-}
-
-.header-title {
-    font-size: 28px;
-    margin-bottom: 8px;
-}
-
-.header-subtitle {
-    font-size: 16px;
-    opacity: 0.9;
-}
-
-/* Карточка профиля */
-.profile-card {
     background: white;
-    border-radius: 15px;
-    padding: 20px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    border-bottom: 1px solid #e1e5e9;
+    padding: 12px 16px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
 }
 
-.profile-title {
-    text-align: center;
-    margin-bottom: 20px;
-    font-size: 20px;
-}
-
-/* Аватар */
-.avatar-block {
+.user-header {
     display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
+    align-items: center;
+    gap: 12px;
 }
 
-.avatar-image {
-    width: 80px;
-    height: 80px;
+.avatar-small {
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    border: 3px solid #667eea;
+    object-fit: cover;
+    cursor: pointer;
 }
 
-.avatar-placeholder {
-    width: 80px;
-    height: 80px;
+.avatar-placeholder-small {
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    background: #667eea;
+    background: #007bff;
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
-    font-size: 24px;
-    font-weight: bold;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
 }
 
-/* Информация пользователя */
-.user-info {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.user-name {
+.user-name-header {
     font-size: 18px;
-    margin-bottom: 5px;
+    font-weight: 600;
+    color: #333;
 }
 
-.user-username {
+/* Основной экран */
+.main {
+    padding-top: 70px;
+    min-height: 100vh;
+}
+
+.main-screen {
+    padding: 20px;
+    text-align: center;
     color: #666;
-    font-size: 14px;
 }
 
-/* Блок био */
-.bio-block {
-    margin-bottom: 20px;
+/* Экран редактирования */
+.edit-profile-screen {
+    padding: 20px;
+    background: white;
+    min-height: calc(100vh - 70px);
 }
 
-.bio-label {
+.profile-edit-card {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.profile-edit-card h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.edit-avatar-block {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+.avatar-edit {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #007bff;
+}
+
+.avatar-placeholder-edit {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: #007bff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 32px;
+    font-weight: 600;
+    border: 3px solid #0056b3;
+}
+
+/* Форма редактирования */
+.edit-form {
+    text-align: left;
+}
+
+.form-group {
+    margin-bottom: 24px;
+}
+
+.form-group label {
     display: block;
     margin-bottom: 8px;
     font-weight: 500;
+    color: #333;
 }
 
-.bio-textarea {
+.bio-edit-textarea {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     border: 1px solid #ddd;
     border-radius: 8px;
     font-family: inherit;
+    font-size: 14px;
     resize: vertical;
+    min-height: 100px;
 }
 
-.bio-textarea:focus {
+.bio-edit-textarea:focus {
     outline: none;
-    border-color: #667eea;
+    border-color: #007bff;
 }
 
-/* Кнопка */
-.save-button {
-    width: 100%;
-    background: #667eea;
+/* Кнопки */
+.form-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.save-profile-btn {
+    flex: 1;
+    background: #007bff;
     color: white;
     border: none;
-    padding: 12px;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.save-profile-btn:hover {
+    background: #0056b3;
+}
+
+.save-profile-btn:disabled {
+    background: #6c757d;
+    cursor: not-allowed;
+}
+
+.cancel-btn {
+    flex: 1;
+    background: #6c757d;
+    color: white;
+    border: none;
+    padding: 12px 20px;
     border-radius: 8px;
     font-size: 16px;
     cursor: pointer;
 }
 
-.save-button:hover {
-    background: #5a6fd8;
-}
-
-.save-button:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
+.cancel-btn:hover {
+    background: #545b62;
 }
 
 /* Загрузка */
 .loading-section {
     text-align: center;
-    color: white;
+    padding: 50px 20px;
     display: none;
 }
 
@@ -152,12 +208,12 @@ body {
 }
 
 .loading-spinner {
-    width: 30px;
-    height: 30px;
-    border: 3px solid rgba(255,255,255,0.3);
-    border-top: 3px solid white;
+    width: 40px;
+    height: 40px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #007bff;
     border-radius: 50%;
-    margin: 0 auto 10px;
+    margin: 0 auto 16px;
     animation: spin 1s linear infinite;
 }
 
@@ -168,11 +224,19 @@ body {
 
 /* Адаптивность */
 @media (max-width: 480px) {
-    body {
-        padding: 15px;
+    .header {
+        padding: 10px 16px;
     }
     
-    .profile-card {
-        padding: 15px;
+    .main {
+        padding-top: 60px;
+    }
+    
+    .edit-profile-screen {
+        padding: 16px;
+    }
+    
+    .form-actions {
+        flex-direction: column;
     }
 }
