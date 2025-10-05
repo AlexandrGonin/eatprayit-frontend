@@ -1,6 +1,6 @@
 // Конфигурация приложения
 const CONFIG = {
-    BACKEND_URL: 'https://your-backend.onrender.com' // ЗАМЕНИТЕ после деплоя
+    BACKEND_URL: 'https://eatprayit-backend.onrender.com/' // ЗАМЕНИТЕ после деплоя
 };
 
 // Получаем элементы страницы
