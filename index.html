@@ -19,8 +19,13 @@
         </header>
 
         <main class="main">
-            <!-- Главный экран -->
+            <!-- Главный экран - ПУСТОЙ -->
             <div id="main-screen" class="main-screen">
+                <!-- Пустая страница -->
+            </div>
+
+            <!-- Экран профиля -->
+            <div id="profile-screen" class="profile-screen" style="display: none;">
                 <div class="profile-view">
                     <div class="profile-avatar-large">
                         <img id="profile-avatar" class="avatar-large" src="" alt="Avatar" style="display: none;">
@@ -30,6 +35,7 @@
                     <div class="profile-info">
                         <h2 id="profile-name" class="profile-name"></h2>
                         <p id="profile-username" class="profile-username"></p>
+                        <p id="profile-position" class="profile-position"></p>
                         
                         <div class="bio-section">
                             <h3>О себе</h3>
@@ -58,6 +64,11 @@
                     
                     <div class="edit-form">
                         <div class="form-group">
+                            <label for="edit-position">Должность</label>
+                            <input type="text" id="edit-position" class="text-input" placeholder="Ваша должность">
+                        </div>
+
+                        <div class="form-group">
                             <label for="edit-bio">О себе</label>
                             <textarea 
                                 id="edit-bio" 
@@ -69,22 +80,26 @@
 
                         <div class="form-group">
                             <label for="edit-telegram">Telegram</label>
-                            <input type="text" id="edit-telegram" class="link-input" placeholder="@username">
+                            <input type="text" id="edit-telegram" class="link-input" placeholder="@username или t.me/username">
+                            <small class="input-hint">Разрешены: t.me, telegram.me</small>
                         </div>
 
                         <div class="form-group">
                             <label for="edit-linkedin">LinkedIn</label>
-                            <input type="text" id="edit-linkedin" class="link-input" placeholder="https://linkedin.com/in/username">
+                            <input type="text" id="edit-linkedin" class="link-input" placeholder="linkedin.com/in/username">
+                            <small class="input-hint">Только домен linkedin.com</small>
                         </div>
 
                         <div class="form-group">
                             <label for="edit-vk">VK</label>
-                            <input type="text" id="edit-vk" class="link-input" placeholder="https://vk.com/username">
+                            <input type="text" id="edit-vk" class="link-input" placeholder="vk.com/username">
+                            <small class="input-hint">Только домен vk.com</small>
                         </div>
 
                         <div class="form-group">
                             <label for="edit-instagram">Instagram</label>
-                            <input type="text" id="edit-instagram" class="link-input" placeholder="https://instagram.com/username">
+                            <input type="text" id="edit-instagram" class="link-input" placeholder="instagram.com/username">
+                            <small class="input-hint">Только домен instagram.com</small>
                         </div>
 
                         <div class="form-actions">
