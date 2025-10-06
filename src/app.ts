@@ -39,8 +39,6 @@ async function initializeApp(): Promise<void> {
     try {
         showLoading(true);
         
-        console.log('🚀 Запуск приложения...');
-        
         const tg = (window as any).Telegram.WebApp;
         if (!tg) {
             throw new Error('Telegram WebApp не загружен');
@@ -50,14 +48,12 @@ async function initializeApp(): Promise<void> {
         tg.ready();
         
         const telegramUser = tg.initDataUnsafe?.user;
-        console.log('👤 Данные пользователя Telegram:', telegramUser);
         
         if (!telegramUser) {
             throw new Error('Не удалось получить данные пользователя из Telegram');
         }
         
         // Авторизация на бэкенде
-        console.log('🔐 Отправляем данные на бэкенд...');
         const response = await fetch(`${CONFIG.BACKEND_URL}/auth/telegram`, {
             method: 'POST',
             headers: {
@@ -66,16 +62,12 @@ async function initializeApp(): Promise<void> {
             body: JSON.stringify(telegramUser)
         });
         
-        console.log('📡 Ответ бэкенда:', response.status);
-        
         if (!response.ok) {
             const errorData = await response.json().catch(() => ({ error: 'Ошибка сервера' }));
             throw new Error(errorData.error || `Ошибка бэкенда: ${response.status}`);
         }
         
         const data = await response.json();
-        console.log('✅ Данные пользователя:', data);
-        
         currentUser = data.user;
         
         // Показываем шапку
@@ -83,10 +75,8 @@ async function initializeApp(): Promise<void> {
         showLoading(false);
         showScreen('main');
         
-        console.log('✅ Приложение успешно запущено');
-        
     } catch (error) {
-        console.error('💥 Ошибка инициализации:', error);
+        console.error('Ошибка инициализации:', error);
         const errorMessage = error instanceof Error ? error.message : 'Ошибка загрузки приложения';
         showError(errorMessage);
         showLoading(false);
@@ -99,12 +89,10 @@ function renderHeader(user: any): void {
     
     // Аватар в шапке
     if (user.photo_url) {
-        console.log('🔄 Загружаем аватар в шапку:', user.photo_url);
         elements.userAvatar.src = user.photo_url;
         elements.userAvatar.style.display = 'block';
         elements.avatarPlaceholderSmall.style.display = 'none';
     } else {
-        console.log('📷 Аватар не найден, используем placeholder в шапке');
         const firstLetter = user.first_name ? user.first_name[0].toUpperCase() : 'U';
         elements.avatarPlaceholderSmall.textContent = firstLetter;
         elements.userAvatar.style.display = 'none';
@@ -120,12 +108,10 @@ function renderProfile(user: any): void {
     
     // Аватар в профиле
     if (user.photo_url) {
-        console.log('🔄 Загружаем аватар в профиль:', user.photo_url);
         elements.profileAvatar.src = user.photo_url;
         elements.profileAvatar.style.display = 'block';
         elements.avatarPlaceholderLarge.style.display = 'none';
     } else {
-        console.log('📷 Аватар не найден, используем placeholder в профиле');
         const firstLetter = user.first_name ? user.first_name[0].toUpperCase() : 'U';
         elements.avatarPlaceholderLarge.textContent = firstLetter;
         elements.profileAvatar.style.display = 'none';
@@ -135,63 +121,65 @@ function renderProfile(user: any): void {
     // Информация в профиле
     elements.profileName.textContent = `${user.first_name} ${user.last_name || ''}`.trim();
     elements.profileUsername.textContent = user.username ? `@${user.username}` : '';
-    elements.profilePosition.textContent = user.position || 'Должность не указана';
-    elements.profileBio.textContent = user.bio || 'Пока ничего не рассказал о себе';
+    elements.profilePosition.textContent = user.position || '';
+    elements.profileBio.textContent = user.bio || '';
     
-    // Ссылки
+    // Ссылки (показываем только непустые)
     renderLinks(user.links);
 }
 
-// Показываем ссылки
+// Показываем ссылки (только непустые)
 function renderLinks(links: any): void {
     if (!links) {
-        elements.profileLinks.innerHTML = '<p style="color: #666; text-align: center;">Ссылки не добавлены</p>';
+        elements.profileLinks.innerHTML = '<p class="no-links">Ссылки не добавлены</p>';
         return;
     }
     
     const linksHTML = [];
+    let hasLinks = false;
     
-    if (links.telegram) {
+    // Проверяем каждую ссылку - показываем только если она не пустая
+    if (links.telegram && links.telegram.trim() !== '') {
+        hasLinks = true;
         const displayName = links.telegram.includes('t.me/') 
             ? links.telegram.split('t.me/')[1] 
             : 'Telegram';
         linksHTML.push(`
             <a href="${links.telegram}" class="profile-link" target="_blank" rel="noopener noreferrer">
-                <span class="profile-link-icon">📱</span>
                 <span>Telegram: ${displayName}</span>
             </a>
         `);
     }
     
-    if (links.linkedin) {
+    if (links.linkedin && links.linkedin.trim() !== '') {
+        hasLinks = true;
         linksHTML.push(`
             <a href="${links.linkedin}" class="profile-link" target="_blank" rel="noopener noreferrer">
-                <span class="profile-link-icon">💼</span>
                 <span>LinkedIn</span>
             </a>
         `);
     }
     
-    if (links.vk) {
+    if (links.vk && links.vk.trim() !== '') {
+        hasLinks = true;
         linksHTML.push(`
             <a href="${links.vk}" class="profile-link" target="_blank" rel="noopener noreferrer">
-                <span class="profile-link-icon">👥</span>
                 <span>VK</span>
             </a>
         `);
     }
     
-    if (links.instagram) {
+    if (links.instagram && links.instagram.trim() !== '') {
+        hasLinks = true;
         linksHTML.push(`
             <a href="${links.instagram}" class="profile-link" target="_blank" rel="noopener noreferrer">
-                <span class="profile-link-icon">📸</span>
                 <span>Instagram</span>
             </a>
         `);
     }
     
-    if (linksHTML.length === 0) {
-        linksHTML.push('<p style="color: #666; text-align: center;">Ссылки не добавлены</p>');
+    if (!hasLinks) {
+        linksHTML.push('<p class="no-links">Ссылки не добавлены</p>');
     }
     
     elements.profileLinks.innerHTML = linksHTML.join('');
@@ -249,8 +237,6 @@ async function saveProfile(): Promise<void> {
             instagram: elements.editInstagram.value
         };
         
-        console.log('💾 Сохраняем обновления:', updates);
-        
         const response = await fetch(`${CONFIG.BACKEND_URL}/profile/${currentUser.id}`, {
             method: 'PATCH',
             headers: {
@@ -259,8 +245,6 @@ async function saveProfile(): Promise<void> {
             body: JSON.stringify(updates)
         });
         
-        console.log('📡 Ответ при сохранении:', response.status);
-        
         if (!response.ok) {
             const errorData = await response.json().catch(() => ({ error: 'Ошибка сервера' }));
             throw new Error(errorData.error || `Ошибка ${response.status}`);
@@ -268,8 +252,6 @@ async function saveProfile(): Promise<void> {
         
         const data = await response.json();
         currentUser = data.user;
-        
-        console.log('✅ Профиль обновлен:', currentUser);
         
         // Обновляем профиль
         renderProfile(currentUser);
@@ -284,7 +266,7 @@ async function saveProfile(): Promise<void> {
         showScreen('profile');
         
     } catch (error) {
-        console.error('❌ Ошибка сохранения:', error);
+        console.error('Ошибка сохранения:', error);
         const errorMessage = error instanceof Error ? error.message : 'Не удалось сохранить изменения';
         showError(errorMessage);
     } finally {
@@ -346,7 +328,6 @@ function setupEventListeners(): void {
 
 // Запуск приложения
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('📄 DOM загружен');
     setupEventListeners();
     initializeApp();
 });
