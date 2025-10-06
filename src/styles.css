@@ -1,11 +1,9 @@
-/* Сброс стилей */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-/* Основные стили */
 body {
     font-family: 'JetBrains Mono', monospace;
     background-color: #f8f9fa;
@@ -18,7 +16,6 @@ body {
     min-height: 100vh;
 }
 
-/* Шапка */
 .header {
     background: white;
     border-bottom: 1px solid #e1e5e9;
@@ -28,7 +25,6 @@ body {
     left: 0;
     right: 0;
     z-index: 100;
-    backdrop-filter: blur(10px);
 }
 
 .user-header {
@@ -44,60 +40,42 @@ body {
     object-fit: cover;
     cursor: pointer;
     border: 2px solid #007bff;
-    transition: all 0.3s ease;
-}
-
-.avatar-small:hover {
-    transform: scale(1.05);
-    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
 }
 
 .avatar-placeholder-small {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #007bff, #0056b3);
+    background: #007bff;
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 600;
     cursor: pointer;
-    border: 2px solid #0056b3;
-    transition: all 0.3s ease;
-}
-
-.avatar-placeholder-small:hover {
-    transform: scale(1.05);
-    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
 }
 
 .user-name-header {
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 600;
     color: #333;
-    letter-spacing: -0.5px;
 }
 
-/* Основной контент */
 .main {
     padding-top: 70px;
     min-height: 100vh;
 }
 
-/* Главный экран */
 .main-screen {
     min-height: calc(100vh - 70px);
     background: #f8f9fa;
 }
 
-/* Кнопка назад */
 .profile-header {
     padding: 12px 16px;
     border-bottom: 1px solid #e1e5e9;
     background: white;
-    backdrop-filter: blur(10px);
 }
 
 .back-button {
@@ -106,19 +84,10 @@ body {
     color: #007bff;
     font-size: 14px;
     cursor: pointer;
-    padding: 8px 16px;
+    padding: 8px 0;
     font-weight: 500;
-    border-radius: 6px;
-    transition: all 0.3s ease;
-    font-family: 'JetBrains Mono', monospace;
 }
 
-.back-button:hover {
-    color: #0056b3;
-    background: #f8f9fa;
-}
-
-/* Экран профиля */
 .profile-screen {
     background: white;
     min-height: calc(100vh - 70px);
@@ -141,33 +110,20 @@ body {
     object-fit: cover;
     border: 4px solid #007bff;
     cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.avatar-large:hover {
-    transform: scale(1.05);
-    box-shadow: 0 8px 24px rgba(0, 123, 255, 0.3);
 }
 
 .avatar-placeholder-large {
     width: 120px;
     height: 120px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #007bff, #0056b3);
+    background: #007bff;
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
-    font-size: 36px;
+    font-size: 48px;
     font-weight: 600;
-    border: 4px solid #0056b3;
     cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.avatar-placeholder-large:hover {
-    transform: scale(1.05);
-    box-shadow: 0 8px 24px rgba(0, 123, 255, 0.3);
 }
 
 .profile-info {
@@ -179,14 +135,19 @@ body {
     font-weight: 700;
     margin-bottom: 4px;
     color: #333;
-    letter-spacing: -0.5px;
 }
 
 .profile-username {
     font-size: 14px;
     color: #666;
-    margin-bottom: 12px;
-    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.profile-coins {
+    font-size: 16px;
+    color: #ffd700;
+    font-weight: 600;
+    margin-bottom: 8px;
 }
 
 .profile-position {
@@ -194,7 +155,6 @@ body {
     color: #007bff;
     font-weight: 600;
     margin-bottom: 24px;
-    padding: 8px 0;
 }
 
 .bio-section, .links-section {
@@ -206,7 +166,6 @@ body {
     font-weight: 700;
     margin-bottom: 12px;
     color: #333;
-    letter-spacing: -0.5px;
 }
 
 .profile-bio {
@@ -244,16 +203,8 @@ body {
     background-color: #f8f9fa;
     border-color: #007bff;
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.1);
 }
 
-.profile-link-icon {
-    font-size: 16px;
-    width: 20px;
-    text-align: center;
-}
-
-/* Экран редактирования */
 .edit-profile-screen {
     background: white;
     min-height: calc(100vh - 70px);
@@ -269,7 +220,6 @@ body {
     font-size: 20px;
     font-weight: 700;
     color: #333;
-    letter-spacing: -0.5px;
 }
 
 .edit-avatar-block {
@@ -290,17 +240,15 @@ body {
     width: 100px;
     height: 100px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #007bff, #0056b3);
+    background: #007bff;
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
-    font-size: 28px;
+    font-size: 32px;
     font-weight: 600;
-    border: 3px solid #0056b3;
 }
 
-/* Форма редактирования */
 .edit-form {
     text-align: left;
 }
@@ -315,7 +263,6 @@ body {
     font-weight: 600;
     color: #333;
     font-size: 13px;
-    letter-spacing: -0.3px;
 }
 
 .text-input, .link-input {
@@ -332,7 +279,6 @@ body {
 .text-input:focus, .link-input:focus {
     outline: none;
     border-color: #007bff;
-    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
     background: white;
 }
 
@@ -345,27 +291,15 @@ body {
     font-size: 14px;
     resize: vertical;
     min-height: 100px;
-    transition: all 0.3s ease;
     background: #f8f9fa;
-    line-height: 1.6;
 }
 
 .bio-edit-textarea:focus {
     outline: none;
     border-color: #007bff;
-    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
     background: white;
 }
 
-.input-hint {
-    display: block;
-    margin-top: 6px;
-    font-size: 11px;
-    color: #666;
-    font-weight: 500;
-}
-
-/* Секция ссылок в редактировании */
 .links-edit-section {
     margin-top: 32px;
     padding-top: 24px;
@@ -377,17 +311,15 @@ body {
     font-weight: 700;
     margin-bottom: 20px;
     color: #333;
-    letter-spacing: -0.5px;
 }
 
-/* Кнопки */
 .form-actions {
     margin-top: 32px;
 }
 
 .save-profile-btn {
     width: 100%;
-    background: linear-gradient(135deg, #007bff, #0056b3);
+    background: #007bff;
     color: white;
     border: none;
     padding: 16px 20px;
@@ -397,23 +329,17 @@ body {
     cursor: pointer;
     transition: all 0.3s ease;
     font-family: 'JetBrains Mono', monospace;
-    letter-spacing: -0.3px;
 }
 
 .save-profile-btn:hover {
-    background: linear-gradient(135deg, #0056b3, #004085);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0, 123, 255, 0.3);
+    background: #0056b3;
 }
 
 .save-profile-btn:disabled {
     background: #6c757d;
     cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
 }
 
-/* Загрузка */
 .loading-section {
     text-align: center;
     padding: 60px 20px;
@@ -444,10 +370,8 @@ body {
 .loading-section p {
     color: #666;
     font-size: 14px;
-    font-weight: 500;
 }
 
-/* Адаптивность */
 @media (max-width: 480px) {
     .header {
         padding: 10px 16px;
@@ -473,7 +397,7 @@ body {
     .avatar-placeholder-large {
         width: 100px;
         height: 100px;
-        font-size: 32px;
+        font-size: 36px;
     }
     
     .profile-name {
@@ -492,7 +416,6 @@ body {
     }
 }
 
-/* Состояния placeholder */
 .profile-bio:empty::before {
     content: "Пока ничего не рассказал о себе";
     color: #999;
@@ -503,9 +426,4 @@ body {
     content: "Должность не указана";
     color: #999;
     font-style: italic;
-}
-
-/* Плавные переходы */
-* {
-    transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
 }

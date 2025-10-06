@@ -10,7 +10,6 @@
 </head>
 <body>
     <div class="app">
-        <!-- Шапка -->
         <header class="header">
             <div class="user-header">
                 <img id="user-avatar" class="avatar-small" src="" alt="Avatar" style="display: none;">
@@ -20,12 +19,9 @@
         </header>
 
         <main class="main">
-            <!-- Главный экран - ПУСТОЙ -->
             <div id="main-screen" class="main-screen">
-                <!-- Пустая страница -->
             </div>
 
-            <!-- Экран профиля -->
             <div id="profile-screen" class="profile-screen" style="display: none;">
                 <div class="profile-header">
                     <button id="back-to-main-btn" class="back-button">Назад</button>
@@ -39,6 +35,7 @@
                     <div class="profile-info">
                         <h2 id="profile-name" class="profile-name"></h2>
                         <p id="profile-username" class="profile-username"></p>
+                        <p id="profile-coins" class="profile-coins"></p>
                         <p id="profile-position" class="profile-position"></p>
                         
                         <div class="bio-section">
@@ -49,14 +46,12 @@
                         <div class="links-section">
                             <h3>Ссылки</h3>
                             <div id="profile-links" class="profile-links">
-                                <!-- Ссылки появятся здесь -->
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Экран редактирования -->
             <div id="edit-profile-screen" class="edit-profile-screen" style="display: none;">
                 <div class="profile-header">
                     <button id="back-to-profile-btn" class="back-button">Назад</button>
@@ -91,25 +86,21 @@
                             <div class="form-group">
                                 <label for="edit-telegram">Telegram</label>
                                 <input type="text" id="edit-telegram" class="link-input" placeholder="@username">
-                                <small class="input-hint">Можно ввести @username или полную ссылку</small>
                             </div>
 
                             <div class="form-group">
                                 <label for="edit-linkedin">LinkedIn</label>
                                 <input type="text" id="edit-linkedin" class="link-input" placeholder="linkedin.com/in/username">
-                                <small class="input-hint">Только ссылки с linkedin.com</small>
                             </div>
 
                             <div class="form-group">
                                 <label for="edit-vk">VK</label>
                                 <input type="text" id="edit-vk" class="link-input" placeholder="vk.com/username">
-                                <small class="input-hint">Только ссылки с vk.com</small>
                             </div>
 
                             <div class="form-group">
                                 <label for="edit-instagram">Instagram</label>
                                 <input type="text" id="edit-instagram" class="link-input" placeholder="instagram.com/username">
-                                <small class="input-hint">Только ссылки с instagram.com</small>
                             </div>
                         </div>
 
@@ -122,7 +113,6 @@
                 </div>
             </div>
 
-            <!-- Загрузка -->
             <div id="loading-section" class="loading-section">
                 <div class="loading-spinner"></div>
                 <p>Загрузка...</p>
