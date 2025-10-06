@@ -26,6 +26,9 @@
 
             <!-- Экран профиля -->
             <div id="profile-screen" class="profile-screen" style="display: none;">
+                <div class="profile-header">
+                    <button id="back-to-main-btn" class="back-button">← Назад</button>
+                </div>
                 <div class="profile-view">
                     <div class="profile-avatar-large">
                         <img id="profile-avatar" class="avatar-large" src="" alt="Avatar" style="display: none;">
@@ -54,6 +57,9 @@
 
             <!-- Экран редактирования -->
             <div id="edit-profile-screen" class="edit-profile-screen" style="display: none;">
+                <div class="profile-header">
+                    <button id="back-to-profile-btn" class="back-button">← Назад</button>
+                </div>
                 <div class="profile-edit-card">
                     <h2>Редактировать профиль</h2>
                     
@@ -78,36 +84,37 @@
                             ></textarea>
                         </div>
 
-                        <div class="form-group">
-                            <label for="edit-telegram">Telegram</label>
-                            <input type="text" id="edit-telegram" class="link-input" placeholder="@username или t.me/username">
-                            <small class="input-hint">Разрешены: t.me, telegram.me</small>
-                        </div>
+                        <div class="links-edit-section">
+                            <h3>Социальные сети</h3>
+                            
+                            <div class="form-group">
+                                <label for="edit-telegram">Telegram</label>
+                                <input type="text" id="edit-telegram" class="link-input" placeholder="@username">
+                                <small class="input-hint">Можно ввести @username или полную ссылку</small>
+                            </div>
 
-                        <div class="form-group">
-                            <label for="edit-linkedin">LinkedIn</label>
-                            <input type="text" id="edit-linkedin" class="link-input" placeholder="linkedin.com/in/username">
-                            <small class="input-hint">Только домен linkedin.com</small>
-                        </div>
+                            <div class="form-group">
+                                <label for="edit-linkedin">LinkedIn</label>
+                                <input type="text" id="edit-linkedin" class="link-input" placeholder="linkedin.com/in/username">
+                                <small class="input-hint">Только ссылки с linkedin.com</small>
+                            </div>
 
-                        <div class="form-group">
-                            <label for="edit-vk">VK</label>
-                            <input type="text" id="edit-vk" class="link-input" placeholder="vk.com/username">
-                            <small class="input-hint">Только домен vk.com</small>
-                        </div>
+                            <div class="form-group">
+                                <label for="edit-vk">VK</label>
+                                <input type="text" id="edit-vk" class="link-input" placeholder="vk.com/username">
+                                <small class="input-hint">Только ссылки с vk.com</small>
+                            </div>
 
-                        <div class="form-group">
-                            <label for="edit-instagram">Instagram</label>
-                            <input type="text" id="edit-instagram" class="link-input" placeholder="instagram.com/username">
-                            <small class="input-hint">Только домен instagram.com</small>
+                            <div class="form-group">
+                                <label for="edit-instagram">Instagram</label>
+                                <input type="text" id="edit-instagram" class="link-input" placeholder="instagram.com/username">
+                                <small class="input-hint">Только ссылки с instagram.com</small>
+                            </div>
                         </div>
 
                         <div class="form-actions">
                             <button id="save-profile-btn" class="save-profile-btn">
-                                Сохранить
-                            </button>
-                            <button id="cancel-edit-btn" class="cancel-btn">
-                                Отмена
+                                Сохранить профиль
                             </button>
                         </div>
                     </div>

@@ -77,6 +77,27 @@ body {
     background: #f8f9fa;
 }
 
+/* Кнопка назад */
+.profile-header {
+    padding: 10px 16px;
+    border-bottom: 1px solid #e1e5e9;
+    background: white;
+}
+
+.back-button {
+    background: none;
+    border: none;
+    color: #007bff;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 8px 0;
+    font-weight: 500;
+}
+
+.back-button:hover {
+    color: #0056b3;
+}
+
 /* Экран профиля */
 .profile-screen {
     background: white;
@@ -118,7 +139,7 @@ body {
 }
 
 .profile-info {
-    text-align: center;
+    text-align: left;
 }
 
 .profile-name {
@@ -143,7 +164,6 @@ body {
 
 .bio-section, .links-section {
     margin-bottom: 25px;
-    text-align: left;
 }
 
 .bio-section h3, .links-section h3 {
@@ -151,7 +171,6 @@ body {
     font-weight: 600;
     margin-bottom: 10px;
     color: #333;
-    text-align: center;
 }
 
 .profile-bio {
@@ -160,7 +179,6 @@ body {
     padding: 12px;
     background: #f8f9fa;
     border-radius: 8px;
-    text-align: left;
 }
 
 .profile-links {
@@ -198,12 +216,10 @@ body {
 .edit-profile-screen {
     background: white;
     min-height: calc(100vh - 70px);
-    padding: 20px;
 }
 
 .profile-edit-card {
-    max-width: 400px;
-    margin: 0 auto;
+    padding: 20px;
 }
 
 .profile-edit-card h2 {
@@ -300,15 +316,27 @@ body {
     color: #666;
 }
 
+/* Секция ссылок в редактировании */
+.links-edit-section {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #e1e5e9;
+}
+
+.links-edit-section h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #333;
+}
+
 /* Кнопки */
 .form-actions {
-    display: flex;
-    gap: 12px;
     margin-top: 30px;
 }
 
 .save-profile-btn {
-    flex: 1;
+    width: 100%;
     background: #007bff;
     color: white;
     border: none;
@@ -329,23 +357,6 @@ body {
     background: #6c757d;
     cursor: not-allowed;
     transform: none;
-}
-
-.cancel-btn {
-    flex: 1;
-    background: #6c757d;
-    color: white;
-    border: none;
-    padding: 14px 20px;
-    border-radius: 8px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.cancel-btn:hover {
-    background: #545b62;
-    transform: translateY(-1px);
 }
 
 /* Загрузка */
@@ -395,7 +406,7 @@ body {
         padding: 16px;
     }
     
-    .edit-profile-screen {
+    .profile-edit-card {
         padding: 16px;
     }
     
@@ -412,10 +423,6 @@ body {
     
     .profile-name {
         font-size: 20px;
-    }
-    
-    .form-actions {
-        flex-direction: column;
     }
     
     .avatar-edit {
@@ -445,17 +452,6 @@ body {
 
 /* Плавные переходы */
 .avatar-small, .avatar-large, .avatar-edit,
-.profile-link, .save-profile-btn, .cancel-btn {
+.profile-link, .save-profile-btn, .back-button {
     transition: all 0.2s ease-in-out;
-}
-
-/* Улучшенная доступность */
-.text-input:focus, .link-input:focus, .bio-edit-textarea:focus {
-    outline: 2px solid #007bff;
-    outline-offset: 2px;
-}
-
-button:focus {
-    outline: 2px solid #007bff;
-    outline-offset: 2px;
 }

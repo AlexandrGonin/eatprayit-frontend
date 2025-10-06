@@ -21,7 +21,8 @@ const elements = {
     editVk: document.getElementById('edit-vk') as HTMLInputElement,
     editInstagram: document.getElementById('edit-instagram') as HTMLInputElement,
     saveProfileBtn: document.getElementById('save-profile-btn') as HTMLButtonElement,
-    cancelEditBtn: document.getElementById('cancel-edit-btn') as HTMLButtonElement,
+    backToMainBtn: document.getElementById('back-to-main-btn') as HTMLButtonElement,
+    backToProfileBtn: document.getElementById('back-to-profile-btn') as HTMLButtonElement,
     profileAvatar: document.getElementById('profile-avatar') as HTMLImageElement,
     avatarPlaceholderLarge: document.getElementById('avatar-placeholder-large') as HTMLDivElement,
     profileName: document.getElementById('profile-name') as HTMLHeadingElement,
@@ -134,7 +135,7 @@ function renderProfile(user: any): void {
     // Информация в профиле
     elements.profileName.textContent = `${user.first_name} ${user.last_name || ''}`.trim();
     elements.profileUsername.textContent = user.username ? `@${user.username}` : '';
-    elements.profilePosition.textContent = user.position || '';
+    elements.profilePosition.textContent = user.position || 'Должность не указана';
     elements.profileBio.textContent = user.bio || 'Пока ничего не рассказал о себе';
     
     // Ссылки
@@ -270,6 +271,9 @@ async function saveProfile(): Promise<void> {
         
         console.log('✅ Профиль обновлен:', currentUser);
         
+        // Обновляем профиль
+        renderProfile(currentUser);
+        
         const tg = (window as any).Telegram.WebApp;
         tg.showPopup({
             title: 'Успех',
@@ -277,7 +281,7 @@ async function saveProfile(): Promise<void> {
             buttons: [{ type: 'ok' }]
         });
         
-        showScreen('main');
+        showScreen('profile');
         
     } catch (error) {
         console.error('❌ Ошибка сохранения:', error);
@@ -285,7 +289,7 @@ async function saveProfile(): Promise<void> {
         showError(errorMessage);
     } finally {
         elements.saveProfileBtn.disabled = false;
-        elements.saveProfileBtn.textContent = 'Сохранить';
+        elements.saveProfileBtn.textContent = 'Сохранить профиль';
     }
 }
 
@@ -332,9 +336,12 @@ function setupEventListeners(): void {
     elements.profileAvatar.addEventListener('click', showEditProfile);
     elements.avatarPlaceholderLarge.addEventListener('click', showEditProfile);
     
-    // Кнопки
+    // Кнопки назад
+    elements.backToMainBtn.addEventListener('click', () => showScreen('main'));
+    elements.backToProfileBtn.addEventListener('click', () => showScreen('profile'));
+    
+    // Кнопка сохранения
     elements.saveProfileBtn.addEventListener('click', saveProfile);
-    elements.cancelEditBtn.addEventListener('click', () => showScreen('main'));
 }
 
 // Запуск приложения
