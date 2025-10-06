@@ -240,3 +240,135 @@ body {
         flex-direction: column;
     }
 }
+
+/* Существующие стили остаются */
+
+/* Профиль */
+.profile-view {
+    padding: 20px;
+}
+
+.profile-avatar-large {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.avatar-large {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #007bff;
+}
+
+.avatar-placeholder-large {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: #007bff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 48px;
+    font-weight: 600;
+    border: 4px solid #0056b3;
+}
+
+.profile-info {
+    text-align: center;
+}
+
+.profile-name {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.profile-username {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.bio-section, .links-section {
+    margin-bottom: 25px;
+    text-align: left;
+}
+
+.bio-section h3, .links-section h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.profile-bio {
+    color: #666;
+    line-height: 1.5;
+}
+
+.profile-links {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.profile-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    border: 1px solid #e1e5e9;
+    border-radius: 8px;
+    text-decoration: none;
+    color: #333;
+    transition: background-color 0.2s;
+}
+
+.profile-link:hover {
+    background-color: #f8f9fa;
+}
+
+.profile-link-icon {
+    font-size: 18px;
+}
+
+/* Форма редактирования */
+.link-input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+}
+
+.link-input:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+/* Адаптивность */
+@media (max-width: 480px) {
+    .profile-view {
+        padding: 16px;
+    }
+    
+    .avatar-large {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .avatar-placeholder-large {
+        width: 100px;
+        height: 100px;
+        font-size: 36px;
+    }
+    
+    .profile-name {
+        font-size: 20px;
+    }
+}

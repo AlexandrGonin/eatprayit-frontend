@@ -9,7 +9,7 @@
 </head>
 <body>
     <div class="app">
-        <!-- Шапка с аватаром и именем -->
+        <!-- Шапка -->
         <header class="header">
             <div class="user-header">
                 <img id="user-avatar" class="avatar-small" src="" alt="Avatar" style="display: none;">
@@ -19,12 +19,34 @@
         </header>
 
         <main class="main">
-            <!-- Основной экран - пустая страница -->
+            <!-- Главный экран -->
             <div id="main-screen" class="main-screen">
-                <!-- Здесь может быть контент в будущем -->
+                <div class="profile-view">
+                    <div class="profile-avatar-large">
+                        <img id="profile-avatar" class="avatar-large" src="" alt="Avatar" style="display: none;">
+                        <div id="avatar-placeholder-large" class="avatar-placeholder-large"></div>
+                    </div>
+                    
+                    <div class="profile-info">
+                        <h2 id="profile-name" class="profile-name"></h2>
+                        <p id="profile-username" class="profile-username"></p>
+                        
+                        <div class="bio-section">
+                            <h3>О себе</h3>
+                            <p id="profile-bio" class="profile-bio"></p>
+                        </div>
+                        
+                        <div class="links-section">
+                            <h3>Ссылки</h3>
+                            <div id="profile-links" class="profile-links">
+                                <!-- Ссылки появятся здесь -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <!-- Экран редактирования профиля (скрыт по умолчанию) -->
+            <!-- Экран редактирования -->
             <div id="edit-profile-screen" class="edit-profile-screen" style="display: none;">
                 <div class="profile-edit-card">
                     <h2>Редактировать профиль</h2>
@@ -45,6 +67,26 @@
                             ></textarea>
                         </div>
 
+                        <div class="form-group">
+                            <label for="edit-telegram">Telegram</label>
+                            <input type="text" id="edit-telegram" class="link-input" placeholder="@username">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="edit-linkedin">LinkedIn</label>
+                            <input type="text" id="edit-linkedin" class="link-input" placeholder="https://linkedin.com/in/username">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="edit-vk">VK</label>
+                            <input type="text" id="edit-vk" class="link-input" placeholder="https://vk.com/username">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="edit-instagram">Instagram</label>
+                            <input type="text" id="edit-instagram" class="link-input" placeholder="https://instagram.com/username">
+                        </div>
+
                         <div class="form-actions">
                             <button id="save-profile-btn" class="save-profile-btn">
                                 Сохранить
@@ -57,7 +99,7 @@
                 </div>
             </div>
 
-            <!-- Секция загрузки -->
+            <!-- Загрузка -->
             <div id="loading-section" class="loading-section">
                 <div class="loading-spinner"></div>
                 <p>Загрузка...</p>
