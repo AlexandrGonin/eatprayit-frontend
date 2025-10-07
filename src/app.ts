@@ -2,14 +2,41 @@ const CONFIG = {
     BACKEND_URL: 'https://your-backend.onrender.com'
 };
 
+interface User {
+    id: number;
+    telegram_id: number;
+    first_name: string;
+    last_name?: string;
+    username?: string;
+    photo_url?: string;
+    bio?: string;
+    position?: string;
+    coins?: number;
+    links?: {
+        telegram?: string;
+        linkedin?: string;
+        vk?: string;
+        instagram?: string;
+    };
+}
+
+// Функция для безопасного получения элементов
+function getElement(id: string): HTMLElement {
+    const element = document.getElementById(id);
+    if (!element) {
+        throw new Error(`Element with id '${id}' not found`);
+    }
+    return element;
+}
+
 const elements = {
     userAvatar: document.getElementById('user-avatar') as HTMLImageElement,
     avatarPlaceholderSmall: document.getElementById('avatar-placeholder-small') as HTMLDivElement,
     userNameHeader: document.getElementById('user-name-header') as HTMLHeadingElement,
-    mainScreen: document.getElementById('main-screen') as HTMLDivElement,
-    profileScreen: document.getElementById('profile-screen') as HTMLDivElement,
-    editProfileScreen: document.getElementById('edit-profile-screen') as HTMLDivElement,
-    loadingSection: document.getElementById('loading-section') as HTMLDivElement,
+    mainScreen: getElement('main-screen'),
+    profileScreen: getElement('profile-screen'),
+    editProfileScreen: getElement('edit-profile-screen'),
+    loadingSection: getElement('loading-section'),
     userAvatarEdit: document.getElementById('user-avatar-edit') as HTMLImageElement,
     avatarPlaceholderEdit: document.getElementById('avatar-placeholder-edit') as HTMLDivElement,
     editPosition: document.getElementById('edit-position') as HTMLInputElement,
@@ -31,7 +58,7 @@ const elements = {
     profileLinks: document.getElementById('profile-links') as HTMLDivElement
 };
 
-let currentUser: any = null;
+let currentUser: User | null = null;
 
 async function initializeApp(): Promise<void> {
     try {
@@ -105,7 +132,7 @@ async function initializeApp(): Promise<void> {
     }
 }
 
-function renderHeader(user: any): void {
+function renderHeader(user: User | null): void {
     if (!user) return;
     
     if (user.photo_url) {
@@ -122,7 +149,7 @@ function renderHeader(user: any): void {
     elements.userNameHeader.textContent = user.first_name || 'Пользователь';
 }
 
-function renderProfile(user: any): void {
+function renderProfile(user: User | null): void {
     if (!user) return;
     
     if (user.photo_url) {
@@ -138,8 +165,8 @@ function renderProfile(user: any): void {
     
     elements.profileName.textContent = `${user.first_name} ${user.last_name || ''}`.trim();
     elements.profileUsername.textContent = user.username ? `@${user.username}` : '';
-    elements.profilePosition.textContent = user.position || '';
-    elements.profileBio.textContent = user.bio || '';
+    elements.profilePosition.textContent = user.position || 'Должность не указана';
+    elements.profileBio.textContent = user.bio || 'Пока ничего не рассказал о себе';
     elements.profileCoins.textContent = `Монеты: ${user.coins || 0}`;
     
     renderLinks(user.links);
@@ -242,13 +269,15 @@ async function saveProfile(): Promise<void> {
         const updates = {
             position: elements.editPosition.value,
             bio: elements.editBio.value,
-            telegram: elements.editTelegram.value,
-            linkedin: elements.editLinkedin.value,
-            vk: elements.editVk.value,
-            instagram: elements.editInstagram.value
+            links: {
+                telegram: elements.editTelegram.value,
+                linkedin: elements.editLinkedin.value,
+                vk: elements.editVk.value,
+                instagram: elements.editInstagram.value
+            }
         };
         
-        const response = await fetch(`${CONFIG.BACKEND_URL}/profile/${currentUser.id}`, {
+        const response = await fetch(`${CONFIG.BACKEND_URL}/profile/${currentUser.telegram_id}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
@@ -325,7 +354,11 @@ function setupEventListeners(): void {
     elements.saveProfileBtn.addEventListener('click', saveProfile);
 }
 
+// Инициализация после загрузки DOM
 document.addEventListener('DOMContentLoaded', () => {
     setupEventListeners();
     initializeApp();
 });
+
+// Добавляем export чтобы файл считался модулем
+export {};
