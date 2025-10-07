@@ -1,9 +1,7 @@
-// Конфигурация
 const CONFIG = {
-    BACKEND_URL: 'https://eatprayit-backend.onrender.com'
+    BACKEND_URL: 'https://your-backend.onrender.com'
 };
 
-// Элементы DOM
 const elements = {
     userAvatar: document.getElementById('user-avatar') as HTMLImageElement,
     avatarPlaceholderSmall: document.getElementById('avatar-placeholder-small') as HTMLDivElement,
@@ -29,12 +27,12 @@ const elements = {
     profileUsername: document.getElementById('profile-username') as HTMLParagraphElement,
     profilePosition: document.getElementById('profile-position') as HTMLParagraphElement,
     profileBio: document.getElementById('profile-bio') as HTMLParagraphElement,
+    profileCoins: document.getElementById('profile-coins') as HTMLParagraphElement,
     profileLinks: document.getElementById('profile-links') as HTMLDivElement
 };
 
 let currentUser: any = null;
 
-// Главная функция
 async function initializeApp(): Promise<void> {
     try {
         showLoading(true);
@@ -52,6 +50,30 @@ async function initializeApp(): Promise<void> {
         if (!telegramUser) {
             throw new Error('Не удалось получить данные пользователя из Telegram');
         }
+
+        // ПРОВЕРКА ДОСТУПА К MINI APP
+        console.log('Проверяем доступ пользователя...');
+        const accessCheck = await fetch(`${CONFIG.BACKEND_URL}/check-access`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                telegram_id: telegramUser.id
+            })
+        });
+        
+        if (!accessCheck.ok) {
+            throw new Error('Доступ к приложению запрещен');
+        }
+        
+        const accessData = await accessCheck.json();
+        
+        if (!accessData.hasAccess) {
+            throw new Error('У вас нет доступа к Mini App. Зарегистрируйтесь через Telegram бота.');
+        }
+
+        console.log('Доступ разрешен, загружаем профиль...');
         
         // Авторизация на бэкенде
         const response = await fetch(`${CONFIG.BACKEND_URL}/auth/telegram`, {
@@ -83,11 +105,9 @@ async function initializeApp(): Promise<void> {
     }
 }
 
-// Показываем данные в шапке
 function renderHeader(user: any): void {
     if (!user) return;
     
-    // Аватар в шапке
     if (user.photo_url) {
         elements.userAvatar.src = user.photo_url;
         elements.userAvatar.style.display = 'block';
@@ -102,11 +122,9 @@ function renderHeader(user: any): void {
     elements.userNameHeader.textContent = user.first_name || 'Пользователь';
 }
 
-// Показываем профиль
 function renderProfile(user: any): void {
     if (!user) return;
     
-    // Аватар в профиле
     if (user.photo_url) {
         elements.profileAvatar.src = user.photo_url;
         elements.profileAvatar.style.display = 'block';
@@ -118,17 +136,15 @@ function renderProfile(user: any): void {
         elements.avatarPlaceholderLarge.style.display = 'flex';
     }
     
-    // Информация в профиле
     elements.profileName.textContent = `${user.first_name} ${user.last_name || ''}`.trim();
     elements.profileUsername.textContent = user.username ? `@${user.username}` : '';
     elements.profilePosition.textContent = user.position || '';
     elements.profileBio.textContent = user.bio || '';
+    elements.profileCoins.textContent = `Монеты: ${user.coins || 0}`;
     
-    // Ссылки (показываем только непустые)
     renderLinks(user.links);
 }
 
-// Показываем ссылки (только непустые)
 function renderLinks(links: any): void {
     if (!links) {
         elements.profileLinks.innerHTML = '<p class="no-links">Ссылки не добавлены</p>';
@@ -138,7 +154,6 @@ function renderLinks(links: any): void {
     const linksHTML = [];
     let hasLinks = false;
     
-    // Проверяем каждую ссылку - показываем только если она не пустая
     if (links.telegram && links.telegram.trim() !== '') {
         hasLinks = true;
         const displayName = links.telegram.includes('t.me/') 
@@ -185,18 +200,15 @@ function renderLinks(links: any): void {
     elements.profileLinks.innerHTML = linksHTML.join('');
 }
 
-// Показать экран профиля
 function showProfile(): void {
     if (!currentUser) return;
     renderProfile(currentUser);
     showScreen('profile');
 }
 
-// Показать экран редактирования
 function showEditProfile(): void {
     if (!currentUser) return;
     
-    // Заполняем форму редактирования
     if (currentUser.photo_url) {
         elements.userAvatarEdit.src = currentUser.photo_url;
         elements.userAvatarEdit.style.display = 'block';
@@ -218,7 +230,6 @@ function showEditProfile(): void {
     showScreen('edit');
 }
 
-// Сохранение профиля
 async function saveProfile(): Promise<void> {
     try {
         elements.saveProfileBtn.disabled = true;
@@ -253,7 +264,6 @@ async function saveProfile(): Promise<void> {
         const data = await response.json();
         currentUser = data.user;
         
-        // Обновляем профиль
         renderProfile(currentUser);
         
         const tg = (window as any).Telegram.WebApp;
@@ -263,7 +273,7 @@ async function saveProfile(): Promise<void> {
             buttons: [{ type: 'ok' }]
         });
         
-        showScreen('profile');
+        showScreen('main');
         
     } catch (error) {
         console.error('Ошибка сохранения:', error);
@@ -275,14 +285,12 @@ async function saveProfile(): Promise<void> {
     }
 }
 
-// Переключение между экранами
 function showScreen(screen: 'main' | 'profile' | 'edit'): void {
     elements.mainScreen.style.display = screen === 'main' ? 'block' : 'none';
     elements.profileScreen.style.display = screen === 'profile' ? 'block' : 'none';
     elements.editProfileScreen.style.display = screen === 'edit' ? 'block' : 'none';
 }
 
-// Показать/скрыть загрузку
 function showLoading(show: boolean): void {
     if (show) {
         elements.loadingSection.classList.add('show');
@@ -294,7 +302,6 @@ function showLoading(show: boolean): void {
     }
 }
 
-// Показать ошибку
 function showError(message: string): void {
     const tg = (window as any).Telegram.WebApp;
     if (tg && tg.showPopup) {
@@ -308,25 +315,16 @@ function showError(message: string): void {
     }
 }
 
-// Назначаем обработчики событий
 function setupEventListeners(): void {
-    // Клик по аватару в шапке - показываем профиль
     elements.userAvatar.addEventListener('click', showProfile);
     elements.avatarPlaceholderSmall.addEventListener('click', showProfile);
-    
-    // Клик по аватару в профиле - редактирование
     elements.profileAvatar.addEventListener('click', showEditProfile);
     elements.avatarPlaceholderLarge.addEventListener('click', showEditProfile);
-    
-    // Кнопки назад
     elements.backToMainBtn.addEventListener('click', () => showScreen('main'));
     elements.backToProfileBtn.addEventListener('click', () => showScreen('profile'));
-    
-    // Кнопка сохранения
     elements.saveProfileBtn.addEventListener('click', saveProfile);
 }
 
-// Запуск приложения
 document.addEventListener('DOMContentLoaded', () => {
     setupEventListeners();
     initializeApp();
