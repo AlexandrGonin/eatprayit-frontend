@@ -1,5 +1,5 @@
 const CONFIG = {
-    BACKEND_URL: 'https://your-backend.onrender.com'
+    BACKEND_URL: 'https://your-backend.onrender.com' // ЗАМЕНИ на свой URL
 };
 
 interface User {
@@ -12,6 +12,7 @@ interface User {
     bio?: string;
     position?: string;
     coins?: number;
+    is_active?: boolean;
     links?: {
         telegram?: string;
         linkedin?: string;
@@ -72,14 +73,25 @@ async function initializeApp(): Promise<void> {
         tg.expand();
         tg.ready();
         
+        // ДЕБАГ: Выводим все данные от Telegram
+        console.log('📱 Telegram WebApp данные:', {
+            initData: tg.initData,
+            initDataUnsafe: tg.initDataUnsafe,
+            platform: tg.platform,
+            version: tg.version
+        });
+        
         const telegramUser = tg.initDataUnsafe?.user;
         
         if (!telegramUser) {
-            throw new Error('Не удалось получить данные пользователя из Telegram');
+            console.error('❌ Не удалось получить telegramUser:', tg.initDataUnsafe);
+            throw new Error('Не удалось получить данные пользователя из Telegram. Убедитесь, что Mini App запущен внутри Telegram.');
         }
 
+        console.log('🔍 Получен пользователь Telegram:', telegramUser);
+
         // ПРОВЕРКА ДОСТУПА К MINI APP
-        console.log('Проверяем доступ пользователя...');
+        console.log('🔐 Проверяем доступ пользователя...', telegramUser.id);
         const accessCheck = await fetch(`${CONFIG.BACKEND_URL}/check-access`, {
             method: 'POST',
             headers: {
@@ -90,20 +102,26 @@ async function initializeApp(): Promise<void> {
             })
         });
         
+        console.log('📡 Ответ check-access:', accessCheck.status);
+        
         if (!accessCheck.ok) {
-            throw new Error('Доступ к приложению запрещен');
+            const errorText = await accessCheck.text();
+            console.error('❌ Ошибка check-access:', errorText);
+            throw new Error(`Ошибка сервера: ${accessCheck.status}`);
         }
         
         const accessData = await accessCheck.json();
+        console.log('📊 Данные доступа:', accessData);
         
         if (!accessData.hasAccess) {
+            console.error('❌ Доступ запрещен:', accessData);
             throw new Error('У вас нет доступа к Mini App. Зарегистрируйтесь через Telegram бота.');
         }
 
-        console.log('Доступ разрешен, загружаем профиль...');
+        console.log('✅ Доступ разрешен, загружаем профиль...');
         
         // Авторизация на бэкенде
-        const response = await fetch(`${CONFIG.BACKEND_URL}/auth/telegram`, {
+        const authResponse = await fetch(`${CONFIG.BACKEND_URL}/auth/telegram`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -111,13 +129,18 @@ async function initializeApp(): Promise<void> {
             body: JSON.stringify(telegramUser)
         });
         
-        if (!response.ok) {
-            const errorData = await response.json().catch(() => ({ error: 'Ошибка сервера' }));
-            throw new Error(errorData.error || `Ошибка бэкенда: ${response.status}`);
+        console.log('📡 Ответ auth/telegram:', authResponse.status);
+        
+        if (!authResponse.ok) {
+            const errorData = await authResponse.json().catch(() => ({ error: 'Ошибка сервера' }));
+            console.error('❌ Ошибка авторизации:', errorData);
+            throw new Error(errorData.error || `Ошибка бэкенда: ${authResponse.status}`);
         }
         
-        const data = await response.json();
-        currentUser = data.user;
+        const authData = await authResponse.json();
+        console.log('📊 Данные авторизации:', authData);
+        
+        currentUser = authData.user;
         
         // Показываем шапку
         renderHeader(currentUser);
@@ -125,12 +148,15 @@ async function initializeApp(): Promise<void> {
         showScreen('main');
         
     } catch (error) {
-        console.error('Ошибка инициализации:', error);
+        console.error('💥 Ошибка инициализации:', error);
         const errorMessage = error instanceof Error ? error.message : 'Ошибка загрузки приложения';
         showError(errorMessage);
         showLoading(false);
     }
 }
+
+// Остальные функции остаются без изменений...
+// renderHeader, renderProfile, renderLinks, showProfile, showEditProfile, saveProfile и т.д.
 
 function renderHeader(user: User | null): void {
     if (!user) return;
@@ -360,5 +386,4 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeApp();
 });
 
-// Добавляем export чтобы файл считался модулем
 export {};
