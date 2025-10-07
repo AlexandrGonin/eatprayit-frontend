@@ -1,5 +1,5 @@
 const CONFIG = {
-    BACKEND_URL: 'https://your-backend.onrender.com' // ЗАМЕНИ на свой URL
+    BACKEND_URL: 'https://eatprayit-backend.onrender.com'
 };
 
 interface User {
