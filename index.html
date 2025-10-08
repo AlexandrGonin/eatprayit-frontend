@@ -29,12 +29,12 @@
             </div>
 
             <div id="events-screen" class="events-screen" style="display: none;">
-                <div class="events-header">
+                <div class="screen-header">
                     <button id="back-to-main-from-events-btn" class="back-button">← Назад</button>
-                    <h2 class="events-title">Мероприятия</h2>
-                    <div style="width: 85px;"></div>
+                    <h2 class="screen-title">Мероприятия</h2>
+                    <div class="header-spacer"></div>
                 </div>
-                <div class="events-container">
+                <div class="screen-content">
                     <div id="events-list" class="events-list">
                         <!-- События загружаются динамически -->
                     </div>
@@ -47,12 +47,12 @@
             </div>
 
             <div id="event-detail-screen" class="event-detail-screen" style="display: none;">
-                <div class="event-detail-header">
+                <div class="screen-header">
                     <button id="back-to-events-btn" class="back-button">← Назад</button>
-                    <h2 class="event-detail-title">Мероприятие</h2>
-                    <div style="width: 85px;"></div>
+                    <h2 class="screen-title">Мероприятие</h2>
+                    <div class="header-spacer"></div>
                 </div>
-                <div class="event-detail-container">
+                <div class="screen-content">
                     <div id="event-detail-content" class="event-detail-content">
                         <!-- Детали события загружаются динамически -->
                     </div>
@@ -60,43 +60,45 @@
             </div>
 
             <div id="profile-screen" class="profile-screen" style="display: none;">
-                <div class="profile-header">
+                <div class="screen-header">
                     <button id="back-to-main-btn" class="back-button">← Назад</button>
-                    <h2 class="events-title">Профиль</h2>
-                    <div style="width: 85px;"></div>
+                    <h2 class="screen-title">Профиль</h2>
+                    <div class="header-spacer"></div>
                 </div>
-                <div class="profile-view">
-                    <div class="profile-avatar-section">
-                        <div class="profile-avatar-large">
-                            <img id="profile-avatar" class="avatar-large" src="" alt="Avatar" style="display: none;">
-                            <div id="avatar-placeholder-large" class="avatar-placeholder-large"></div>
+                <div class="screen-content">
+                    <div class="profile-view">
+                        <div class="profile-avatar-section">
+                            <div class="profile-avatar-large">
+                                <img id="profile-avatar" class="avatar-large" src="" alt="Avatar" style="display: none;">
+                                <div id="avatar-placeholder-large" class="avatar-placeholder-large"></div>
+                            </div>
                         </div>
-                    </div>
-                    
-                    <div class="profile-info-card">
-                        <div class="profile-main-info">
-                            <h2 id="profile-name" class="profile-name"></h2>
-                            <p id="profile-username" class="profile-username"></p>
-                            <div class="profile-stats">
-                                <div class="stat-item">
-                                    <span class="stat-icon">🪙</span>
-                                    <span id="profile-coins" class="stat-value"></span>
+                        
+                        <div class="profile-info-card">
+                            <div class="profile-main-info">
+                                <h2 id="profile-name" class="profile-name"></h2>
+                                <p id="profile-username" class="profile-username"></p>
+                                <div class="profile-stats">
+                                    <div class="stat-item">
+                                        <span class="stat-icon">🪙</span>
+                                        <span id="profile-coins" class="stat-value"></span>
+                                    </div>
+                                </div>
+                                <p id="profile-position" class="profile-position"></p>
+                            </div>
+                            
+                            <div class="profile-section">
+                                <h3 class="section-title">О себе</h3>
+                                <div class="section-content">
+                                    <p id="profile-bio" class="profile-bio"></p>
                                 </div>
                             </div>
-                            <p id="profile-position" class="profile-position"></p>
-                        </div>
-                        
-                        <div class="profile-section">
-                            <h3 class="section-title">О себе</h3>
-                            <div class="section-content">
-                                <p id="profile-bio" class="profile-bio"></p>
-                            </div>
-                        </div>
-                        
-                        <div class="profile-section">
-                            <h3 class="section-title">Ссылки</h3>
-                            <div class="section-content">
-                                <div id="profile-links" class="profile-links">
+                            
+                            <div class="profile-section">
+                                <h3 class="section-title">Ссылки</h3>
+                                <div class="section-content">
+                                    <div id="profile-links" class="profile-links">
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -105,63 +107,65 @@
             </div>
 
             <div id="edit-profile-screen" class="edit-profile-screen" style="display: none;">
-                <div class="profile-header">
+                <div class="screen-header">
                     <button id="back-to-profile-btn" class="back-button">← Назад</button>
-                    <h2 class="events-title">Редактировать</h2>
-                    <div style="width: 85px;"></div>
+                    <h2 class="screen-title">Редактировать</h2>
+                    <div class="header-spacer"></div>
                 </div>
-                <div class="profile-edit-card">
-                    <h2>Редактировать профиль</h2>
-                    
-                    <div class="edit-avatar-block">
-                        <img id="user-avatar-edit" class="avatar-edit" src="" alt="Avatar" style="display: none;">
-                        <div id="avatar-placeholder-edit" class="avatar-placeholder-edit"></div>
-                    </div>
-                    
-                    <div class="edit-form">
-                        <div class="form-group">
-                            <label for="edit-position">Должность</label>
-                            <input type="text" id="edit-position" class="text-input" placeholder="Ваша должность">
+                <div class="screen-content">
+                    <div class="profile-edit-card">
+                        <h2>Редактировать профиль</h2>
+                        
+                        <div class="edit-avatar-block">
+                            <img id="user-avatar-edit" class="avatar-edit" src="" alt="Avatar" style="display: none;">
+                            <div id="avatar-placeholder-edit" class="avatar-placeholder-edit"></div>
                         </div>
-
-                        <div class="form-group">
-                            <label for="edit-bio">О себе</label>
-                            <textarea 
-                                id="edit-bio" 
-                                class="bio-edit-textarea"
-                                placeholder="Расскажите о себе..."
-                                rows="4"
-                            ></textarea>
-                        </div>
-
-                        <div class="links-edit-section">
-                            <h3>Социальные сети</h3>
-                            
+                        
+                        <div class="edit-form">
                             <div class="form-group">
-                                <label for="edit-telegram">Telegram</label>
-                                <input type="text" id="edit-telegram" class="link-input" placeholder="@username">
+                                <label for="edit-position">Должность</label>
+                                <input type="text" id="edit-position" class="text-input" placeholder="Ваша должность">
                             </div>
 
                             <div class="form-group">
-                                <label for="edit-linkedin">LinkedIn</label>
-                                <input type="text" id="edit-linkedin" class="link-input" placeholder="linkedin.com/in/username">
+                                <label for="edit-bio">О себе</label>
+                                <textarea 
+                                    id="edit-bio" 
+                                    class="bio-edit-textarea"
+                                    placeholder="Расскажите о себе..."
+                                    rows="4"
+                                ></textarea>
                             </div>
 
-                            <div class="form-group">
-                                <label for="edit-vk">VK</label>
-                                <input type="text" id="edit-vk" class="link-input" placeholder="vk.com/username">
+                            <div class="links-edit-section">
+                                <h3>Социальные сети</h3>
+                                
+                                <div class="form-group">
+                                    <label for="edit-telegram">Telegram</label>
+                                    <input type="text" id="edit-telegram" class="link-input" placeholder="@username">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="edit-linkedin">LinkedIn</label>
+                                    <input type="text" id="edit-linkedin" class="link-input" placeholder="linkedin.com/in/username">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="edit-vk">VK</label>
+                                    <input type="text" id="edit-vk" class="link-input" placeholder="vk.com/username">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="edit-instagram">Instagram</label>
+                                    <input type="text" id="edit-instagram" class="link-input" placeholder="instagram.com/username">
+                                </div>
                             </div>
 
-                            <div class="form-group">
-                                <label for="edit-instagram">Instagram</label>
-                                <input type="text" id="edit-instagram" class="link-input" placeholder="instagram.com/username">
+                            <div class="form-actions">
+                                <button id="save-profile-btn" class="save-profile-btn">
+                                    Сохранить профиль
+                                </button>
                             </div>
-                        </div>
-
-                        <div class="form-actions">
-                            <button id="save-profile-btn" class="save-profile-btn">
-                                Сохранить профиль
-                            </button>
                         </div>
                     </div>
                 </div>
