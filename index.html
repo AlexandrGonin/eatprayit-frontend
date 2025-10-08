@@ -2,8 +2,8 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>IT Events</title>
     <link rel="stylesheet" href="/src/styles.css">
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -20,6 +20,25 @@
 
         <main class="main">
             <div id="main-screen" class="main-screen">
+                <!-- Динамически заполняется через JS -->
+            </div>
+
+            <div id="events-screen" class="events-screen" style="display: none;">
+                <div class="events-header">
+                    <button id="back-to-main-from-events-btn" class="back-button">Назад</button>
+                    <h2 class="events-title">Мероприятия</h2>
+                    <div style="width: 60px;"></div> <!-- Для выравнивания -->
+                </div>
+                <div class="events-container">
+                    <div id="events-list" class="events-list">
+                        <!-- События загружаются динамически -->
+                    </div>
+                    <div id="no-access-message" class="no-access-message" style="display: none;">
+                        <div class="no-access-icon">🔒</div>
+                        <h3>Доступ к мероприятиям ограничен</h3>
+                        <p>Чтобы получать информацию об ивентах, необходимо перейти по реферальной ссылке от друга</p>
+                    </div>
+                </div>
             </div>
 
             <div id="profile-screen" class="profile-screen" style="display: none;">

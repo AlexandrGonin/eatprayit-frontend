@@ -2,6 +2,18 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html {
+    touch-action: pan-x pan-y;
+    overflow: hidden;
 }
 
 body {
@@ -10,10 +22,16 @@ body {
     min-height: 100vh;
     color: #333;
     line-height: 1.6;
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+    height: 100%;
 }
 
 .app {
     min-height: 100vh;
+    overflow: hidden;
+    position: relative;
 }
 
 .header {
@@ -65,17 +83,103 @@ body {
 .main {
     padding-top: 70px;
     min-height: 100vh;
+    overflow: hidden;
 }
 
 .main-screen {
     min-height: calc(100vh - 70px);
     background: #f8f9fa;
+    overflow: hidden;
 }
 
-.profile-header {
+.main-menu {
+    padding: 24px 16px;
+}
+
+.menu-cards {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.menu-card {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.menu-card:hover {
+    transform: translateY(-2px);
+    border-color: #007bff;
+    box-shadow: 0 4px 16px rgba(0,123,255,0.2);
+}
+
+.menu-icon {
+    font-size: 48px;
+    margin-bottom: 12px;
+}
+
+.menu-card h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.menu-card p {
+    font-size: 14px;
+    color: #666;
+}
+
+.access-warning {
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.warning-icon {
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+.access-warning p {
+    color: #856404;
+    font-size: 14px;
+    margin: 0;
+    text-align: left;
+}
+
+/* Стили для экрана событий */
+.events-screen {
+    background: #f8f9fa;
+    min-height: calc(100vh - 70px);
+    overflow-y: auto;
+}
+
+.events-header {
     padding: 12px 16px;
     border-bottom: 1px solid #e1e5e9;
     background: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.events-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #333;
 }
 
 .back-button {
@@ -86,11 +190,174 @@ body {
     cursor: pointer;
     padding: 8px 0;
     font-weight: 500;
+    font-family: 'JetBrains Mono', monospace;
 }
 
+.events-container {
+    padding: 20px 16px;
+}
+
+.events-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.event-card {
+    background: white;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border: 1px solid #e1e5e9;
+    transition: all 0.3s ease;
+}
+
+.event-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+}
+
+.event-content {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+}
+
+.event-main {
+    flex: 1;
+    min-width: 0;
+}
+
+.event-title {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #333;
+    line-height: 1.4;
+}
+
+.event-short-desc {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.5;
+    margin-bottom: 0;
+}
+
+.event-details {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.event-date {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #007bff;
+    color: white;
+    border-radius: 8px;
+    padding: 8px 12px;
+    min-width: 60px;
+}
+
+.event-date-day {
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.event-date-month {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: lowercase;
+    line-height: 1;
+}
+
+.event-time-location {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+}
+
+.event-time {
+    font-size: 13px;
+    font-weight: 600;
+    color: #333;
+}
+
+.event-location {
+    font-size: 12px;
+    color: #666;
+    text-align: right;
+    max-width: 120px;
+    line-height: 1.3;
+}
+
+.no-access-message {
+    text-align: center;
+    padding: 60px 20px;
+    background: white;
+    margin: 20px;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.no-access-icon {
+    font-size: 64px;
+    margin-bottom: 20px;
+}
+
+.no-access-message h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: #333;
+}
+
+.no-access-message p {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.5;
+}
+
+.no-events {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.no-events-icon {
+    font-size: 64px;
+    margin-bottom: 20px;
+    opacity: 0.5;
+}
+
+.no-events h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: #666;
+}
+
+.no-events p {
+    font-size: 14px;
+    color: #999;
+}
+
+/* Стили для профиля */
 .profile-screen {
     background: white;
     min-height: calc(100vh - 70px);
+}
+
+.profile-header {
+    padding: 12px 16px;
+    border-bottom: 1px solid #e1e5e9;
+    background: white;
+    display: flex;
+    align-items: center;
 }
 
 .profile-view {
@@ -205,6 +472,7 @@ body {
     transform: translateY(-2px);
 }
 
+/* Стили для редактирования профиля */
 .edit-profile-screen {
     background: white;
     min-height: calc(100vh - 70px);
@@ -340,6 +608,7 @@ body {
     cursor: not-allowed;
 }
 
+/* Стили для загрузки */
 .loading-section {
     text-align: center;
     padding: 60px 20px;
@@ -372,6 +641,27 @@ body {
     font-size: 14px;
 }
 
+/* Вспомогательные классы */
+.no-links {
+    color: #999;
+    font-style: italic;
+    text-align: center;
+    padding: 20px;
+}
+
+.profile-bio:empty::before {
+    content: "Пока ничего не рассказал о себе";
+    color: #999;
+    font-style: italic;
+}
+
+.profile-position:empty::before {
+    content: "Должность не указана";
+    color: #999;
+    font-style: italic;
+}
+
+/* Адаптивность */
 @media (max-width: 480px) {
     .header {
         padding: 10px 16px;
@@ -414,16 +704,164 @@ body {
         height: 80px;
         font-size: 24px;
     }
+    
+    .menu-card {
+        padding: 20px;
+    }
+    
+    .menu-icon {
+        font-size: 40px;
+    }
+    
+    .event-card {
+        padding: 16px;
+    }
+    
+    .event-content {
+        gap: 12px;
+    }
+    
+    .event-date {
+        min-width: 50px;
+        padding: 6px 10px;
+    }
+    
+    .event-date-day {
+        font-size: 18px;
+    }
+    
+    .event-date-month {
+        font-size: 11px;
+    }
 }
 
-.profile-bio:empty::before {
-    content: "Пока ничего не рассказал о себе";
-    color: #999;
-    font-style: italic;
+/* Улучшения для событий на маленьких экранах */
+@media (max-width: 360px) {
+    .event-content {
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    .event-details {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+    }
+    
+    .event-time-location {
+        align-items: flex-start;
+    }
+    
+    .event-location {
+        max-width: none;
+        text-align: left;
+    }
 }
 
-.profile-position:empty::before {
-    content: "Должность не указана";
-    color: #999;
-    font-style: italic;
+/* Анимации для плавности */
+.event-card, .menu-card, .profile-link {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Улучшение скролла */
+.events-screen::-webkit-scrollbar {
+    width: 4px;
+}
+
+.events-screen::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.events-screen::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 2px;
+}
+
+.events-screen::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+/* Состояния наведения для десктопов */
+@media (hover: hover) {
+    .menu-card:hover, .profile-link:hover, .event-card:hover {
+        transform: translateY(-2px);
+    }
+}
+
+/* Состояния активного нажатия для мобильных */
+.menu-card:active, .profile-link:active, .event-card:active {
+    transform: translateY(0);
+    transition: transform 0.1s ease;
+}
+
+/* Улучшение доступности */
+@media (prefers-reduced-motion: reduce) {
+    .menu-card, .profile-link, .event-card, .save-profile-btn {
+        transition: none;
+    }
+    
+    .loading-spinner {
+        animation: none;
+        border: 3px solid #f3f3f3;
+        border-top: 3px solid #007bff;
+    }
+}
+
+/* Поддержка темной темы Telegram */
+@media (prefers-color-scheme: dark) {
+    .app {
+        background: #1c1c1c;
+        color: #ffffff;
+    }
+    
+    .header, .profile-header, .events-header {
+        background: #2d2d2d;
+        border-bottom-color: #404040;
+    }
+    
+    .user-name-header, .events-title, .profile-name, .bio-section h3, .links-section h3 {
+        color: #ffffff;
+    }
+    
+    .menu-card, .event-card, .no-access-message {
+        background: #2d2d2d;
+        border-color: #404040;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+    
+    .profile-info, .profile-edit-card {
+        background: #1c1c1c;
+    }
+    
+    .text-input, .link-input, .bio-edit-textarea, .profile-bio {
+        background: #2d2d2d;
+        border-color: #404040;
+        color: #ffffff;
+    }
+    
+    .text-input:focus, .link-input:focus, .bio-edit-textarea:focus {
+        background: #363636;
+    }
+    
+    .profile-username, .event-short-desc, .event-location, .menu-card p {
+        color: #b0b0b0;
+    }
+    
+    .access-warning {
+        background: #3a2e00;
+        border-color: #5a4a00;
+    }
+    
+    .access-warning p {
+        color: #ffd54f;
+    }
+    
+    .no-access-message h3, .no-events h3 {
+        color: #ffffff;
+    }
+    
+    .no-access-message p, .no-events p {
+        color: #b0b0b0;
+    }
 }

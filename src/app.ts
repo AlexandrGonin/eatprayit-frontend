@@ -21,6 +21,17 @@ interface User {
     };
 }
 
+interface Event {
+    id: number;
+    title: string;
+    short_description: string;
+    description?: string;
+    date: string;
+    time: string;
+    location: string;
+    event_type?: string;
+}
+
 // Функция для безопасного получения элементов
 function getElement(id: string): HTMLElement {
     const element = document.getElementById(id);
@@ -37,6 +48,7 @@ const elements = {
     mainScreen: getElement('main-screen'),
     profileScreen: getElement('profile-screen'),
     editProfileScreen: getElement('edit-profile-screen'),
+    eventsScreen: getElement('events-screen'),
     loadingSection: getElement('loading-section'),
     userAvatarEdit: document.getElementById('user-avatar-edit') as HTMLImageElement,
     avatarPlaceholderEdit: document.getElementById('avatar-placeholder-edit') as HTMLDivElement,
@@ -49,6 +61,7 @@ const elements = {
     saveProfileBtn: document.getElementById('save-profile-btn') as HTMLButtonElement,
     backToMainBtn: document.getElementById('back-to-main-btn') as HTMLButtonElement,
     backToProfileBtn: document.getElementById('back-to-profile-btn') as HTMLButtonElement,
+    backToMainFromEventsBtn: document.getElementById('back-to-main-from-events-btn') as HTMLButtonElement,
     profileAvatar: document.getElementById('profile-avatar') as HTMLImageElement,
     avatarPlaceholderLarge: document.getElementById('avatar-placeholder-large') as HTMLDivElement,
     profileName: document.getElementById('profile-name') as HTMLHeadingElement,
@@ -56,7 +69,11 @@ const elements = {
     profilePosition: document.getElementById('profile-position') as HTMLParagraphElement,
     profileBio: document.getElementById('profile-bio') as HTMLParagraphElement,
     profileCoins: document.getElementById('profile-coins') as HTMLParagraphElement,
-    profileLinks: document.getElementById('profile-links') as HTMLDivElement
+    profileLinks: document.getElementById('profile-links') as HTMLDivElement,
+    eventsList: document.getElementById('events-list') as HTMLDivElement,
+    noAccessMessage: document.getElementById('no-access-message') as HTMLDivElement,
+    eventsTab: document.getElementById('events-tab') as HTMLButtonElement,
+    profileTab: document.getElementById('profile-tab') as HTMLButtonElement
 };
 
 let currentUser: User | null = null;
@@ -68,6 +85,17 @@ async function initializeApp(): Promise<void> {
         const tg = (window as any).Telegram.WebApp;
         if (!tg) {
             throw new Error('Telegram WebApp не загружен');
+        }
+        
+        // ОТКЛЮЧАЕМ ЗУМ И СКРОЛЛ
+        tg.disableVerticalSwipes();
+        tg.disableHorizontalSwipes();
+        tg.preventBackgroundTransitions();
+        
+        // Отключаем масштабирование
+        const viewport = document.querySelector('meta[name="viewport"]');
+        if (viewport) {
+            viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
         }
         
         tg.expand();
@@ -114,8 +142,8 @@ async function initializeApp(): Promise<void> {
         console.log('📊 Данные доступа:', accessData);
         
         if (!accessData.hasAccess) {
-            console.error('❌ Доступ запрещен:', accessData);
-            throw new Error('У вас нет доступа к Mini App. Зарегистрируйтесь через Telegram бота.');
+            console.error('❌ Пользователь не найден в системе');
+            throw new Error('Пользователь не найден. Зарегистрируйтесь через Telegram бота.');
         }
 
         console.log('✅ Доступ разрешен, загружаем профиль...');
@@ -142,8 +170,9 @@ async function initializeApp(): Promise<void> {
         
         currentUser = authData.user;
         
-        // Показываем шапку
+        // Показываем шапку и основное меню
         renderHeader(currentUser);
+        renderMainMenu(currentUser);
         showLoading(false);
         showScreen('main');
         
@@ -154,9 +183,6 @@ async function initializeApp(): Promise<void> {
         showLoading(false);
     }
 }
-
-// Остальные функции остаются без изменений...
-// renderHeader, renderProfile, renderLinks, showProfile, showEditProfile, saveProfile и т.д.
 
 function renderHeader(user: User | null): void {
     if (!user) return;
@@ -174,6 +200,148 @@ function renderHeader(user: User | null): void {
     
     elements.userNameHeader.textContent = user.first_name || 'Пользователь';
 }
+
+function renderMainMenu(user: User | null): void {
+    if (!user) return;
+    
+    const mainScreen = elements.mainScreen;
+    mainScreen.innerHTML = `
+        <div class="main-menu">
+            <div class="menu-cards">
+                <div class="menu-card" id="events-tab">
+                    <div class="menu-icon">📅</div>
+                    <h3>Мероприятия</h3>
+                    <p>Расписание IT-ивентов</p>
+                </div>
+                <div class="menu-card" id="profile-tab">
+                    <div class="menu-icon">👤</div>
+                    <h3>Профиль</h3>
+                    <p>Ваши данные и настройки</p>
+                </div>
+            </div>
+            ${!user.is_active ? `
+                <div class="access-warning">
+                    <div class="warning-icon">🔒</div>
+                    <p>Для просмотра мероприятий нужна реферальная ссылка</p>
+                </div>
+            ` : ''}
+        </div>
+    `;
+    
+    // Добавляем обработчики событий после рендера
+    setTimeout(() => {
+        const eventsTab = document.getElementById('events-tab');
+        const profileTab = document.getElementById('profile-tab');
+        
+        if (eventsTab) {
+            eventsTab.addEventListener('click', () => showEvents());
+        }
+        if (profileTab) {
+            profileTab.addEventListener('click', () => showProfile());
+        }
+    }, 100);
+}
+
+async function showEvents(): Promise<void> {
+    try {
+        showLoading(true);
+        
+        if (!currentUser) {
+            throw new Error('Нет данных пользователя');
+        }
+        
+        const response = await fetch(`${CONFIG.BACKEND_URL}/events/${currentUser.telegram_id}`);
+        
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({ error: 'Ошибка сервера' }));
+            
+            if (response.status === 403) {
+                // Пользователь не активен - показываем сообщение
+                renderNoAccessScreen();
+                showScreen('events');
+                showLoading(false);
+                return;
+            }
+            
+            throw new Error(errorData.error || `Ошибка ${response.status}`);
+        }
+        
+        const data = await response.json();
+        renderEvents(data.events);
+        showScreen('events');
+        
+    } catch (error) {
+        console.error('Ошибка загрузки событий:', error);
+        const errorMessage = error instanceof Error ? error.message : 'Не удалось загрузить события';
+        showError(errorMessage);
+    } finally {
+        showLoading(false);
+    }
+}
+
+function renderEvents(events: Event[]): void {
+    const eventsList = elements.eventsList;
+    
+    if (!events || events.length === 0) {
+        eventsList.innerHTML = `
+            <div class="no-events">
+                <div class="no-events-icon">📅</div>
+                <h3>Нет предстоящих мероприятий</h3>
+                <p>Следите за обновлениями, скоро появятся новые события!</p>
+            </div>
+        `;
+        return;
+    }
+    
+    const eventsHTML = events.map(event => `
+        <div class="event-card">
+            <div class="event-content">
+                <div class="event-main">
+                    <h3 class="event-title">${escapeHtml(event.title)}</h3>
+                    <p class="event-short-desc">${escapeHtml(event.short_description)}</p>
+                </div>
+                <div class="event-details">
+                    <div class="event-date">
+                        <span class="event-date-day">${formatEventDate(event.date)}</span>
+                        <span class="event-date-month">${formatEventMonth(event.date)}</span>
+                    </div>
+                    <div class="event-time-location">
+                        <div class="event-time">🕒 ${event.time.slice(0, 5)}</div>
+                        <div class="event-location">📍 ${escapeHtml(event.location)}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `).join('');
+    
+    eventsList.innerHTML = eventsHTML;
+    elements.noAccessMessage.style.display = 'none';
+    eventsList.style.display = 'block';
+}
+
+function renderNoAccessScreen(): void {
+    elements.eventsList.style.display = 'none';
+    elements.noAccessMessage.style.display = 'block';
+}
+
+function formatEventDate(dateString: string): string {
+    const date = new Date(dateString);
+    return date.getDate().toString();
+}
+
+function formatEventMonth(dateString: string): string {
+    const date = new Date(dateString);
+    const months = ['янв', 'фев', 'мар', 'апр', 'мая', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек'];
+    return months[date.getMonth()];
+}
+
+function escapeHtml(text: string): string {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+// Остальные функции (renderProfile, renderLinks, showProfile, showEditProfile, saveProfile) остаются без изменений...
 
 function renderProfile(user: User | null): void {
     if (!user) return;
@@ -340,10 +508,11 @@ async function saveProfile(): Promise<void> {
     }
 }
 
-function showScreen(screen: 'main' | 'profile' | 'edit'): void {
+function showScreen(screen: 'main' | 'profile' | 'edit' | 'events'): void {
     elements.mainScreen.style.display = screen === 'main' ? 'block' : 'none';
     elements.profileScreen.style.display = screen === 'profile' ? 'block' : 'none';
     elements.editProfileScreen.style.display = screen === 'edit' ? 'block' : 'none';
+    elements.eventsScreen.style.display = screen === 'events' ? 'block' : 'none';
 }
 
 function showLoading(show: boolean): void {
@@ -352,6 +521,7 @@ function showLoading(show: boolean): void {
         elements.mainScreen.style.display = 'none';
         elements.profileScreen.style.display = 'none';
         elements.editProfileScreen.style.display = 'none';
+        elements.eventsScreen.style.display = 'none';
     } else {
         elements.loadingSection.classList.remove('show');
     }
@@ -377,6 +547,7 @@ function setupEventListeners(): void {
     elements.avatarPlaceholderLarge.addEventListener('click', showEditProfile);
     elements.backToMainBtn.addEventListener('click', () => showScreen('main'));
     elements.backToProfileBtn.addEventListener('click', () => showScreen('profile'));
+    elements.backToMainFromEventsBtn.addEventListener('click', () => showScreen('main'));
     elements.saveProfileBtn.addEventListener('click', saveProfile);
 }
 
