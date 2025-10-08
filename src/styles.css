@@ -84,8 +84,13 @@ body {
     overflow-y: auto;
 }
 
+/* Главный экран */
 .main-menu {
     padding: 24px 16px;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .menu-cards {
@@ -184,6 +189,7 @@ body {
     gap: 16px;
 }
 
+/* Карточка события */
 .event-card {
     background: #2d2d2d;
     border-radius: 16px;
@@ -192,7 +198,9 @@ body {
     border: 1px solid #404040;
     transition: all 0.3s ease;
     cursor: pointer;
+    margin: 0 8px; /* Боковые отступы */
 }
+
 
 .event-card:hover {
     transform: translateY(-2px);
@@ -486,8 +494,13 @@ body {
     align-items: center;
 }
 
+/* Профиль */
 .profile-view {
     padding: 0 16px 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .profile-avatar-section {
@@ -1139,4 +1152,167 @@ body {
     padding: 20px 16px;
     flex: 1;
     overflow-y: auto;
+}
+
+/* Контейнер для списка событий */
+.events-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 0 0 20px 0; /* Отступ снизу для скролла */
+}
+
+/* Контейнер событий */
+.events-container {
+    padding: 20px 8px; /* Уменьшили боковые отступы */
+    flex: 1;
+    overflow-y: auto;
+    max-width: 1200px; /* Максимальная ширина для больших экранов */
+    margin: 0 auto; /* Центрирование на широких экранах */
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.profile-edit-card {
+    padding: 0 16px 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Детальная страница события */
+.event-detail-container {
+    padding: 20px 16px;
+    flex: 1;
+    overflow-y: auto;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.event-detail-card {
+    background: #2d2d2d;
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    border: 1px solid #404040;
+    margin: 0 8px; /* Боковые отступы */
+}
+
+/* Хедеры экранов */
+.screen-header {
+    padding: 12px 16px;
+    border-bottom: 1px solid #404040;
+    background: #2d2d2d;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    min-height: 60px;
+    box-sizing: border-box;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+/* Адаптивность для больших экранов */
+@media (min-width: 768px) {
+    .events-container {
+        padding: 30px 20px;
+    }
+    
+    .event-card {
+        margin: 0 12px;
+        padding: 24px;
+    }
+    
+    .events-list {
+        gap: 20px;
+    }
+    
+    .main-menu {
+        padding: 40px 24px;
+    }
+    
+    .menu-cards {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 24px;
+    }
+    
+    .menu-card {
+        padding: 32px;
+    }
+    
+    .profile-view,
+    .profile-edit-card {
+        padding: 0 24px 32px;
+    }
+    
+    .event-detail-container {
+        padding: 30px 24px;
+    }
+    
+    .event-detail-card {
+        margin: 0 12px;
+        padding: 32px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .events-container {
+        padding: 40px 24px;
+    }
+    
+    .event-card {
+        margin: 0 16px;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    .event-detail-card {
+        margin: 0 16px;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+/* Исправить поведение при растяжении */
+.app {
+    background: #1c1c1c;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.main {
+    padding-top: 70px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: #1c1c1c;
+}
+
+/* Все экраны должны занимать всю доступную высоту */
+.events-screen,
+.event-detail-screen,
+.profile-screen,
+.edit-profile-screen {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    background: #1c1c1c;
+}
+
+/* Контент должен растягиваться правильно */
+.screen-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: #1c1c1c;
 }
