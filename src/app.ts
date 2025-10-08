@@ -305,7 +305,7 @@ function renderEvents(events: Event[]): void {
     setTimeout(() => {
         const eventCards = document.querySelectorAll('.event-card');
         eventCards.forEach(card => {
-            card.addEventListener('click', (e) => {
+            card.addEventListener('click', () => {
                 const eventIndex = parseInt(card.getAttribute('data-event-index') || '0');
                 showEventDetail(eventIndex);
             });
