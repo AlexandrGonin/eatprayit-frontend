@@ -71,9 +71,7 @@ const elements = {
     profileCoins: document.getElementById('profile-coins') as HTMLParagraphElement,
     profileLinks: document.getElementById('profile-links') as HTMLDivElement,
     eventsList: document.getElementById('events-list') as HTMLDivElement,
-    noAccessMessage: document.getElementById('no-access-message') as HTMLDivElement,
-    eventsTab: document.getElementById('events-tab') as HTMLButtonElement,
-    profileTab: document.getElementById('profile-tab') as HTMLButtonElement
+    noAccessMessage: document.getElementById('no-access-message') as HTMLDivElement
 };
 
 let currentUser: User | null = null;
@@ -85,17 +83,6 @@ async function initializeApp(): Promise<void> {
         const tg = (window as any).Telegram.WebApp;
         if (!tg) {
             throw new Error('Telegram WebApp не загружен');
-        }
-        
-        // ОТКЛЮЧАЕМ ЗУМ И СКРОЛЛ
-        tg.disableVerticalSwipes();
-        tg.disableHorizontalSwipes();
-        tg.preventBackgroundTransitions();
-        
-        // Отключаем масштабирование
-        const viewport = document.querySelector('meta[name="viewport"]');
-        if (viewport) {
-            viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
         }
         
         tg.expand();
@@ -340,8 +327,6 @@ function escapeHtml(text: string): string {
     div.textContent = text;
     return div.innerHTML;
 }
-
-// Остальные функции (renderProfile, renderLinks, showProfile, showEditProfile, saveProfile) остаются без изменений...
 
 function renderProfile(user: User | null): void {
     if (!user) return;
