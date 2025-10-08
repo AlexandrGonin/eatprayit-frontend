@@ -49,6 +49,7 @@ const elements = {
     profileScreen: getElement('profile-screen'),
     editProfileScreen: getElement('edit-profile-screen'),
     eventsScreen: getElement('events-screen'),
+    eventDetailScreen: getElement('event-detail-screen'),
     loadingSection: getElement('loading-section'),
     userAvatarEdit: document.getElementById('user-avatar-edit') as HTMLImageElement,
     avatarPlaceholderEdit: document.getElementById('avatar-placeholder-edit') as HTMLDivElement,
@@ -62,6 +63,7 @@ const elements = {
     backToMainBtn: document.getElementById('back-to-main-btn') as HTMLButtonElement,
     backToProfileBtn: document.getElementById('back-to-profile-btn') as HTMLButtonElement,
     backToMainFromEventsBtn: document.getElementById('back-to-main-from-events-btn') as HTMLButtonElement,
+    backToEventsBtn: document.getElementById('back-to-events-btn') as HTMLButtonElement,
     profileAvatar: document.getElementById('profile-avatar') as HTMLImageElement,
     avatarPlaceholderLarge: document.getElementById('avatar-placeholder-large') as HTMLDivElement,
     profileName: document.getElementById('profile-name') as HTMLHeadingElement,
@@ -71,10 +73,12 @@ const elements = {
     profileCoins: document.getElementById('profile-coins') as HTMLParagraphElement,
     profileLinks: document.getElementById('profile-links') as HTMLDivElement,
     eventsList: document.getElementById('events-list') as HTMLDivElement,
-    noAccessMessage: document.getElementById('no-access-message') as HTMLDivElement
+    noAccessMessage: document.getElementById('no-access-message') as HTMLDivElement,
+    eventDetailContent: document.getElementById('event-detail-content') as HTMLDivElement
 };
 
 let currentUser: User | null = null;
+let currentEvents: Event[] = [];
 
 async function initializeApp(): Promise<void> {
     try {
@@ -200,11 +204,6 @@ function renderMainMenu(user: User | null): void {
                     <h3>Мероприятия</h3>
                     <p>Расписание IT-ивентов</p>
                 </div>
-                <div class="menu-card" id="profile-tab">
-                    <div class="menu-icon">👤</div>
-                    <h3>Профиль</h3>
-                    <p>Ваши данные и настройки</p>
-                </div>
             </div>
             ${!user.is_active ? `
                 <div class="access-warning">
@@ -218,13 +217,9 @@ function renderMainMenu(user: User | null): void {
     // Добавляем обработчики событий после рендера
     setTimeout(() => {
         const eventsTab = document.getElementById('events-tab');
-        const profileTab = document.getElementById('profile-tab');
         
         if (eventsTab) {
             eventsTab.addEventListener('click', () => showEvents());
-        }
-        if (profileTab) {
-            profileTab.addEventListener('click', () => showProfile());
         }
     }, 100);
 }
@@ -254,7 +249,8 @@ async function showEvents(): Promise<void> {
         }
         
         const data = await response.json();
-        renderEvents(data.events);
+        currentEvents = data.events;
+        renderEvents(currentEvents);
         showScreen('events');
         
     } catch (error) {
@@ -280,8 +276,8 @@ function renderEvents(events: Event[]): void {
         return;
     }
     
-    const eventsHTML = events.map(event => `
-        <div class="event-card">
+    const eventsHTML = events.map((event, index) => `
+        <div class="event-card" data-event-index="${index}">
             <div class="event-content">
                 <div class="event-main">
                     <h3 class="event-title">${escapeHtml(event.title)}</h3>
@@ -304,6 +300,76 @@ function renderEvents(events: Event[]): void {
     eventsList.innerHTML = eventsHTML;
     elements.noAccessMessage.style.display = 'none';
     eventsList.style.display = 'block';
+    
+    // Добавляем обработчики для карточек событий
+    setTimeout(() => {
+        const eventCards = document.querySelectorAll('.event-card');
+        eventCards.forEach(card => {
+            card.addEventListener('click', (e) => {
+                const eventIndex = parseInt(card.getAttribute('data-event-index') || '0');
+                showEventDetail(eventIndex);
+            });
+        });
+    }, 100);
+}
+
+function showEventDetail(eventIndex: number): void {
+    if (!currentEvents[eventIndex]) return;
+    
+    const event = currentEvents[eventIndex];
+    renderEventDetail(event);
+    showScreen('event-detail');
+}
+
+function renderEventDetail(event: Event): void {
+    const eventDetailContent = elements.eventDetailContent;
+    
+    eventDetailContent.innerHTML = `
+        <div class="event-detail-card">
+            <div class="event-detail-header">
+                <h1 class="event-detail-title">${escapeHtml(event.title)}</h1>
+                <div class="event-detail-date-badge">
+                    <div class="event-detail-date">
+                        <span class="event-detail-day">${formatEventDate(event.date)}</span>
+                        <span class="event-detail-month">${formatEventMonth(event.date)}</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="event-detail-info">
+                <div class="event-detail-item">
+                    <span class="event-detail-icon">🕒</span>
+                    <div class="event-detail-text">
+                        <strong>Время</strong>
+                        <span>${event.time.slice(0, 5)}</span>
+                    </div>
+                </div>
+                
+                <div class="event-detail-item">
+                    <span class="event-detail-icon">📍</span>
+                    <div class="event-detail-text">
+                        <strong>Место</strong>
+                        <span>${escapeHtml(event.location)}</span>
+                    </div>
+                </div>
+                
+                ${event.event_type ? `
+                <div class="event-detail-item">
+                    <span class="event-detail-icon">🎯</span>
+                    <div class="event-detail-text">
+                        <strong>Тип мероприятия</strong>
+                        <span>${escapeHtml(event.event_type)}</span>
+                    </div>
+                </div>
+                ` : ''}
+            </div>
+            
+            <div class="event-detail-description">
+                <h3>Описание</h3>
+                <p>${escapeHtml(event.description || event.short_description)}</p>
+            </div>
+        </div>
+    `;
 }
 
 function renderNoAccessScreen(): void {
@@ -346,7 +412,7 @@ function renderProfile(user: User | null): void {
     elements.profileUsername.textContent = user.username ? `@${user.username}` : '';
     elements.profilePosition.textContent = user.position || 'Должность не указана';
     elements.profileBio.textContent = user.bio || 'Пока ничего не рассказал о себе';
-    elements.profileCoins.textContent = `Монеты: ${user.coins || 0}`;
+    elements.profileCoins.textContent = `${user.coins || 0} монет`;
     
     renderLinks(user.links);
 }
@@ -367,7 +433,8 @@ function renderLinks(links: any): void {
             : 'Telegram';
         linksHTML.push(`
             <a href="${links.telegram}" class="profile-link" target="_blank" rel="noopener noreferrer">
-                <span>Telegram: ${displayName}</span>
+                <span class="link-icon">📱</span>
+                <span class="link-text">Telegram: ${displayName}</span>
             </a>
         `);
     }
@@ -376,7 +443,8 @@ function renderLinks(links: any): void {
         hasLinks = true;
         linksHTML.push(`
             <a href="${links.linkedin}" class="profile-link" target="_blank" rel="noopener noreferrer">
-                <span>LinkedIn</span>
+                <span class="link-icon">💼</span>
+                <span class="link-text">LinkedIn</span>
             </a>
         `);
     }
@@ -385,7 +453,8 @@ function renderLinks(links: any): void {
         hasLinks = true;
         linksHTML.push(`
             <a href="${links.vk}" class="profile-link" target="_blank" rel="noopener noreferrer">
-                <span>VK</span>
+                <span class="link-icon">👥</span>
+                <span class="link-text">VK</span>
             </a>
         `);
     }
@@ -394,7 +463,8 @@ function renderLinks(links: any): void {
         hasLinks = true;
         linksHTML.push(`
             <a href="${links.instagram}" class="profile-link" target="_blank" rel="noopener noreferrer">
-                <span>Instagram</span>
+                <span class="link-icon">📸</span>
+                <span class="link-text">Instagram</span>
             </a>
         `);
     }
@@ -493,11 +563,12 @@ async function saveProfile(): Promise<void> {
     }
 }
 
-function showScreen(screen: 'main' | 'profile' | 'edit' | 'events'): void {
+function showScreen(screen: 'main' | 'profile' | 'edit' | 'events' | 'event-detail'): void {
     elements.mainScreen.style.display = screen === 'main' ? 'block' : 'none';
     elements.profileScreen.style.display = screen === 'profile' ? 'block' : 'none';
     elements.editProfileScreen.style.display = screen === 'edit' ? 'block' : 'none';
     elements.eventsScreen.style.display = screen === 'events' ? 'block' : 'none';
+    elements.eventDetailScreen.style.display = screen === 'event-detail' ? 'block' : 'none';
 }
 
 function showLoading(show: boolean): void {
@@ -507,6 +578,7 @@ function showLoading(show: boolean): void {
         elements.profileScreen.style.display = 'none';
         elements.editProfileScreen.style.display = 'none';
         elements.eventsScreen.style.display = 'none';
+        elements.eventDetailScreen.style.display = 'none';
     } else {
         elements.loadingSection.classList.remove('show');
     }
@@ -533,6 +605,7 @@ function setupEventListeners(): void {
     elements.backToMainBtn.addEventListener('click', () => showScreen('main'));
     elements.backToProfileBtn.addEventListener('click', () => showScreen('profile'));
     elements.backToMainFromEventsBtn.addEventListener('click', () => showScreen('main'));
+    elements.backToEventsBtn.addEventListener('click', () => showScreen('events'));
     elements.saveProfileBtn.addEventListener('click', saveProfile);
 }
 

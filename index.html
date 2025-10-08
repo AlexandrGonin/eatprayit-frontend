@@ -27,7 +27,7 @@
                 <div class="events-header">
                     <button id="back-to-main-from-events-btn" class="back-button">Назад</button>
                     <h2 class="events-title">Мероприятия</h2>
-                    <div style="width: 60px;"></div> <!-- Для выравнивания -->
+                    <div style="width: 60px;"></div>
                 </div>
                 <div class="events-container">
                     <div id="events-list" class="events-list">
@@ -41,30 +41,56 @@
                 </div>
             </div>
 
+            <div id="event-detail-screen" class="event-detail-screen" style="display: none;">
+                <div class="event-detail-header">
+                    <button id="back-to-events-btn" class="back-button">Назад</button>
+                    <h2 class="event-detail-title">Мероприятие</h2>
+                    <div style="width: 60px;"></div>
+                </div>
+                <div class="event-detail-container">
+                    <div id="event-detail-content" class="event-detail-content">
+                        <!-- Детали события загружаются динамически -->
+                    </div>
+                </div>
+            </div>
+
             <div id="profile-screen" class="profile-screen" style="display: none;">
                 <div class="profile-header">
                     <button id="back-to-main-btn" class="back-button">Назад</button>
                 </div>
                 <div class="profile-view">
-                    <div class="profile-avatar-large">
-                        <img id="profile-avatar" class="avatar-large" src="" alt="Avatar" style="display: none;">
-                        <div id="avatar-placeholder-large" class="avatar-placeholder-large"></div>
+                    <div class="profile-avatar-section">
+                        <div class="profile-avatar-large">
+                            <img id="profile-avatar" class="avatar-large" src="" alt="Avatar" style="display: none;">
+                            <div id="avatar-placeholder-large" class="avatar-placeholder-large"></div>
+                        </div>
                     </div>
                     
-                    <div class="profile-info">
-                        <h2 id="profile-name" class="profile-name"></h2>
-                        <p id="profile-username" class="profile-username"></p>
-                        <p id="profile-coins" class="profile-coins"></p>
-                        <p id="profile-position" class="profile-position"></p>
-                        
-                        <div class="bio-section">
-                            <h3>О себе</h3>
-                            <p id="profile-bio" class="profile-bio"></p>
+                    <div class="profile-info-card">
+                        <div class="profile-main-info">
+                            <h2 id="profile-name" class="profile-name"></h2>
+                            <p id="profile-username" class="profile-username"></p>
+                            <div class="profile-stats">
+                                <div class="stat-item">
+                                    <span class="stat-icon">🪙</span>
+                                    <span id="profile-coins" class="stat-value"></span>
+                                </div>
+                            </div>
+                            <p id="profile-position" class="profile-position"></p>
                         </div>
                         
-                        <div class="links-section">
-                            <h3>Ссылки</h3>
-                            <div id="profile-links" class="profile-links">
+                        <div class="profile-section">
+                            <h3 class="section-title">О себе</h3>
+                            <div class="section-content">
+                                <p id="profile-bio" class="profile-bio"></p>
+                            </div>
+                        </div>
+                        
+                        <div class="profile-section">
+                            <h3 class="section-title">Ссылки</h3>
+                            <div class="section-content">
+                                <div id="profile-links" class="profile-links">
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -18,9 +18,9 @@ html {
 
 body {
     font-family: 'JetBrains Mono', monospace;
-    background-color: #f8f9fa;
+    background-color: #1c1c1c;
     min-height: 100vh;
-    color: #333;
+    color: #ffffff;
     line-height: 1.6;
     overflow: hidden;
     position: fixed;
@@ -32,11 +32,12 @@ body {
     min-height: 100vh;
     overflow: hidden;
     position: relative;
+    background: #1c1c1c;
 }
 
 .header {
-    background: white;
-    border-bottom: 1px solid #e1e5e9;
+    background: #2d2d2d;
+    border-bottom: 1px solid #404040;
     padding: 12px 16px;
     position: fixed;
     top: 0;
@@ -77,18 +78,19 @@ body {
 .user-name-header {
     font-size: 18px;
     font-weight: 600;
-    color: #333;
+    color: #ffffff;
 }
 
 .main {
     padding-top: 70px;
     min-height: 100vh;
     overflow: hidden;
+    background: #1c1c1c;
 }
 
 .main-screen {
     min-height: calc(100vh - 70px);
-    background: #f8f9fa;
+    background: #1c1c1c;
     overflow: hidden;
 }
 
@@ -104,20 +106,20 @@ body {
 }
 
 .menu-card {
-    background: white;
+    background: #2d2d2d;
     border-radius: 16px;
     padding: 24px;
     text-align: center;
     cursor: pointer;
     transition: all 0.3s ease;
-    border: 2px solid transparent;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border: 2px solid #404040;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
 }
 
 .menu-card:hover {
     transform: translateY(-2px);
     border-color: #007bff;
-    box-shadow: 0 4px 16px rgba(0,123,255,0.2);
+    box-shadow: 0 6px 20px rgba(0,123,255,0.3);
 }
 
 .menu-icon {
@@ -129,17 +131,17 @@ body {
     font-size: 18px;
     font-weight: 700;
     margin-bottom: 8px;
-    color: #333;
+    color: #ffffff;
 }
 
 .menu-card p {
     font-size: 14px;
-    color: #666;
+    color: #b0b0b0;
 }
 
 .access-warning {
-    background: #fff3cd;
-    border: 1px solid #ffeaa7;
+    background: #3a2e00;
+    border: 1px solid #5a4a00;
     border-radius: 12px;
     padding: 16px;
     text-align: center;
@@ -154,7 +156,7 @@ body {
 }
 
 .access-warning p {
-    color: #856404;
+    color: #ffd54f;
     font-size: 14px;
     margin: 0;
     text-align: left;
@@ -162,15 +164,15 @@ body {
 
 /* Стили для экрана событий */
 .events-screen {
-    background: #f8f9fa;
+    background: #1c1c1c;
     min-height: calc(100vh - 70px);
     overflow-y: auto;
 }
 
 .events-header {
     padding: 12px 16px;
-    border-bottom: 1px solid #e1e5e9;
-    background: white;
+    border-bottom: 1px solid #404040;
+    background: #2d2d2d;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -179,7 +181,7 @@ body {
 .events-title {
     font-size: 18px;
     font-weight: 700;
-    color: #333;
+    color: #ffffff;
 }
 
 .back-button {
@@ -204,17 +206,19 @@ body {
 }
 
 .event-card {
-    background: white;
+    background: #2d2d2d;
     border-radius: 16px;
     padding: 20px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    border: 1px solid #e1e5e9;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    border: 1px solid #404040;
     transition: all 0.3s ease;
+    cursor: pointer;
 }
 
 .event-card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+    border-color: #007bff;
 }
 
 .event-content {
@@ -232,13 +236,13 @@ body {
     font-size: 16px;
     font-weight: 700;
     margin-bottom: 8px;
-    color: #333;
+    color: #ffffff;
     line-height: 1.4;
 }
 
 .event-short-desc {
     font-size: 14px;
-    color: #666;
+    color: #b0b0b0;
     line-height: 1.5;
     margin-bottom: 0;
 }
@@ -257,9 +261,9 @@ body {
     align-items: center;
     background: #007bff;
     color: white;
-    border-radius: 8px;
-    padding: 8px 12px;
-    min-width: 60px;
+    border-radius: 12px;
+    padding: 10px 14px;
+    min-width: 65px;
 }
 
 .event-date-day {
@@ -285,24 +289,167 @@ body {
 .event-time {
     font-size: 13px;
     font-weight: 600;
-    color: #333;
+    color: #ffffff;
 }
 
 .event-location {
     font-size: 12px;
-    color: #666;
+    color: #b0b0b0;
     text-align: right;
     max-width: 120px;
     line-height: 1.3;
 }
 
+/* Стили для детальной страницы события */
+.event-detail-screen {
+    background: #1c1c1c;
+    min-height: calc(100vh - 70px);
+    overflow-y: auto;
+}
+
+.event-detail-header {
+    padding: 12px 16px;
+    border-bottom: 1px solid #404040;
+    background: #2d2d2d;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.event-detail-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.event-detail-container {
+    padding: 20px 16px;
+}
+
+.event-detail-card {
+    background: #2d2d2d;
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    border: 1px solid #404040;
+}
+
+.event-detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 24px;
+    border: none;
+    padding: 0;
+    background: none;
+}
+
+.event-detail-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #ffffff;
+    line-height: 1.3;
+    flex: 1;
+    margin-right: 16px;
+}
+
+.event-detail-date-badge {
+    flex-shrink: 0;
+}
+
+.event-detail-date {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #007bff;
+    color: white;
+    border-radius: 16px;
+    padding: 16px 20px;
+    min-width: 70px;
+}
+
+.event-detail-day {
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.event-detail-month {
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: lowercase;
+    line-height: 1;
+    margin-top: 4px;
+}
+
+.event-detail-info {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.event-detail-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px;
+    background: #363636;
+    border-radius: 12px;
+    border-left: 4px solid #007bff;
+}
+
+.event-detail-icon {
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.event-detail-text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.event-detail-text strong {
+    font-size: 14px;
+    font-weight: 600;
+    color: #b0b0b0;
+}
+
+.event-detail-text span {
+    font-size: 16px;
+    font-weight: 500;
+    color: #ffffff;
+}
+
+.event-detail-description {
+    padding: 20px;
+    background: #363636;
+    border-radius: 12px;
+    border-left: 4px solid #007bff;
+}
+
+.event-detail-description h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: #ffffff;
+}
+
+.event-detail-description p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #e0e0e0;
+}
+
 .no-access-message {
     text-align: center;
     padding: 60px 20px;
-    background: white;
+    background: #2d2d2d;
     margin: 20px;
     border-radius: 16px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    border: 1px solid #404040;
 }
 
 .no-access-icon {
@@ -314,12 +461,12 @@ body {
     font-size: 18px;
     font-weight: 700;
     margin-bottom: 12px;
-    color: #333;
+    color: #ffffff;
 }
 
 .no-access-message p {
     font-size: 14px;
-    color: #666;
+    color: #b0b0b0;
     line-height: 1.5;
 }
 
@@ -338,36 +485,41 @@ body {
     font-size: 18px;
     font-weight: 700;
     margin-bottom: 12px;
-    color: #666;
+    color: #b0b0b0;
 }
 
 .no-events p {
     font-size: 14px;
-    color: #999;
+    color: #808080;
 }
 
 /* Стили для профиля */
 .profile-screen {
-    background: white;
+    background: #1c1c1c;
     min-height: calc(100vh - 70px);
 }
 
 .profile-header {
     padding: 12px 16px;
-    border-bottom: 1px solid #e1e5e9;
-    background: white;
+    border-bottom: 1px solid #404040;
+    background: #2d2d2d;
     display: flex;
     align-items: center;
 }
 
 .profile-view {
-    padding: 24px;
+    padding: 24px 16px;
+}
+
+.profile-avatar-section {
+    text-align: center;
+    margin-bottom: 24px;
 }
 
 .profile-avatar-large {
     display: flex;
     justify-content: center;
-    margin-bottom: 24px;
+    margin-bottom: 16px;
 }
 
 .avatar-large {
@@ -393,55 +545,91 @@ body {
     cursor: pointer;
 }
 
-.profile-info {
-    text-align: left;
+.profile-info-card {
+    background: #2d2d2d;
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    border: 1px solid #404040;
+}
+
+.profile-main-info {
+    text-align: center;
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #404040;
 }
 
 .profile-name {
     font-size: 24px;
     font-weight: 700;
-    margin-bottom: 4px;
-    color: #333;
+    margin-bottom: 8px;
+    color: #ffffff;
 }
 
 .profile-username {
-    font-size: 14px;
-    color: #666;
-    margin-bottom: 8px;
+    font-size: 16px;
+    color: #007bff;
+    margin-bottom: 16px;
 }
 
-.profile-coins {
+.profile-stats {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 16px;
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: #363636;
+    border-radius: 12px;
+}
+
+.stat-icon {
     font-size: 16px;
-    color: #ffd700;
+}
+
+.stat-value {
+    font-size: 14px;
     font-weight: 600;
-    margin-bottom: 8px;
+    color: #ffffff;
 }
 
 .profile-position {
     font-size: 16px;
-    color: #007bff;
-    font-weight: 600;
+    color: #b0b0b0;
+    font-weight: 500;
+}
+
+.profile-section {
     margin-bottom: 24px;
 }
 
-.bio-section, .links-section {
-    margin-bottom: 28px;
+.profile-section:last-child {
+    margin-bottom: 0;
 }
 
-.bio-section h3, .links-section h3 {
+.section-title {
     font-size: 16px;
     font-weight: 700;
     margin-bottom: 12px;
-    color: #333;
+    color: #ffffff;
+}
+
+.section-content {
+    background: #363636;
+    border-radius: 12px;
+    padding: 16px;
+    border-left: 4px solid #007bff;
 }
 
 .profile-bio {
-    color: #666;
+    color: #e0e0e0;
     line-height: 1.6;
-    padding: 16px;
-    background: #f8f9fa;
-    border-radius: 8px;
-    border-left: 4px solid #007bff;
     font-size: 14px;
 }
 
@@ -456,30 +644,39 @@ body {
     align-items: center;
     gap: 12px;
     padding: 14px 16px;
-    border: 1px solid #e1e5e9;
+    border: 1px solid #404040;
     border-radius: 8px;
     text-decoration: none;
-    color: #333;
+    color: #ffffff;
     transition: all 0.3s ease;
-    background: white;
+    background: #2d2d2d;
     font-size: 14px;
     font-weight: 500;
 }
 
 .profile-link:hover {
-    background-color: #f8f9fa;
+    background-color: #363636;
     border-color: #007bff;
     transform: translateY(-2px);
 }
 
+.link-icon {
+    font-size: 16px;
+    flex-shrink: 0;
+}
+
+.link-text {
+    flex: 1;
+}
+
 /* Стили для редактирования профиля */
 .edit-profile-screen {
-    background: white;
+    background: #1c1c1c;
     min-height: calc(100vh - 70px);
 }
 
 .profile-edit-card {
-    padding: 24px;
+    padding: 24px 16px;
 }
 
 .profile-edit-card h2 {
@@ -487,7 +684,7 @@ body {
     margin-bottom: 32px;
     font-size: 20px;
     font-weight: 700;
-    color: #333;
+    color: #ffffff;
 }
 
 .edit-avatar-block {
@@ -529,56 +726,66 @@ body {
     display: block;
     margin-bottom: 8px;
     font-weight: 600;
-    color: #333;
+    color: #ffffff;
     font-size: 13px;
 }
 
 .text-input, .link-input {
     width: 100%;
     padding: 12px 16px;
-    border: 1px solid #e1e5e9;
+    border: 1px solid #404040;
     border-radius: 8px;
     font-size: 14px;
     font-family: 'JetBrains Mono', monospace;
     transition: all 0.3s ease;
-    background: #f8f9fa;
+    background: #2d2d2d;
+    color: #ffffff;
 }
 
 .text-input:focus, .link-input:focus {
     outline: none;
     border-color: #007bff;
-    background: white;
+    background: #363636;
+}
+
+.text-input::placeholder, .link-input::placeholder {
+    color: #808080;
 }
 
 .bio-edit-textarea {
     width: 100%;
     padding: 12px 16px;
-    border: 1px solid #e1e5e9;
+    border: 1px solid #404040;
     border-radius: 8px;
     font-family: 'JetBrains Mono', monospace;
     font-size: 14px;
     resize: vertical;
     min-height: 100px;
-    background: #f8f9fa;
+    background: #2d2d2d;
+    color: #ffffff;
 }
 
 .bio-edit-textarea:focus {
     outline: none;
     border-color: #007bff;
-    background: white;
+    background: #363636;
+}
+
+.bio-edit-textarea::placeholder {
+    color: #808080;
 }
 
 .links-edit-section {
     margin-top: 32px;
     padding-top: 24px;
-    border-top: 1px solid #e1e5e9;
+    border-top: 1px solid #404040;
 }
 
 .links-edit-section h3 {
     font-size: 16px;
     font-weight: 700;
     margin-bottom: 20px;
-    color: #333;
+    color: #ffffff;
 }
 
 .form-actions {
@@ -591,7 +798,7 @@ body {
     color: white;
     border: none;
     padding: 16px 20px;
-    border-radius: 8px;
+    border-radius: 12px;
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
@@ -601,11 +808,13 @@ body {
 
 .save-profile-btn:hover {
     background: #0056b3;
+    transform: translateY(-2px);
 }
 
 .save-profile-btn:disabled {
     background: #6c757d;
     cursor: not-allowed;
+    transform: none;
 }
 
 /* Стили для загрузки */
@@ -613,7 +822,7 @@ body {
     text-align: center;
     padding: 60px 20px;
     display: none;
-    background: white;
+    background: #1c1c1c;
     min-height: calc(100vh - 70px);
 }
 
@@ -624,7 +833,7 @@ body {
 .loading-spinner {
     width: 40px;
     height: 40px;
-    border: 3px solid #f3f3f3;
+    border: 3px solid #404040;
     border-top: 3px solid #007bff;
     border-radius: 50%;
     margin: 0 auto 20px;
@@ -637,13 +846,13 @@ body {
 }
 
 .loading-section p {
-    color: #666;
+    color: #b0b0b0;
     font-size: 14px;
 }
 
 /* Вспомогательные классы */
 .no-links {
-    color: #999;
+    color: #808080;
     font-style: italic;
     text-align: center;
     padding: 20px;
@@ -651,13 +860,13 @@ body {
 
 .profile-bio:empty::before {
     content: "Пока ничего не рассказал о себе";
-    color: #999;
+    color: #808080;
     font-style: italic;
 }
 
 .profile-position:empty::before {
     content: "Должность не указана";
-    color: #999;
+    color: #808080;
     font-style: italic;
 }
 
@@ -672,11 +881,11 @@ body {
     }
     
     .profile-view {
-        padding: 20px;
+        padding: 20px 16px;
     }
     
     .profile-edit-card {
-        padding: 20px;
+        padding: 20px 16px;
     }
     
     .avatar-large {
@@ -722,8 +931,8 @@ body {
     }
     
     .event-date {
-        min-width: 50px;
-        padding: 6px 10px;
+        min-width: 55px;
+        padding: 8px 12px;
     }
     
     .event-date-day {
@@ -732,6 +941,27 @@ body {
     
     .event-date-month {
         font-size: 11px;
+    }
+    
+    .event-detail-card {
+        padding: 20px;
+    }
+    
+    .event-detail-title {
+        font-size: 20px;
+    }
+    
+    .event-detail-date {
+        padding: 12px 16px;
+        min-width: 60px;
+    }
+    
+    .event-detail-day {
+        font-size: 20px;
+    }
+    
+    .event-detail-month {
+        font-size: 12px;
     }
 }
 
@@ -757,40 +987,54 @@ body {
         max-width: none;
         text-align: left;
     }
+    
+    .event-detail-header {
+        flex-direction: column;
+        gap: 16px;
+        align-items: flex-start;
+    }
+    
+    .event-detail-date-badge {
+        align-self: flex-end;
+    }
 }
 
 /* Анимации для плавности */
-.event-card, .menu-card, .profile-link {
+.event-card, .menu-card, .profile-link, .save-profile-btn {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Улучшение скролла */
-.events-screen::-webkit-scrollbar {
+.events-screen::-webkit-scrollbar,
+.event-detail-screen::-webkit-scrollbar {
     width: 4px;
 }
 
-.events-screen::-webkit-scrollbar-track {
-    background: #f1f1f1;
+.events-screen::-webkit-scrollbar-track,
+.event-detail-screen::-webkit-scrollbar-track {
+    background: #2d2d2d;
 }
 
-.events-screen::-webkit-scrollbar-thumb {
-    background: #c1c1c1;
+.events-screen::-webkit-scrollbar-thumb,
+.event-detail-screen::-webkit-scrollbar-thumb {
+    background: #007bff;
     border-radius: 2px;
 }
 
-.events-screen::-webkit-scrollbar-thumb:hover {
-    background: #a8a8a8;
+.events-screen::-webkit-scrollbar-thumb:hover,
+.event-detail-screen::-webkit-scrollbar-thumb:hover {
+    background: #0056b3;
 }
 
 /* Состояния наведения для десктопов */
 @media (hover: hover) {
-    .menu-card:hover, .profile-link:hover, .event-card:hover {
+    .menu-card:hover, .profile-link:hover, .event-card:hover, .save-profile-btn:hover {
         transform: translateY(-2px);
     }
 }
 
 /* Состояния активного нажатия для мобильных */
-.menu-card:active, .profile-link:active, .event-card:active {
+.menu-card:active, .profile-link:active, .event-card:active, .save-profile-btn:active {
     transform: translateY(0);
     transition: transform 0.1s ease;
 }
@@ -803,65 +1047,7 @@ body {
     
     .loading-spinner {
         animation: none;
-        border: 3px solid #f3f3f3;
+        border: 3px solid #404040;
         border-top: 3px solid #007bff;
-    }
-}
-
-/* Поддержка темной темы Telegram */
-@media (prefers-color-scheme: dark) {
-    .app {
-        background: #1c1c1c;
-        color: #ffffff;
-    }
-    
-    .header, .profile-header, .events-header {
-        background: #2d2d2d;
-        border-bottom-color: #404040;
-    }
-    
-    .user-name-header, .events-title, .profile-name, .bio-section h3, .links-section h3 {
-        color: #ffffff;
-    }
-    
-    .menu-card, .event-card, .no-access-message {
-        background: #2d2d2d;
-        border-color: #404040;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-    }
-    
-    .profile-info, .profile-edit-card {
-        background: #1c1c1c;
-    }
-    
-    .text-input, .link-input, .bio-edit-textarea, .profile-bio {
-        background: #2d2d2d;
-        border-color: #404040;
-        color: #ffffff;
-    }
-    
-    .text-input:focus, .link-input:focus, .bio-edit-textarea:focus {
-        background: #363636;
-    }
-    
-    .profile-username, .event-short-desc, .event-location, .menu-card p {
-        color: #b0b0b0;
-    }
-    
-    .access-warning {
-        background: #3a2e00;
-        border-color: #5a4a00;
-    }
-    
-    .access-warning p {
-        color: #ffd54f;
-    }
-    
-    .no-access-message h3, .no-events h3 {
-        color: #ffffff;
-    }
-    
-    .no-access-message p, .no-events p {
-        color: #b0b0b0;
     }
 }
