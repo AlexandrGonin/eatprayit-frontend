@@ -9,6 +9,7 @@
     -ms-user-select: none;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
+    font-family: 'JetBrains Mono', monospace !important;
 }
 
 html {
