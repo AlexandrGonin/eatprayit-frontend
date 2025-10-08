@@ -13,26 +13,15 @@
 
 html {
     touch-action: pan-x pan-y;
-    overflow: hidden;
 }
 
 body {
-    font-family: 'JetBrains Mono', monospace;
-    background-color: #1c1c1c;
-    min-height: 100vh;
-    color: #ffffff;
-    line-height: 1.6;
-    overflow: hidden;
-    position: fixed;
     width: 100%;
-    height: 100%;
+    min-height: 100vh;
 }
 
 .app {
     min-height: 100vh;
-    overflow: hidden;
-    position: relative;
-    background: #1c1c1c;
 }
 
 .header {
@@ -82,10 +71,7 @@ body {
 }
 
 .main {
-    padding-top: 70px;
-    min-height: 100vh;
-    overflow: hidden;
-    background: #1c1c1c;
+    min-height: calc(100vh - 70px);
 }
 
 .main-screen {
@@ -1050,4 +1036,60 @@ body {
         border: 3px solid #404040;
         border-top: 3px solid #007bff;
     }
+}
+
+/* Стили для кнопок назад */
+.back-button {
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'JetBrains Mono', monospace;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.back-button:hover {
+    background: #0056b3;
+    transform: translateY(-1px);
+}
+
+.back-button:active {
+    transform: translateY(0);
+}
+
+/* Исправляем хедеры для кнопок назад */
+.events-header,
+.event-detail-header,
+.profile-header {
+    padding: 12px 16px;
+    border-bottom: 1px solid #404040;
+    background: #2d2d2d;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.events-title,
+.event-detail-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #ffffff;
+    flex: 1;
+    text-align: center;
+}
+
+.profile-header .events-title,
+.edit-profile-header .events-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #ffffff;
+    flex: 1;
+    text-align: center;
 }
