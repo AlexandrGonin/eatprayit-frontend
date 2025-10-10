@@ -57,7 +57,6 @@ const elements = {
     loadingSection: getElement('loading-section'),
     
     // Buttons
-    profileBtn: document.getElementById('profile-btn') as HTMLButtonElement,
     filterBtn: document.getElementById('filter-btn') as HTMLButtonElement,
     backToMainBtn: document.getElementById('back-to-main-btn') as HTMLButtonElement,
     backToMainFromProfile: document.getElementById('back-to-main-from-profile') as HTMLButtonElement,
@@ -319,25 +318,25 @@ function renderEvents(events: Event[]): void {
     }
     
     const eventsHTML = events.map((event, index) => `
-    <div class="event-card" data-event-index="${index}">
-        <div class="event-content">
-            <div class="event-main">
-                <h3 class="event-title">${escapeHtml(event.title)}</h3>
-                <p class="event-short-desc">${escapeHtml(event.short_description)}</p>
-            </div>
-            <div class="event-details">
-                <div class="event-date">
-                    <span class="event-date-day">${formatEventDate(event.date)}</span>
-                    <span class="event-date-month">${formatEventMonth(event.date)}</span>
+        <div class="event-card" data-event-index="${index}">
+            <div class="event-content">
+                <div class="event-main">
+                    <h3 class="event-title">${escapeHtml(event.title)}</h3>
+                    <p class="event-short-desc">${escapeHtml(event.short_description)}</p>
                 </div>
-                <div class="event-time-location">
-                    <div class="event-time">🕒 ${event.time.slice(0, 5)}</div>
-                    <div class="event-location">📍 ${escapeHtml(event.location)}</div>
+                <div class="event-details">
+                    <div class="event-date">
+                        <span class="event-date-day">${formatEventDate(event.date)}</span>
+                        <span class="event-date-month">${formatEventMonth(event.date)}</span>
+                    </div>
+                    <div class="event-time-location">
+                        <div class="event-time">🕒 ${event.time.slice(0, 5)}</div>
+                        <div class="event-location">📍 ${escapeHtml(event.location)}</div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-`).join('');
+    `).join('');
     
     if (currentPage === 1) {
         eventsList.innerHTML = eventsHTML;
@@ -455,7 +454,6 @@ function renderNoEvents(): void {
 function showFilters(): void {
     showScreen('filters');
 }
-
 
 function applyFilters(): void {
     // Собираем выбранные типы

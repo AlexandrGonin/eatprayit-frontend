@@ -149,6 +149,7 @@ html, body {
     min-width: 85px;
     justify-content: center;
 }
+
 .filter-header-button {
     background: #007bff;
     color: white;
@@ -167,23 +168,14 @@ html, body {
     justify-content: center;
 }
 
+.back-button:hover,
 .filter-header-button:hover {
     background: #0056b3;
     transform: translateY(-1px);
 }
 
-.filter-header-button:active {
-    transform: translateY(0);
-}
-
-.back-button:hover,
-.icon-button:hover {
-    background: #0056b3;
-    transform: translateY(-1px);
-}
-
 .back-button:active,
-.icon-button:active {
+.filter-header-button:active {
     transform: translateY(0);
 }
 
@@ -244,7 +236,6 @@ html, body {
     line-height: 1.5;
     margin-bottom: 0;
 }
-
 
 .event-details {
     display: flex;
