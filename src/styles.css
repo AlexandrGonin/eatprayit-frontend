@@ -2,6 +2,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'JetBrains Mono', monospace !important;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -khtml-user-select: none;
@@ -9,10 +10,9 @@
     -ms-user-select: none;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
-    font-family: 'JetBrains Mono', monospace !important;
 }
 
-/* Базовые стили */
+/* Base Styles */
 html, body {
     background: #1c1c1c;
     color: #ffffff;
@@ -28,7 +28,7 @@ html, body {
     flex-direction: column;
 }
 
-/* Хедеры */
+/* Header */
 .header {
     background: #2d2d2d;
     border-bottom: 1px solid #404040;
@@ -44,6 +44,7 @@ html, body {
 .user-header {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 12px;
 }
 
@@ -52,8 +53,8 @@ html, body {
     height: 40px;
     border-radius: 50%;
     object-fit: cover;
-    cursor: pointer;
     border: 2px solid #007bff;
+    cursor: pointer;
 }
 
 .avatar-placeholder-small {
@@ -74,9 +75,21 @@ html, body {
     font-size: 18px;
     font-weight: 600;
     color: #ffffff;
+    flex: 1;
 }
 
-/* Основной контент */
+.user-coins-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: #007bff;
+    padding: 6px 12px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* Main Layout */
 .main {
     padding-top: 70px;
     flex: 1;
@@ -85,66 +98,116 @@ html, body {
     background: #1c1c1c;
 }
 
-/* Главный экран с событиями */
-.main-screen {
+/* Screen Components */
+.screen-header {
+    background: #2d2d2d;
+    border-bottom: 1px solid #404040;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    min-height: 60px;
+    box-sizing: border-box;
+}
+
+.screen-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #ffffff;
+    text-align: center;
+    flex: 1;
+    margin: 0;
+}
+
+.header-left,
+.header-right {
+    width: 40px;
+}
+
+.header-spacer {
+    width: 85px;
+}
+
+/* Buttons */
+.back-button {
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+    min-width: 85px;
+    justify-content: center;
+}
+
+.icon-button {
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.back-button:hover,
+.icon-button:hover {
+    background: #0056b3;
+    transform: translateY(-1px);
+}
+
+.back-button:active,
+.icon-button:active {
+    transform: translateY(0);
+}
+
+/* Events List */
+.screen-content {
     flex: 1;
     display: flex;
     flex-direction: column;
     background: #1c1c1c;
-}
-
-.events-header {
-    background: #2d2d2d;
-    border-bottom: 1px solid #404040;
-    padding: 20px 16px 16px;
-    position: sticky;
-    top: 70px;
-    z-index: 999;
-}
-
-.screen-title {
-    font-size: 24px;
-    font-weight: 700;
-    color: #ffffff;
-    text-align: center;
-    margin: 0;
-}
-
-/* Контейнер событий */
-.events-container {
-    flex: 1;
-    padding: 20px 8px;
     overflow-y: auto;
-    max-width: 1200px;
-    margin: 0 auto;
-    width: 100%;
-    box-sizing: border-box;
 }
 
-/* Список событий */
 .events-list {
     display: flex;
     flex-direction: column;
-    gap: 16px;
-    padding: 0 0 20px 0;
+    gap: 12px;
+    padding: 20px 16px;
+    flex: 1;
 }
 
-/* Карточка события */
 .event-card {
     background: #2d2d2d;
     border-radius: 16px;
     padding: 20px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     border: 1px solid #404040;
     transition: all 0.3s ease;
     cursor: pointer;
-    margin: 0 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
 
 .event-card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0,0,0,0.4);
     border-color: #007bff;
+    box-shadow: 0 4px 16px rgba(0,123,255,0.3);
 }
 
 .event-content {
@@ -226,96 +289,18 @@ html, body {
     line-height: 1.3;
 }
 
-/* Пагинация */
-.pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
-    padding: 20px 0;
-    flex-wrap: wrap;
-}
-
-.page-btn {
-    background: #2d2d2d;
-    color: #ffffff;
-    border: 1px solid #404040;
-    border-radius: 8px;
-    padding: 8px 12px;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    min-width: 44px;
-    text-align: center;
-}
-
-.page-btn:hover:not(.disabled) {
-    background: #007bff;
-    border-color: #007bff;
-}
-
-.page-btn.active {
-    background: #007bff;
-    border-color: #007bff;
-    color: white;
-}
-
-.page-btn.disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-/* Детальная страница события */
-.event-detail-screen {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    background: #1c1c1c;
-}
-
-.screen-header {
-    padding: 12px 16px;
-    border-bottom: 1px solid #404040;
-    background: #2d2d2d;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    min-height: 60px;
-    box-sizing: border-box;
-}
-
-.header-spacer {
-    width: 85px;
-    flex-shrink: 0;
-}
-
-.screen-content {
-    flex: 1;
-    overflow-y: auto;
-    background: #1c1c1c;
-}
-
+/* Event Detail */
 .event-detail-container {
     padding: 20px 16px;
     flex: 1;
     overflow-y: auto;
-    max-width: 1200px;
-    margin: 0 auto;
-    width: 100%;
-    box-sizing: border-box;
 }
 
 .event-detail-card {
     background: #2d2d2d;
     border-radius: 20px;
     padding: 24px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     border: 1px solid #404040;
-    margin: 0 8px;
 }
 
 .event-detail-header {
@@ -423,82 +408,10 @@ html, body {
     color: #e0e0e0;
 }
 
-/* Сообщения */
-.no-access-message,
-.no-events {
-    text-align: center;
-    padding: 60px 20px;
-    background: #2d2d2d;
-    margin: 20px;
-    border-radius: 16px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-    border: 1px solid #404040;
-}
-
-.no-access-icon,
-.no-events-icon {
-    font-size: 64px;
-    margin-bottom: 20px;
-}
-
-.no-access-message h3,
-.no-events h3 {
-    font-size: 18px;
-    font-weight: 700;
-    margin-bottom: 12px;
-    color: #ffffff;
-}
-
-.no-access-message p,
-.no-events p {
-    font-size: 14px;
-    color: #b0b0b0;
-    line-height: 1.5;
-}
-
-/* Кнопки */
-.back-button {
-    background: #007bff;
-    color: white;
-    border: none;
-    border-radius: 12px;
-    padding: 10px 16px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-shrink: 0;
-    min-width: 85px;
-    justify-content: center;
-}
-
-.back-button:hover {
-    background: #0056b3;
-    transform: translateY(-1px);
-}
-
-.back-button:active {
-    transform: translateY(0);
-}
-
-/* Профиль */
-.profile-screen,
-.edit-profile-screen {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    background: #1c1c1c;
-}
-
+/* Profile */
 .profile-view {
     padding: 0 16px 24px;
-    max-width: 1200px;
-    margin: 0 auto;
-    width: 100%;
-    box-sizing: border-box;
+    flex: 1;
 }
 
 .profile-avatar-section {
@@ -540,7 +453,6 @@ html, body {
     background: #2d2d2d;
     border-radius: 20px;
     padding: 24px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     border: 1px solid #404040;
 }
 
@@ -660,13 +572,10 @@ html, body {
     flex: 1;
 }
 
-/* Редактирование профиля */
+/* Edit Profile */
 .profile-edit-card {
     padding: 0 16px 24px;
-    max-width: 1200px;
-    margin: 0 auto;
-    width: 100%;
-    box-sizing: border-box;
+    flex: 1;
 }
 
 .profile-edit-card h2 {
@@ -805,17 +714,167 @@ html, body {
     transform: none;
 }
 
-/* Загрузка */
+.secondary-button {
+    width: 100%;
+    background: #6c757d;
+    color: white;
+    border: none;
+    padding: 16px 20px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 12px;
+}
+
+.secondary-button:hover {
+    background: #5a6268;
+    transform: translateY(-2px);
+}
+
+/* Filters */
+.filters-container {
+    padding: 20px 16px;
+    flex: 1;
+}
+
+.filters-section {
+    margin-bottom: 32px;
+}
+
+.filters-section h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: #ffffff;
+}
+
+.event-types {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.event-type-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    background: #2d2d2d;
+    border: 1px solid #404040;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.event-type-checkbox:hover {
+    border-color: #007bff;
+}
+
+.event-type-checkbox input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    border: 2px solid #404040;
+    background: #2d2d2d;
+    cursor: pointer;
+}
+
+.event-type-checkbox input[type="checkbox"]:checked {
+    background: #007bff;
+    border-color: #007bff;
+}
+
+.event-type-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #ffffff;
+    flex: 1;
+}
+
+.filters-actions {
+    margin-top: 32px;
+}
+
+/* Messages */
+.no-access-message {
+    text-align: center;
+    padding: 60px 20px;
+    background: #2d2d2d;
+    margin: 20px;
+    border-radius: 16px;
+    border: 1px solid #404040;
+}
+
+.no-access-icon {
+    font-size: 64px;
+    margin-bottom: 20px;
+}
+
+.no-access-message h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: #ffffff;
+}
+
+.no-access-message p {
+    font-size: 14px;
+    color: #b0b0b0;
+    line-height: 1.5;
+}
+
+.no-events {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.no-events-icon {
+    font-size: 64px;
+    margin-bottom: 20px;
+    opacity: 0.5;
+}
+
+.no-events h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: #b0b0b0;
+}
+
+.no-events p {
+    font-size: 14px;
+    color: #808080;
+}
+
+/* Loading */
 .loading-section {
     text-align: center;
     padding: 60px 20px;
     display: none;
     background: #1c1c1c;
     min-height: calc(100vh - 70px);
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
 
 .loading-section.show {
-    display: block;
+    display: flex;
+}
+
+.loading-more {
+    text-align: center;
+    padding: 20px;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.loading-more.show {
+    display: flex;
 }
 
 .loading-spinner {
@@ -828,17 +887,25 @@ html, body {
     animation: spin 1s linear infinite;
 }
 
+.loading-spinner.small {
+    width: 24px;
+    height: 24px;
+    border-width: 2px;
+    margin: 0;
+}
+
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
 
-.loading-section p {
+.loading-section p,
+.loading-more p {
     color: #b0b0b0;
     font-size: 14px;
 }
 
-/* Вспомогательные классы */
+/* Utility */
 .no-links {
     color: #808080;
     font-style: italic;
@@ -858,7 +925,7 @@ html, body {
     font-style: italic;
 }
 
-/* Адаптивность */
+/* Responsive */
 @media (max-width: 480px) {
     .header {
         padding: 10px 16px;
@@ -868,17 +935,13 @@ html, body {
         padding-top: 60px;
     }
     
-    .events-header {
-        padding: 16px 16px 12px;
-    }
-    
-    .screen-title {
-        font-size: 20px;
+    .events-list {
+        padding: 16px 12px;
+        gap: 10px;
     }
     
     .event-card {
         padding: 16px;
-        margin: 0 4px;
     }
     
     .event-content {
@@ -896,43 +959,6 @@ html, body {
     
     .event-date-month {
         font-size: 11px;
-    }
-    
-    .pagination {
-        gap: 6px;
-    }
-    
-    .page-btn {
-        padding: 6px 10px;
-        font-size: 13px;
-        min-width: 40px;
-    }
-    
-    .event-detail-card {
-        padding: 20px;
-        margin: 0 4px;
-    }
-    
-    .event-detail-title {
-        font-size: 20px;
-    }
-    
-    .event-detail-date {
-        padding: 12px 16px;
-        min-width: 60px;
-    }
-    
-    .event-detail-day {
-        font-size: 20px;
-    }
-    
-    .event-detail-month {
-        font-size: 12px;
-    }
-    
-    .profile-view,
-    .profile-edit-card {
-        padding: 0 12px 20px;
     }
     
     .avatar-large {
@@ -960,61 +986,84 @@ html, body {
         height: 80px;
         font-size: 24px;
     }
-}
-
-@media (min-width: 768px) {
-    .events-container {
-        padding: 30px 20px;
-    }
-    
-    .event-card {
-        margin: 0 12px;
-        padding: 24px;
-        max-width: 800px;
-        margin-left: auto;
-        margin-right: auto;
-    }
-    
-    .events-list {
-        gap: 20px;
-    }
-    
-    .event-detail-container {
-        padding: 30px 24px;
-    }
     
     .event-detail-card {
-        margin: 0 12px;
-        padding: 32px;
-        max-width: 800px;
-        margin-left: auto;
-        margin-right: auto;
+        padding: 20px;
     }
     
-    .profile-view,
-    .profile-edit-card {
-        padding: 0 24px 32px;
+    .event-detail-title {
+        font-size: 20px;
+    }
+    
+    .event-detail-date {
+        padding: 12px 16px;
+        min-width: 60px;
+    }
+    
+    .event-detail-day {
+        font-size: 20px;
+    }
+    
+    .event-detail-month {
+        font-size: 12px;
     }
 }
 
-/* Улучшение скролла */
-.events-container::-webkit-scrollbar,
-.screen-content::-webkit-scrollbar {
+@media (max-width: 360px) {
+    .event-content {
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    .event-details {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+    }
+    
+    .event-time-location {
+        align-items: flex-start;
+    }
+    
+    .event-location {
+        max-width: none;
+        text-align: left;
+    }
+    
+    .event-detail-header {
+        flex-direction: column;
+        gap: 16px;
+        align-items: flex-start;
+    }
+    
+    .event-detail-date-badge {
+        align-self: flex-end;
+    }
+}
+
+/* Scrollbar */
+.events-screen .screen-content::-webkit-scrollbar,
+.event-detail-screen .screen-content::-webkit-scrollbar,
+.profile-screen .screen-content::-webkit-scrollbar {
     width: 4px;
 }
 
-.events-container::-webkit-scrollbar-track,
-.screen-content::-webkit-scrollbar-track {
+.events-screen .screen-content::-webkit-scrollbar-track,
+.event-detail-screen .screen-content::-webkit-scrollbar-track,
+.profile-screen .screen-content::-webkit-scrollbar-track {
     background: #2d2d2d;
 }
 
-.events-container::-webkit-scrollbar-thumb,
-.screen-content::-webkit-scrollbar-thumb {
+.events-screen .screen-content::-webkit-scrollbar-thumb,
+.event-detail-screen .screen-content::-webkit-scrollbar-thumb,
+.profile-screen .screen-content::-webkit-scrollbar-thumb {
     background: #007bff;
     border-radius: 2px;
 }
 
-.events-container::-webkit-scrollbar-thumb:hover,
-.screen-content::-webkit-scrollbar-thumb:hover {
+.events-screen .screen-content::-webkit-scrollbar-thumb:hover,
+.event-detail-screen .screen-content::-webkit-scrollbar-thumb:hover,
+.profile-screen .screen-content::-webkit-scrollbar-thumb:hover {
     background: #0056b3;
 }

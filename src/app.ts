@@ -32,14 +32,6 @@ interface Event {
     event_type?: string;
 }
 
-interface EventsResponse {
-    success: boolean;
-    events: Event[];
-    totalPages: number;
-    currentPage: number;
-    hasAccess: boolean;
-}
-
 // Функция для безопасного получения элементов
 function getElement(id: string): HTMLElement {
     const element = document.getElementById(id);
@@ -50,14 +42,32 @@ function getElement(id: string): HTMLElement {
 }
 
 const elements = {
+    // Header
     userAvatar: document.getElementById('user-avatar') as HTMLImageElement,
     avatarPlaceholderSmall: document.getElementById('avatar-placeholder-small') as HTMLDivElement,
     userNameHeader: document.getElementById('user-name-header') as HTMLHeadingElement,
+    userCoinsHeader: document.getElementById('user-coins-header') as HTMLDivElement,
+    
+    // Screens
     mainScreen: getElement('main-screen'),
     profileScreen: getElement('profile-screen'),
     editProfileScreen: getElement('edit-profile-screen'),
     eventDetailScreen: getElement('event-detail-screen'),
+    filtersScreen: getElement('filters-screen'),
     loadingSection: getElement('loading-section'),
+    
+    // Buttons
+    profileBtn: document.getElementById('profile-btn') as HTMLButtonElement,
+    filterBtn: document.getElementById('filter-btn') as HTMLButtonElement,
+    backToMainBtn: document.getElementById('back-to-main-btn') as HTMLButtonElement,
+    backToMainFromProfile: document.getElementById('back-to-main-from-profile') as HTMLButtonElement,
+    backToProfileBtn: document.getElementById('back-to-profile-btn') as HTMLButtonElement,
+    backToMainFromFilters: document.getElementById('back-to-main-from-filters') as HTMLButtonElement,
+    saveProfileBtn: document.getElementById('save-profile-btn') as HTMLButtonElement,
+    applyFilters: document.getElementById('apply-filters') as HTMLButtonElement,
+    resetFilters: document.getElementById('reset-filters') as HTMLButtonElement,
+    
+    // Profile
     userAvatarEdit: document.getElementById('user-avatar-edit') as HTMLImageElement,
     avatarPlaceholderEdit: document.getElementById('avatar-placeholder-edit') as HTMLDivElement,
     editPosition: document.getElementById('edit-position') as HTMLInputElement,
@@ -66,10 +76,6 @@ const elements = {
     editLinkedin: document.getElementById('edit-linkedin') as HTMLInputElement,
     editVk: document.getElementById('edit-vk') as HTMLInputElement,
     editInstagram: document.getElementById('edit-instagram') as HTMLInputElement,
-    saveProfileBtn: document.getElementById('save-profile-btn') as HTMLButtonElement,
-    backToMainBtn: document.getElementById('back-to-main-btn') as HTMLButtonElement,
-    backToProfileBtn: document.getElementById('back-to-profile-btn') as HTMLButtonElement,
-    backToMainFromProfileBtn: document.getElementById('back-to-main-from-profile-btn') as HTMLButtonElement,
     profileAvatar: document.getElementById('profile-avatar') as HTMLImageElement,
     avatarPlaceholderLarge: document.getElementById('avatar-placeholder-large') as HTMLDivElement,
     profileName: document.getElementById('profile-name') as HTMLHeadingElement,
@@ -78,16 +84,25 @@ const elements = {
     profileBio: document.getElementById('profile-bio') as HTMLParagraphElement,
     profileCoins: document.getElementById('profile-coins') as HTMLParagraphElement,
     profileLinks: document.getElementById('profile-links') as HTMLDivElement,
+    
+    // Events
     eventsList: document.getElementById('events-list') as HTMLDivElement,
     noAccessMessage: document.getElementById('no-access-message') as HTMLDivElement,
+    loadingMore: document.getElementById('loading-more') as HTMLDivElement,
     eventDetailContent: document.getElementById('event-detail-content') as HTMLDivElement,
-    pagination: document.getElementById('pagination') as HTMLDivElement
+    
+    // Filters
+    eventTypes: document.getElementById('event-types') as HTMLDivElement
 };
 
 let currentUser: User | null = null;
 let currentEvents: Event[] = [];
-let currentPage = 1;
-let totalPages = 1;
+let allEventTypes: string[] = [];
+let selectedEventTypes: string[] = [];
+let currentPage = 0;
+const EVENTS_PER_PAGE = 20;
+let isLoading = false;
+let hasMoreEvents = true;
 
 async function initializeApp(): Promise<void> {
     try {
@@ -104,14 +119,10 @@ async function initializeApp(): Promise<void> {
         const telegramUser = tg.initDataUnsafe?.user;
         
         if (!telegramUser) {
-            console.error('❌ Не удалось получить telegramUser:', tg.initDataUnsafe);
-            throw new Error('Не удалось получить данные пользователя из Telegram. Убедитесь, что Mini App запущен внутри Telegram.');
+            throw new Error('Не удалось получить данные пользователя из Telegram.');
         }
 
-        console.log('🔍 Получен пользователь Telegram:', telegramUser);
-
-        // ПРОВЕРКА ДОСТУПА К MINI APP
-        console.log('🔐 Проверяем доступ пользователя...', telegramUser.id);
+        // Проверка доступа
         const accessCheck = await fetch(`${CONFIG.BACKEND_URL}/check-access`, {
             method: 'POST',
             headers: {
@@ -122,25 +133,17 @@ async function initializeApp(): Promise<void> {
             })
         });
         
-        console.log('📡 Ответ check-access:', accessCheck.status);
-        
         if (!accessCheck.ok) {
-            const errorText = await accessCheck.text();
-            console.error('❌ Ошибка check-access:', errorText);
             throw new Error(`Ошибка сервера: ${accessCheck.status}`);
         }
         
         const accessData = await accessCheck.json();
-        console.log('📊 Данные доступа:', accessData);
         
         if (!accessData.hasAccess) {
-            console.error('❌ Пользователь не найден в системе');
             throw new Error('Пользователь не найден. Зарегистрируйтесь через Telegram бота.');
         }
 
-        console.log('✅ Доступ разрешен, загружаем профиль...');
-        
-        // Авторизация на бэкенде
+        // Авторизация
         const authResponse = await fetch(`${CONFIG.BACKEND_URL}/auth/telegram`, {
             method: 'POST',
             headers: {
@@ -149,22 +152,21 @@ async function initializeApp(): Promise<void> {
             body: JSON.stringify(telegramUser)
         });
         
-        console.log('📡 Ответ auth/telegram:', authResponse.status);
-        
         if (!authResponse.ok) {
-            const errorData = await authResponse.json().catch(() => ({ error: 'Ошибка сервера' }));
-            console.error('❌ Ошибка авторизации:', errorData);
-            throw new Error(errorData.error || `Ошибка бэкенда: ${authResponse.status}`);
+            throw new Error('Ошибка авторизации');
         }
         
         const authData = await authResponse.json();
-        console.log('📊 Данные авторизации:', authData);
-        
         currentUser = authData.user;
         
-        // Показываем шапку и загружаем события
+        // Инициализация интерфейса
         renderHeader(currentUser);
-        await loadEvents(1); // Загружаем первую страницу
+        setupEventListeners();
+        
+        // Загрузка мероприятий
+        await loadEventTypes();
+        await loadEvents(true);
+        
         showLoading(false);
         showScreen('main');
         
@@ -176,11 +178,89 @@ async function initializeApp(): Promise<void> {
     }
 }
 
-async function loadEvents(page: number): Promise<void> {
+function renderHeader(user: User | null): void {
+    if (!user) return;
+    
+    if (user.photo_url) {
+        elements.userAvatar.src = user.photo_url;
+        elements.userAvatar.style.display = 'block';
+        elements.avatarPlaceholderSmall.style.display = 'none';
+    } else {
+        const firstLetter = user.first_name ? user.first_name[0].toUpperCase() : 'U';
+        elements.avatarPlaceholderSmall.textContent = firstLetter;
+        elements.userAvatar.style.display = 'none';
+        elements.avatarPlaceholderSmall.style.display = 'flex';
+    }
+    
+    elements.userNameHeader.textContent = user.first_name || 'Пользователь';
+    elements.userCoinsHeader.innerHTML = `🪙 ${user.coins || 0}`;
+}
+
+async function loadEventTypes(): Promise<void> {
     try {
         if (!currentUser) return;
+        
+        const response = await fetch(`${CONFIG.BACKEND_URL}/events/types/${currentUser.telegram_id}`);
+        
+        if (response.ok) {
+            const data = await response.json();
+            allEventTypes = data.types || [];
+            renderEventTypes();
+        }
+    } catch (error) {
+        console.error('Ошибка загрузки типов событий:', error);
+    }
+}
 
-        const response = await fetch(`${CONFIG.BACKEND_URL}/events/${currentUser.telegram_id}?page=${page}&limit=10`);
+function renderEventTypes(): void {
+    const eventTypesContainer = elements.eventTypes;
+    
+    if (!allEventTypes || allEventTypes.length === 0) {
+        eventTypesContainer.innerHTML = '<p class="no-links">Типы мероприятий не найдены</p>';
+        return;
+    }
+    
+    const typesHTML = allEventTypes.map(type => `
+        <label class="event-type-checkbox">
+            <input type="checkbox" value="${escapeHtml(type)}" ${selectedEventTypes.includes(type) ? 'checked' : ''}>
+            <span class="event-type-label">${escapeHtml(type)}</span>
+        </label>
+    `).join('');
+    
+    eventTypesContainer.innerHTML = typesHTML;
+}
+
+async function loadEvents(initialLoad = false): Promise<void> {
+    if (isLoading || (!initialLoad && !hasMoreEvents)) return;
+    
+    try {
+        isLoading = true;
+        
+        if (initialLoad) {
+            currentPage = 0;
+            currentEvents = [];
+            elements.eventsList.innerHTML = '';
+            showLoadingMore(false);
+        } else {
+            showLoadingMore(true);
+        }
+        
+        if (!currentUser) {
+            throw new Error('Нет данных пользователя');
+        }
+        
+        const params = new URLSearchParams({
+            page: currentPage.toString(),
+            limit: EVENTS_PER_PAGE.toString()
+        });
+        
+        if (selectedEventTypes.length > 0) {
+            selectedEventTypes.forEach(type => {
+                params.append('types', type);
+            });
+        }
+        
+        const response = await fetch(`${CONFIG.BACKEND_URL}/events/${currentUser.telegram_id}?${params}`);
         
         if (!response.ok) {
             const errorData = await response.json().catch(() => ({ error: 'Ошибка сервера' }));
@@ -193,32 +273,44 @@ async function loadEvents(page: number): Promise<void> {
             throw new Error(errorData.error || `Ошибка ${response.status}`);
         }
         
-        const data: EventsResponse = await response.json();
-        currentEvents = data.events;
-        currentPage = data.currentPage;
-        totalPages = data.totalPages;
+        const data = await response.json();
         
-        renderEvents(currentEvents);
-        renderPagination();
+        if (data.events && data.events.length > 0) {
+            if (initialLoad) {
+                currentEvents = data.events;
+            } else {
+                currentEvents = [...currentEvents, ...data.events];
+            }
+            
+            renderEvents(currentEvents);
+            currentPage++;
+            hasMoreEvents = data.events.length === EVENTS_PER_PAGE;
+        } else {
+            if (initialLoad) {
+                renderNoEvents();
+            }
+            hasMoreEvents = false;
+        }
         
     } catch (error) {
         console.error('Ошибка загрузки событий:', error);
-        const errorMessage = error instanceof Error ? error.message : 'Не удалось загрузить события';
-        showError(errorMessage);
+        if (initialLoad) {
+            showError('Не удалось загрузить мероприятия');
+        }
+    } finally {
+        isLoading = false;
+        showLoadingMore(false);
+        if (initialLoad) {
+            showLoading(false);
+        }
     }
 }
 
 function renderEvents(events: Event[]): void {
     const eventsList = elements.eventsList;
     
-    if (!events || events.length === 0) {
-        eventsList.innerHTML = `
-            <div class="no-events">
-                <div class="no-events-icon">📅</div>
-                <h3>Нет мероприятий</h3>
-                <p>На данный момент нет запланированных мероприятий</p>
-            </div>
-        `;
+    if (events.length === 0) {
+        renderNoEvents();
         return;
     }
     
@@ -243,11 +335,15 @@ function renderEvents(events: Event[]): void {
         </div>
     `).join('');
     
-    eventsList.innerHTML = eventsHTML;
-    elements.noAccessMessage.style.display = 'none';
-    eventsList.style.display = 'block';
+    if (currentPage === 1) {
+        eventsList.innerHTML = eventsHTML;
+    } else {
+        eventsList.innerHTML += eventsHTML;
+    }
     
-    // Добавляем обработчики для карточек событий
+    elements.noAccessMessage.style.display = 'none';
+    
+    // Добавляем обработчики для новых карточек
     setTimeout(() => {
         const eventCards = document.querySelectorAll('.event-card');
         eventCards.forEach(card => {
@@ -257,55 +353,25 @@ function renderEvents(events: Event[]): void {
             });
         });
     }, 100);
+    
+    // Настраиваем бесконечный скролл
+    setupInfiniteScroll();
 }
 
-function renderPagination(): void {
-    const pagination = elements.pagination;
-    
-    if (totalPages <= 1) {
-        pagination.style.display = 'none';
-        return;
-    }
-    
-    pagination.style.display = 'flex';
-    
-    let paginationHTML = '';
-    
-    // Кнопка "Назад"
-    if (currentPage > 1) {
-        paginationHTML += `<button class="page-btn prev-btn" data-page="${currentPage - 1}">← Назад</button>`;
-    } else {
-        paginationHTML += `<button class="page-btn prev-btn disabled" disabled>← Назад</button>`;
-    }
-    
-    // Номера страниц
-    for (let i = 1; i <= totalPages; i++) {
-        if (i === currentPage) {
-            paginationHTML += `<button class="page-btn page-number active" data-page="${i}">${i}</button>`;
-        } else {
-            paginationHTML += `<button class="page-btn page-number" data-page="${i}">${i}</button>`;
-        }
-    }
-    
-    // Кнопка "Вперед"
-    if (currentPage < totalPages) {
-        paginationHTML += `<button class="page-btn next-btn" data-page="${currentPage + 1}">Вперед →</button>`;
-    } else {
-        paginationHTML += `<button class="page-btn next-btn disabled" disabled>Вперед →</button>`;
-    }
-    
-    pagination.innerHTML = paginationHTML;
-    
-    // Добавляем обработчики для пагинации
-    setTimeout(() => {
-        const pageButtons = document.querySelectorAll('.page-btn:not(.disabled)');
-        pageButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const page = parseInt(button.getAttribute('data-page') || '1');
-                loadEvents(page);
-            });
+function setupInfiniteScroll(): void {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting && hasMoreEvents && !isLoading) {
+                loadEvents(false);
+            }
         });
-    }, 100);
+    });
+    
+    // Наблюдаем за последней карточкой
+    const eventCards = document.querySelectorAll('.event-card');
+    if (eventCards.length > 0) {
+        observer.observe(eventCards[eventCards.length - 1]);
+    }
 }
 
 function showEventDetail(eventIndex: number): void {
@@ -369,50 +435,45 @@ function renderEventDetail(event: Event): void {
 
 function renderNoAccessScreen(): void {
     elements.eventsList.style.display = 'none';
-    elements.pagination.style.display = 'none';
     elements.noAccessMessage.style.display = 'block';
 }
 
-function renderHeader(user: User | null): void {
-    if (!user) return;
+function renderNoEvents(): void {
+    elements.eventsList.innerHTML = `
+        <div class="no-events">
+            <div class="no-events-icon">📅</div>
+            <h3>Нет мероприятий</h3>
+            <p>По выбранным фильтрам мероприятия не найдены</p>
+        </div>
+    `;
+}
+
+function showFilters(): void {
+    showScreen('filters');
+}
+
+function applyFilters(): void {
+    // Собираем выбранные типы
+    selectedEventTypes = [];
+    const checkboxes = elements.eventTypes.querySelectorAll('input[type="checkbox"]:checked');
+    checkboxes.forEach((checkbox: Element) => {
+        if (checkbox instanceof HTMLInputElement) {
+            selectedEventTypes.push(checkbox.value);
+        }
+    });
     
-    if (user.photo_url) {
-        elements.userAvatar.src = user.photo_url;
-        elements.userAvatar.style.display = 'block';
-        elements.avatarPlaceholderSmall.style.display = 'none';
-    } else {
-        const firstLetter = user.first_name ? user.first_name[0].toUpperCase() : 'U';
-        elements.avatarPlaceholderSmall.textContent = firstLetter;
-        elements.userAvatar.style.display = 'none';
-        elements.avatarPlaceholderSmall.style.display = 'flex';
-    }
-    
-    elements.userNameHeader.textContent = user.first_name || 'Пользователь';
+    showScreen('main');
+    loadEvents(true);
 }
 
-function formatEventDate(dateString: string): string {
-    const date = new Date(dateString);
-    return date.getDate().toString();
+function resetFilters(): void {
+    selectedEventTypes = [];
+    renderEventTypes();
+    showScreen('main');
+    loadEvents(true);
 }
 
-function formatEventMonth(dateString: string): string {
-    const date = new Date(dateString);
-    const months = ['янв', 'фев', 'мар', 'апр', 'мая', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек'];
-    return months[date.getMonth()];
-}
-
-function escapeHtml(text: string): string {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-}
-
-function showProfile(): void {
-    if (!currentUser) return;
-    renderProfile(currentUser);
-    showScreen('profile');
-}
-
+// Profile Functions
 function renderProfile(user: User | null): void {
     if (!user) return;
     
@@ -495,6 +556,12 @@ function renderLinks(links: any): void {
     elements.profileLinks.innerHTML = linksHTML.join('');
 }
 
+function showProfile(): void {
+    if (!currentUser) return;
+    renderProfile(currentUser);
+    showScreen('profile');
+}
+
 function showEditProfile(): void {
     if (!currentUser) return;
     
@@ -556,6 +623,7 @@ async function saveProfile(): Promise<void> {
         currentUser = data.user;
         
         renderProfile(currentUser);
+        renderHeader(currentUser);
         
         const tg = (window as any).Telegram.WebApp;
         tg.showPopup({
@@ -564,7 +632,7 @@ async function saveProfile(): Promise<void> {
             buttons: [{ type: 'ok' }]
         });
         
-        showScreen('main');
+        showScreen('profile');
         
     } catch (error) {
         console.error('Ошибка сохранения:', error);
@@ -576,22 +644,27 @@ async function saveProfile(): Promise<void> {
     }
 }
 
-function showScreen(screen: 'main' | 'profile' | 'edit' | 'event-detail'): void {
-    elements.mainScreen.style.display = screen === 'main' ? 'block' : 'none';
-    elements.profileScreen.style.display = screen === 'profile' ? 'block' : 'none';
-    elements.editProfileScreen.style.display = screen === 'edit' ? 'block' : 'none';
-    elements.eventDetailScreen.style.display = screen === 'event-detail' ? 'block' : 'none';
+function showScreen(screen: 'main' | 'profile' | 'edit' | 'event-detail' | 'filters'): void {
+    elements.mainScreen.style.display = screen === 'main' ? 'flex' : 'none';
+    elements.profileScreen.style.display = screen === 'profile' ? 'flex' : 'none';
+    elements.editProfileScreen.style.display = screen === 'edit' ? 'flex' : 'none';
+    elements.eventDetailScreen.style.display = screen === 'event-detail' ? 'flex' : 'none';
+    elements.filtersScreen.style.display = screen === 'filters' ? 'flex' : 'none';
 }
 
 function showLoading(show: boolean): void {
     if (show) {
         elements.loadingSection.classList.add('show');
-        elements.mainScreen.style.display = 'none';
-        elements.profileScreen.style.display = 'none';
-        elements.editProfileScreen.style.display = 'none';
-        elements.eventDetailScreen.style.display = 'none';
     } else {
         elements.loadingSection.classList.remove('show');
+    }
+}
+
+function showLoadingMore(show: boolean): void {
+    if (show) {
+        elements.loadingMore.classList.add('show');
+    } else {
+        elements.loadingMore.classList.remove('show');
     }
 }
 
@@ -609,19 +682,48 @@ function showError(message: string): void {
 }
 
 function setupEventListeners(): void {
-    elements.userAvatar.addEventListener('click', showProfile);
-    elements.avatarPlaceholderSmall.addEventListener('click', showProfile);
-    elements.profileAvatar.addEventListener('click', showEditProfile);
-    elements.avatarPlaceholderLarge.addEventListener('click', showEditProfile);
+    // Header buttons
+    elements.profileBtn.addEventListener('click', () => showProfile());
+    elements.filterBtn.addEventListener('click', () => showFilters());
+    elements.userAvatar.addEventListener('click', () => showProfile());
+    elements.avatarPlaceholderSmall.addEventListener('click', () => showProfile());
+    
+    // Navigation
     elements.backToMainBtn.addEventListener('click', () => showScreen('main'));
+    elements.backToMainFromProfile.addEventListener('click', () => showScreen('main'));
     elements.backToProfileBtn.addEventListener('click', () => showScreen('profile'));
-    elements.backToMainFromProfileBtn.addEventListener('click', () => showScreen('main'));
+    elements.backToMainFromFilters.addEventListener('click', () => showScreen('main'));
+    
+    // Profile
+    elements.profileAvatar.addEventListener('click', () => showEditProfile());
+    elements.avatarPlaceholderLarge.addEventListener('click', () => showEditProfile());
     elements.saveProfileBtn.addEventListener('click', saveProfile);
+    
+    // Filters
+    elements.applyFilters.addEventListener('click', applyFilters);
+    elements.resetFilters.addEventListener('click', resetFilters);
+}
+
+// Utility functions
+function formatEventDate(dateString: string): string {
+    const date = new Date(dateString);
+    return date.getDate().toString();
+}
+
+function formatEventMonth(dateString: string): string {
+    const date = new Date(dateString);
+    const months = ['янв', 'фев', 'мар', 'апр', 'мая', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек'];
+    return months[date.getMonth()];
+}
+
+function escapeHtml(text: string): string {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
 }
 
 // Инициализация после загрузки DOM
 document.addEventListener('DOMContentLoaded', () => {
-    setupEventListeners();
     initializeApp();
 });
 

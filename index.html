@@ -20,15 +20,22 @@
                 <img id="user-avatar" class="avatar-small" src="" alt="Avatar" style="display: none;">
                 <div id="avatar-placeholder-small" class="avatar-placeholder-small"></div>
                 <h1 id="user-name-header" class="user-name-header"></h1>
+                <div id="user-coins-header" class="user-coins-header"></div>
             </div>
         </header>
 
         <main class="main">
             <div id="main-screen" class="main-screen">
-                <div class="events-header">
+                <div class="screen-header">
+                    <div class="header-left">
+                        <button id="profile-btn" class="icon-button">👤</button>
+                    </div>
                     <h2 class="screen-title">Мероприятия</h2>
+                    <div class="header-right">
+                        <button id="filter-btn" class="icon-button">🔍</button>
+                    </div>
                 </div>
-                <div class="events-container">
+                <div class="screen-content">
                     <div id="events-list" class="events-list">
                         <!-- События загружаются динамически -->
                     </div>
@@ -37,8 +44,9 @@
                         <h3>Доступ к мероприятиям ограничен</h3>
                         <p>Чтобы получать информацию об ивентах, необходимо перейти по реферальной ссылке от друга</p>
                     </div>
-                    <div id="pagination" class="pagination" style="display: none;">
-                        <!-- Пагинация загружается динамически -->
+                    <div id="loading-more" class="loading-more" style="display: none;">
+                        <div class="loading-spinner small"></div>
+                        <p>Загрузка...</p>
                     </div>
                 </div>
             </div>
@@ -58,7 +66,7 @@
 
             <div id="profile-screen" class="profile-screen" style="display: none;">
                 <div class="screen-header">
-                    <button id="back-to-main-from-profile-btn" class="back-button">← Назад</button>
+                    <button id="back-to-main-from-profile" class="back-button">← Назад</button>
                     <h2 class="screen-title">Профиль</h2>
                     <div class="header-spacer"></div>
                 </div>
@@ -163,6 +171,28 @@
                                     Сохранить профиль
                                 </button>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="filters-screen" class="filters-screen" style="display: none;">
+                <div class="screen-header">
+                    <button id="back-to-main-from-filters" class="back-button">← Назад</button>
+                    <h2 class="screen-title">Фильтры</h2>
+                    <div class="header-spacer"></div>
+                </div>
+                <div class="screen-content">
+                    <div class="filters-container">
+                        <div class="filters-section">
+                            <h3>Тип мероприятия</h3>
+                            <div id="event-types" class="event-types">
+                                <!-- Типы событий загружаются динамически -->
+                            </div>
+                        </div>
+                        <div class="filters-actions">
+                            <button id="apply-filters" class="save-profile-btn">Применить фильтры</button>
+                            <button id="reset-filters" class="secondary-button">Сбросить фильтры</button>
                         </div>
                     </div>
                 </div>
