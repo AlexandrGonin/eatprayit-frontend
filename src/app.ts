@@ -456,6 +456,7 @@ function showFilters(): void {
     showScreen('filters');
 }
 
+
 function applyFilters(): void {
     // Собираем выбранные типы
     selectedEventTypes = [];
@@ -687,7 +688,7 @@ function showError(message: string): void {
 
 function setupEventListeners(): void {
     // Header buttons
-    elements.profileBtn.addEventListener('click', () => showProfile());
+    elements.filterBtn.addEventListener('click', () => showFilters());
     elements.userAvatar.addEventListener('click', () => showProfile());
     elements.avatarPlaceholderSmall.addEventListener('click', () => showProfile());
     
