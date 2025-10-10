@@ -149,21 +149,31 @@ html, body {
     min-width: 85px;
     justify-content: center;
 }
-
-.icon-button {
+.filter-header-button {
     background: #007bff;
     color: white;
     border: none;
     border-radius: 12px;
-    padding: 10px;
-    font-size: 16px;
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
-    width: 40px;
-    height: 40px;
     display: flex;
     align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+    min-width: 85px;
     justify-content: center;
+}
+
+.filter-header-button:hover {
+    background: #0056b3;
+    transform: translateY(-1px);
+}
+
+.filter-header-button:active {
+    transform: translateY(0);
 }
 
 .back-button:hover,

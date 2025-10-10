@@ -202,13 +202,17 @@ async function loadEventTypes(): Promise<void> {
         
         const response = await fetch(`${CONFIG.BACKEND_URL}/events/types/${currentUser.telegram_id}`);
         
-        if (response.ok) {
-            const data = await response.json();
-            allEventTypes = data.types || [];
-            renderEventTypes();
+        if (!response.ok) {
+            throw new Error('Ошибка загрузки типов событий');
         }
+        
+        const data = await response.json();
+        allEventTypes = data.types || [];
+        renderEventTypes();
+        
     } catch (error) {
         console.error('Ошибка загрузки типов событий:', error);
+        showError('Не удалось загрузить типы мероприятий');
     }
 }
 
@@ -684,7 +688,6 @@ function showError(message: string): void {
 function setupEventListeners(): void {
     // Header buttons
     elements.profileBtn.addEventListener('click', () => showProfile());
-    elements.filterBtn.addEventListener('click', () => showFilters());
     elements.userAvatar.addEventListener('click', () => showProfile());
     elements.avatarPlaceholderSmall.addEventListener('click', () => showProfile());
     
