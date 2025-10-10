@@ -25,16 +25,10 @@
 
         <main class="main">
             <div id="main-screen" class="main-screen">
-                <!-- Динамически заполняется через JS -->
-            </div>
-
-            <div id="events-screen" class="events-screen" style="display: none;">
-                <div class="screen-header">
-                    <button id="back-to-main-from-events-btn" class="back-button">← Назад</button>
+                <div class="events-header">
                     <h2 class="screen-title">Мероприятия</h2>
-                    <div class="header-spacer"></div>
                 </div>
-                <div class="screen-content">
+                <div class="events-container">
                     <div id="events-list" class="events-list">
                         <!-- События загружаются динамически -->
                     </div>
@@ -43,12 +37,15 @@
                         <h3>Доступ к мероприятиям ограничен</h3>
                         <p>Чтобы получать информацию об ивентах, необходимо перейти по реферальной ссылке от друга</p>
                     </div>
+                    <div id="pagination" class="pagination" style="display: none;">
+                        <!-- Пагинация загружается динамически -->
+                    </div>
                 </div>
             </div>
 
             <div id="event-detail-screen" class="event-detail-screen" style="display: none;">
                 <div class="screen-header">
-                    <button id="back-to-events-btn" class="back-button">← Назад</button>
+                    <button id="back-to-main-btn" class="back-button">← Назад</button>
                     <h2 class="screen-title">Мероприятие</h2>
                     <div class="header-spacer"></div>
                 </div>
@@ -61,7 +58,7 @@
 
             <div id="profile-screen" class="profile-screen" style="display: none;">
                 <div class="screen-header">
-                    <button id="back-to-main-btn" class="back-button">← Назад</button>
+                    <button id="back-to-main-from-profile-btn" class="back-button">← Назад</button>
                     <h2 class="screen-title">Профиль</h2>
                     <div class="header-spacer"></div>
                 </div>

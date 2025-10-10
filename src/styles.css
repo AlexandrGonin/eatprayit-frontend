@@ -9,25 +9,26 @@
     -ms-user-select: none;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
+    font-family: 'JetBrains Mono', monospace !important;
 }
 
+/* Базовые стили */
 html, body {
-    background: #1c1c1c !important;
-    margin: 0;
-    padding: 0;
+    background: #1c1c1c;
+    color: #ffffff;
+    line-height: 1.6;
     width: 100%;
     min-height: 100vh;
-}
-
-body {
-    background: #1c1c1c;
 }
 
 .app {
     background: #1c1c1c;
     min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
+/* Хедеры */
 .header {
     background: #2d2d2d;
     border-bottom: 1px solid #404040;
@@ -36,7 +37,8 @@ body {
     top: 0;
     left: 0;
     right: 0;
-    z-index: 100;
+    z-index: 1000;
+    height: 70px;
 }
 
 .user-header {
@@ -74,119 +76,57 @@ body {
     color: #ffffff;
 }
 
+/* Основной контент */
 .main {
-    min-height: calc(100vh - 70px);
-}
-
-.main-screen {
-    min-height: calc(100vh - 70px);
+    padding-top: 70px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
     background: #1c1c1c;
-    overflow-y: auto;
 }
 
-/* Главный экран */
-.main-menu {
-    padding: 24px 16px;
+/* Главный экран с событиями */
+.main-screen {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: #1c1c1c;
+}
+
+.events-header {
+    background: #2d2d2d;
+    border-bottom: 1px solid #404040;
+    padding: 20px 16px 16px;
+    position: sticky;
+    top: 70px;
+    z-index: 999;
+}
+
+.screen-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #ffffff;
+    text-align: center;
+    margin: 0;
+}
+
+/* Контейнер событий */
+.events-container {
+    flex: 1;
+    padding: 20px 8px;
+    overflow-y: auto;
     max-width: 1200px;
     margin: 0 auto;
     width: 100%;
     box-sizing: border-box;
 }
 
-.menu-cards {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 16px;
-    margin-bottom: 24px;
-}
-
-.menu-card {
-    background: #2d2d2d;
-    border-radius: 16px;
-    padding: 24px;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    border: 2px solid #404040;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-}
-
-.menu-card:hover {
-    transform: translateY(-2px);
-    border-color: #007bff;
-    box-shadow: 0 6px 20px rgba(0,123,255,0.3);
-}
-
-.menu-icon {
-    font-size: 48px;
-    margin-bottom: 12px;
-}
-
-.menu-card h3 {
-    font-size: 18px;
-    font-weight: 700;
-    margin-bottom: 8px;
-    color: #ffffff;
-}
-
-.menu-card p {
-    font-size: 14px;
-    color: #b0b0b0;
-}
-
-.access-warning {
-    background: #3a2e00;
-    border: 1px solid #5a4a00;
-    border-radius: 12px;
-    padding: 16px;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.warning-icon {
-    font-size: 24px;
-    flex-shrink: 0;
-}
-
-.access-warning p {
-    color: #ffd54f;
-    font-size: 14px;
-    margin: 0;
-    text-align: left;
-}
-
-/* Стили для экрана событий */
-.events-screen {
-    background: #1c1c1c;
-    min-height: calc(100vh - 70px);
-    overflow-y: auto;
-}
-
-.events-header {
-    padding: 12px 16px;
-    border-bottom: 1px solid #404040;
-    background: #2d2d2d;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.events-title {
-    font-size: 18px;
-    font-weight: 700;
-    color: #ffffff;
-}
-
-.events-container {
-    padding: 20px 16px;
-}
-
+/* Список событий */
 .events-list {
     display: flex;
     flex-direction: column;
     gap: 16px;
+    padding: 0 0 20px 0;
 }
 
 /* Карточка события */
@@ -198,9 +138,8 @@ body {
     border: 1px solid #404040;
     transition: all 0.3s ease;
     cursor: pointer;
-    margin: 0 8px; /* Боковые отступы */
+    margin: 0 8px;
 }
-
 
 .event-card:hover {
     transform: translateY(-2px);
@@ -287,30 +226,87 @@ body {
     line-height: 1.3;
 }
 
-/* Стили для детальной страницы события */
-.event-detail-screen {
-    background: #1c1c1c;
-    min-height: calc(100vh - 70px);
-    overflow-y: auto;
+/* Пагинация */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    padding: 20px 0;
+    flex-wrap: wrap;
 }
 
-.event-detail-header {
+.page-btn {
+    background: #2d2d2d;
+    color: #ffffff;
+    border: 1px solid #404040;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 44px;
+    text-align: center;
+}
+
+.page-btn:hover:not(.disabled) {
+    background: #007bff;
+    border-color: #007bff;
+}
+
+.page-btn.active {
+    background: #007bff;
+    border-color: #007bff;
+    color: white;
+}
+
+.page-btn.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Детальная страница события */
+.event-detail-screen {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    background: #1c1c1c;
+}
+
+.screen-header {
     padding: 12px 16px;
     border-bottom: 1px solid #404040;
     background: #2d2d2d;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    min-height: 60px;
+    box-sizing: border-box;
 }
 
-.event-detail-title {
-    font-size: 18px;
-    font-weight: 700;
-    color: #ffffff;
+.header-spacer {
+    width: 85px;
+    flex-shrink: 0;
+}
+
+.screen-content {
+    flex: 1;
+    overflow-y: auto;
+    background: #1c1c1c;
 }
 
 .event-detail-container {
     padding: 20px 16px;
+    flex: 1;
+    overflow-y: auto;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .event-detail-card {
@@ -319,6 +315,7 @@ body {
     padding: 24px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     border: 1px solid #404040;
+    margin: 0 8px;
 }
 
 .event-detail-header {
@@ -326,9 +323,6 @@ body {
     justify-content: space-between;
     align-items: flex-start;
     margin-bottom: 24px;
-    border: none;
-    padding: 0;
-    background: none;
 }
 
 .event-detail-title {
@@ -429,7 +423,9 @@ body {
     color: #e0e0e0;
 }
 
-.no-access-message {
+/* Сообщения */
+.no-access-message,
+.no-events {
     text-align: center;
     padding: 60px 20px;
     background: #2d2d2d;
@@ -439,62 +435,64 @@ body {
     border: 1px solid #404040;
 }
 
-.no-access-icon {
+.no-access-icon,
+.no-events-icon {
     font-size: 64px;
     margin-bottom: 20px;
 }
 
-.no-access-message h3 {
+.no-access-message h3,
+.no-events h3 {
     font-size: 18px;
     font-weight: 700;
     margin-bottom: 12px;
     color: #ffffff;
 }
 
-.no-access-message p {
+.no-access-message p,
+.no-events p {
     font-size: 14px;
     color: #b0b0b0;
     line-height: 1.5;
 }
 
-.no-events {
-    text-align: center;
-    padding: 60px 20px;
-}
-
-.no-events-icon {
-    font-size: 64px;
-    margin-bottom: 20px;
-    opacity: 0.5;
-}
-
-.no-events h3 {
-    font-size: 18px;
-    font-weight: 700;
-    margin-bottom: 12px;
-    color: #b0b0b0;
-}
-
-.no-events p {
+/* Кнопки */
+.back-button {
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 10px 16px;
     font-size: 14px;
-    color: #808080;
-}
-
-/* Стили для профиля */
-.profile-screen {
-    background: #1c1c1c;
-    min-height: calc(100vh - 70px);
-}
-
-.profile-header {
-    padding: 12px 16px;
-    border-bottom: 1px solid #404040;
-    background: #2d2d2d;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
     display: flex;
     align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+    min-width: 85px;
+    justify-content: center;
+}
+
+.back-button:hover {
+    background: #0056b3;
+    transform: translateY(-1px);
+}
+
+.back-button:active {
+    transform: translateY(0);
 }
 
 /* Профиль */
+.profile-screen,
+.edit-profile-screen {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    background: #1c1c1c;
+}
+
 .profile-view {
     padding: 0 16px 24px;
     max-width: 1200px;
@@ -506,6 +504,7 @@ body {
 .profile-avatar-section {
     text-align: center;
     margin-bottom: 24px;
+    padding-top: 20px;
 }
 
 .profile-avatar-large {
@@ -661,14 +660,13 @@ body {
     flex: 1;
 }
 
-/* Стили для редактирования профиля */
-.edit-profile-screen {
-    background: #1c1c1c;
-    min-height: calc(100vh - 70px);
-}
-
+/* Редактирование профиля */
 .profile-edit-card {
     padding: 0 16px 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .profile-edit-card h2 {
@@ -677,6 +675,7 @@ body {
     font-size: 20px;
     font-weight: 700;
     color: #ffffff;
+    padding-top: 20px;
 }
 
 .edit-avatar-block {
@@ -728,7 +727,6 @@ body {
     border: 1px solid #404040;
     border-radius: 8px;
     font-size: 14px;
-    font-family: 'JetBrains Mono', monospace;
     transition: all 0.3s ease;
     background: #2d2d2d;
     color: #ffffff;
@@ -749,7 +747,6 @@ body {
     padding: 12px 16px;
     border: 1px solid #404040;
     border-radius: 8px;
-    font-family: 'JetBrains Mono', monospace;
     font-size: 14px;
     resize: vertical;
     min-height: 100px;
@@ -795,7 +792,6 @@ body {
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
-    font-family: 'JetBrains Mono', monospace;
 }
 
 .save-profile-btn:hover {
@@ -809,7 +805,7 @@ body {
     transform: none;
 }
 
-/* Стили для загрузки */
+/* Загрузка */
 .loading-section {
     text-align: center;
     padding: 60px 20px;
@@ -872,12 +868,71 @@ body {
         padding-top: 60px;
     }
     
-    .profile-view {
-        padding: 20px 16px;
+    .events-header {
+        padding: 16px 16px 12px;
     }
     
+    .screen-title {
+        font-size: 20px;
+    }
+    
+    .event-card {
+        padding: 16px;
+        margin: 0 4px;
+    }
+    
+    .event-content {
+        gap: 12px;
+    }
+    
+    .event-date {
+        min-width: 55px;
+        padding: 8px 12px;
+    }
+    
+    .event-date-day {
+        font-size: 18px;
+    }
+    
+    .event-date-month {
+        font-size: 11px;
+    }
+    
+    .pagination {
+        gap: 6px;
+    }
+    
+    .page-btn {
+        padding: 6px 10px;
+        font-size: 13px;
+        min-width: 40px;
+    }
+    
+    .event-detail-card {
+        padding: 20px;
+        margin: 0 4px;
+    }
+    
+    .event-detail-title {
+        font-size: 20px;
+    }
+    
+    .event-detail-date {
+        padding: 12px 16px;
+        min-width: 60px;
+    }
+    
+    .event-detail-day {
+        font-size: 20px;
+    }
+    
+    .event-detail-month {
+        font-size: 12px;
+    }
+    
+    .profile-view,
     .profile-edit-card {
-        padding: 20px 16px;
+        padding: 0 12px 20px;
     }
     
     .avatar-large {
@@ -905,321 +960,8 @@ body {
         height: 80px;
         font-size: 24px;
     }
-    
-    .menu-card {
-        padding: 20px;
-    }
-    
-    .menu-icon {
-        font-size: 40px;
-    }
-    
-    .event-card {
-        padding: 16px;
-    }
-    
-    .event-content {
-        gap: 12px;
-    }
-    
-    .event-date {
-        min-width: 55px;
-        padding: 8px 12px;
-    }
-    
-    .event-date-day {
-        font-size: 18px;
-    }
-    
-    .event-date-month {
-        font-size: 11px;
-    }
-    
-    .event-detail-card {
-        padding: 20px;
-    }
-    
-    .event-detail-title {
-        font-size: 20px;
-    }
-    
-    .event-detail-date {
-        padding: 12px 16px;
-        min-width: 60px;
-    }
-    
-    .event-detail-day {
-        font-size: 20px;
-    }
-    
-    .event-detail-month {
-        font-size: 12px;
-    }
 }
 
-/* Улучшения для событий на маленьких экранах */
-@media (max-width: 360px) {
-    .event-content {
-        flex-direction: column;
-        gap: 12px;
-    }
-    
-    .event-details {
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
-        width: 100%;
-    }
-    
-    .event-time-location {
-        align-items: flex-start;
-    }
-    
-    .event-location {
-        max-width: none;
-        text-align: left;
-    }
-    
-    .event-detail-header {
-        flex-direction: column;
-        gap: 16px;
-        align-items: flex-start;
-    }
-    
-    .event-detail-date-badge {
-        align-self: flex-end;
-    }
-}
-
-/* Анимации для плавности */
-.event-card, .menu-card, .profile-link, .save-profile-btn {
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* Улучшение скролла */
-.events-screen::-webkit-scrollbar,
-.event-detail-screen::-webkit-scrollbar {
-    width: 4px;
-}
-
-.events-screen::-webkit-scrollbar-track,
-.event-detail-screen::-webkit-scrollbar-track {
-    background: #2d2d2d;
-}
-
-.events-screen::-webkit-scrollbar-thumb,
-.event-detail-screen::-webkit-scrollbar-thumb {
-    background: #007bff;
-    border-radius: 2px;
-}
-
-.events-screen::-webkit-scrollbar-thumb:hover,
-.event-detail-screen::-webkit-scrollbar-thumb:hover {
-    background: #0056b3;
-}
-
-/* Состояния наведения для десктопов */
-@media (hover: hover) {
-    .menu-card:hover, .profile-link:hover, .event-card:hover, .save-profile-btn:hover {
-        transform: translateY(-2px);
-    }
-}
-
-/* Состояния активного нажатия для мобильных */
-.menu-card:active, .profile-link:active, .event-card:active, .save-profile-btn:active {
-    transform: translateY(0);
-    transition: transform 0.1s ease;
-}
-
-/* Улучшение доступности */
-@media (prefers-reduced-motion: reduce) {
-    .menu-card, .profile-link, .event-card, .save-profile-btn {
-        transition: none;
-    }
-    
-    .loading-spinner {
-        animation: none;
-        border: 3px solid #404040;
-        border-top: 3px solid #007bff;
-    }
-}
-
-/* Стили для кнопок назад */
-.back-button {
-    background: #007bff;
-    color: white;
-    border: none;
-    border-radius: 12px;
-    padding: 10px 16px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    font-family: 'JetBrains Mono', monospace;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.back-button:hover {
-    background: #0056b3;
-    transform: translateY(-1px);
-}
-
-.back-button:active {
-    transform: translateY(0);
-}
-
-/* Исправляем хедеры для кнопок назад */
-.events-header,
-.event-detail-header,
-.profile-header {
-    padding: 12px 16px;
-    border-bottom: 1px solid #404040;
-    background: #2d2d2d;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.events-title,
-.event-detail-title {
-    font-size: 18px;
-    font-weight: 700;
-    color: #ffffff;
-    flex: 1;
-    text-align: center;
-}
-
-.profile-header .events-title,
-.edit-profile-header .events-title {
-    font-size: 18px;
-    font-weight: 700;
-    color: #ffffff;
-    flex: 1;
-    text-align: center;
-}
-
-/* Универсальные стили для хедеров экранов */
-.screen-header {
-    padding: 12px 16px;
-    border-bottom: 1px solid #404040;
-    background: #2d2d2d;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    min-height: 60px;
-    box-sizing: border-box;
-}
-
-.screen-title {
-    font-size: 18px;
-    font-weight: 700;
-    color: #ffffff;
-    text-align: center;
-    flex: 1;
-    margin: 0;
-}
-
-.header-spacer {
-    width: 85px;
-    flex-shrink: 0;
-}
-
-/* Контент экранов */
-.screen-content {
-    flex: 1;
-    overflow-y: auto;
-    background: #1c1c1c;
-}
-
-/* Специфичные стили для каждого экрана */
-.events-screen,
-.event-detail-screen,
-.profile-screen,
-.edit-profile-screen {
-    display: flex;
-    flex-direction: column;
-    height: calc(100vh - 70px);
-    background: #1c1c1c;
-}
-
-.events-container,
-.event-detail-container {
-    padding: 20px 16px;
-    flex: 1;
-    overflow-y: auto;
-}
-
-/* Контейнер для списка событий */
-.events-list {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    padding: 0 0 20px 0; /* Отступ снизу для скролла */
-}
-
-/* Контейнер событий */
-.events-container {
-    padding: 20px 8px; /* Уменьшили боковые отступы */
-    flex: 1;
-    overflow-y: auto;
-    max-width: 1200px; /* Максимальная ширина для больших экранов */
-    margin: 0 auto; /* Центрирование на широких экранах */
-    width: 100%;
-    box-sizing: border-box;
-}
-
-.profile-edit-card {
-    padding: 0 16px 24px;
-    max-width: 1200px;
-    margin: 0 auto;
-    width: 100%;
-    box-sizing: border-box;
-}
-
-/* Детальная страница события */
-.event-detail-container {
-    padding: 20px 16px;
-    flex: 1;
-    overflow-y: auto;
-    max-width: 1200px;
-    margin: 0 auto;
-    width: 100%;
-    box-sizing: border-box;
-}
-
-.event-detail-card {
-    background: #2d2d2d;
-    border-radius: 20px;
-    padding: 24px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-    border: 1px solid #404040;
-    margin: 0 8px; /* Боковые отступы */
-}
-
-/* Хедеры экранов */
-.screen-header {
-    padding: 12px 16px;
-    border-bottom: 1px solid #404040;
-    background: #2d2d2d;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    min-height: 60px;
-    box-sizing: border-box;
-    max-width: 1200px;
-    margin: 0 auto;
-    width: 100%;
-}
-
-/* Адаптивность для больших экранов */
 @media (min-width: 768px) {
     .events-container {
         padding: 30px 20px;
@@ -1228,28 +970,13 @@ body {
     .event-card {
         margin: 0 12px;
         padding: 24px;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
     }
     
     .events-list {
         gap: 20px;
-    }
-    
-    .main-menu {
-        padding: 40px 24px;
-    }
-    
-    .menu-cards {
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 24px;
-    }
-    
-    .menu-card {
-        padding: 32px;
-    }
-    
-    .profile-view,
-    .profile-edit-card {
-        padding: 0 24px 32px;
     }
     
     .event-detail-container {
@@ -1259,60 +986,35 @@ body {
     .event-detail-card {
         margin: 0 12px;
         padding: 32px;
-    }
-}
-
-@media (min-width: 1200px) {
-    .events-container {
-        padding: 40px 24px;
-    }
-    
-    .event-card {
-        margin: 0 16px;
         max-width: 800px;
         margin-left: auto;
         margin-right: auto;
     }
     
-    .event-detail-card {
-        margin: 0 16px;
-        max-width: 800px;
-        margin-left: auto;
-        margin-right: auto;
+    .profile-view,
+    .profile-edit-card {
+        padding: 0 24px 32px;
     }
 }
 
-/* Исправить поведение при растяжении */
-.app {
-    background: #1c1c1c;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
+/* Улучшение скролла */
+.events-container::-webkit-scrollbar,
+.screen-content::-webkit-scrollbar {
+    width: 4px;
 }
 
-.main {
-    padding-top: 70px;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    background: #1c1c1c;
+.events-container::-webkit-scrollbar-track,
+.screen-content::-webkit-scrollbar-track {
+    background: #2d2d2d;
 }
 
-/* Все экраны должны занимать всю доступную высоту */
-.events-screen,
-.event-detail-screen,
-.profile-screen,
-.edit-profile-screen {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    background: #1c1c1c;
+.events-container::-webkit-scrollbar-thumb,
+.screen-content::-webkit-scrollbar-thumb {
+    background: #007bff;
+    border-radius: 2px;
 }
 
-/* Контент должен растягиваться правильно */
-.screen-content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    background: #1c1c1c;
+.events-container::-webkit-scrollbar-thumb:hover,
+.screen-content::-webkit-scrollbar-thumb:hover {
+    background: #0056b3;
 }

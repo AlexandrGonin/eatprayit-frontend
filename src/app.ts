@@ -32,6 +32,14 @@ interface Event {
     event_type?: string;
 }
 
+interface EventsResponse {
+    success: boolean;
+    events: Event[];
+    totalPages: number;
+    currentPage: number;
+    hasAccess: boolean;
+}
+
 // Функция для безопасного получения элементов
 function getElement(id: string): HTMLElement {
     const element = document.getElementById(id);
@@ -48,7 +56,6 @@ const elements = {
     mainScreen: getElement('main-screen'),
     profileScreen: getElement('profile-screen'),
     editProfileScreen: getElement('edit-profile-screen'),
-    eventsScreen: getElement('events-screen'),
     eventDetailScreen: getElement('event-detail-screen'),
     loadingSection: getElement('loading-section'),
     userAvatarEdit: document.getElementById('user-avatar-edit') as HTMLImageElement,
@@ -62,8 +69,7 @@ const elements = {
     saveProfileBtn: document.getElementById('save-profile-btn') as HTMLButtonElement,
     backToMainBtn: document.getElementById('back-to-main-btn') as HTMLButtonElement,
     backToProfileBtn: document.getElementById('back-to-profile-btn') as HTMLButtonElement,
-    backToMainFromEventsBtn: document.getElementById('back-to-main-from-events-btn') as HTMLButtonElement,
-    backToEventsBtn: document.getElementById('back-to-events-btn') as HTMLButtonElement,
+    backToMainFromProfileBtn: document.getElementById('back-to-main-from-profile-btn') as HTMLButtonElement,
     profileAvatar: document.getElementById('profile-avatar') as HTMLImageElement,
     avatarPlaceholderLarge: document.getElementById('avatar-placeholder-large') as HTMLDivElement,
     profileName: document.getElementById('profile-name') as HTMLHeadingElement,
@@ -74,11 +80,14 @@ const elements = {
     profileLinks: document.getElementById('profile-links') as HTMLDivElement,
     eventsList: document.getElementById('events-list') as HTMLDivElement,
     noAccessMessage: document.getElementById('no-access-message') as HTMLDivElement,
-    eventDetailContent: document.getElementById('event-detail-content') as HTMLDivElement
+    eventDetailContent: document.getElementById('event-detail-content') as HTMLDivElement,
+    pagination: document.getElementById('pagination') as HTMLDivElement
 };
 
 let currentUser: User | null = null;
 let currentEvents: Event[] = [];
+let currentPage = 1;
+let totalPages = 1;
 
 async function initializeApp(): Promise<void> {
     try {
@@ -91,14 +100,6 @@ async function initializeApp(): Promise<void> {
         
         tg.expand();
         tg.ready();
-        
-        // ДЕБАГ: Выводим все данные от Telegram
-        console.log('📱 Telegram WebApp данные:', {
-            initData: tg.initData,
-            initDataUnsafe: tg.initDataUnsafe,
-            platform: tg.platform,
-            version: tg.version
-        });
         
         const telegramUser = tg.initDataUnsafe?.user;
         
@@ -161,9 +162,9 @@ async function initializeApp(): Promise<void> {
         
         currentUser = authData.user;
         
-        // Показываем шапку и основное меню
+        // Показываем шапку и загружаем события
         renderHeader(currentUser);
-        renderMainMenu(currentUser);
+        await loadEvents(1); // Загружаем первую страницу
         showLoading(false);
         showScreen('main');
         
@@ -175,90 +176,35 @@ async function initializeApp(): Promise<void> {
     }
 }
 
-function renderHeader(user: User | null): void {
-    if (!user) return;
-    
-    if (user.photo_url) {
-        elements.userAvatar.src = user.photo_url;
-        elements.userAvatar.style.display = 'block';
-        elements.avatarPlaceholderSmall.style.display = 'none';
-    } else {
-        const firstLetter = user.first_name ? user.first_name[0].toUpperCase() : 'U';
-        elements.avatarPlaceholderSmall.textContent = firstLetter;
-        elements.userAvatar.style.display = 'none';
-        elements.avatarPlaceholderSmall.style.display = 'flex';
-    }
-    
-    elements.userNameHeader.textContent = user.first_name || 'Пользователь';
-}
-
-function renderMainMenu(user: User | null): void {
-    if (!user) return;
-    
-    const mainScreen = elements.mainScreen;
-    mainScreen.innerHTML = `
-        <div class="main-menu">
-            <div class="menu-cards">
-                <div class="menu-card" id="events-tab">
-                    <div class="menu-icon">📅</div>
-                    <h3>Мероприятия</h3>
-                    <p>Расписание IT-ивентов</p>
-                </div>
-            </div>
-            ${!user.is_active ? `
-                <div class="access-warning">
-                    <div class="warning-icon">🔒</div>
-                    <p>Для просмотра мероприятий нужна реферальная ссылка</p>
-                </div>
-            ` : ''}
-        </div>
-    `;
-    
-    // Добавляем обработчики событий после рендера
-    setTimeout(() => {
-        const eventsTab = document.getElementById('events-tab');
-        
-        if (eventsTab) {
-            eventsTab.addEventListener('click', () => showEvents());
-        }
-    }, 100);
-}
-
-async function showEvents(): Promise<void> {
+async function loadEvents(page: number): Promise<void> {
     try {
-        showLoading(true);
-        
-        if (!currentUser) {
-            throw new Error('Нет данных пользователя');
-        }
-        
-        const response = await fetch(`${CONFIG.BACKEND_URL}/events/${currentUser.telegram_id}`);
+        if (!currentUser) return;
+
+        const response = await fetch(`${CONFIG.BACKEND_URL}/events/${currentUser.telegram_id}?page=${page}&limit=10`);
         
         if (!response.ok) {
             const errorData = await response.json().catch(() => ({ error: 'Ошибка сервера' }));
             
             if (response.status === 403) {
-                // Пользователь не активен - показываем сообщение
                 renderNoAccessScreen();
-                showScreen('events');
-                showLoading(false);
                 return;
             }
             
             throw new Error(errorData.error || `Ошибка ${response.status}`);
         }
         
-        const data = await response.json();
+        const data: EventsResponse = await response.json();
         currentEvents = data.events;
+        currentPage = data.currentPage;
+        totalPages = data.totalPages;
+        
         renderEvents(currentEvents);
-        showScreen('events');
+        renderPagination();
         
     } catch (error) {
         console.error('Ошибка загрузки событий:', error);
         const errorMessage = error instanceof Error ? error.message : 'Не удалось загрузить события';
         showError(errorMessage);
-    } finally {
-        showLoading(false);
     }
 }
 
@@ -269,8 +215,8 @@ function renderEvents(events: Event[]): void {
         eventsList.innerHTML = `
             <div class="no-events">
                 <div class="no-events-icon">📅</div>
-                <h3>Нет предстоящих мероприятий</h3>
-                <p>Следите за обновлениями, скоро появятся новые события!</p>
+                <h3>Нет мероприятий</h3>
+                <p>На данный момент нет запланированных мероприятий</p>
             </div>
         `;
         return;
@@ -308,6 +254,55 @@ function renderEvents(events: Event[]): void {
             card.addEventListener('click', () => {
                 const eventIndex = parseInt(card.getAttribute('data-event-index') || '0');
                 showEventDetail(eventIndex);
+            });
+        });
+    }, 100);
+}
+
+function renderPagination(): void {
+    const pagination = elements.pagination;
+    
+    if (totalPages <= 1) {
+        pagination.style.display = 'none';
+        return;
+    }
+    
+    pagination.style.display = 'flex';
+    
+    let paginationHTML = '';
+    
+    // Кнопка "Назад"
+    if (currentPage > 1) {
+        paginationHTML += `<button class="page-btn prev-btn" data-page="${currentPage - 1}">← Назад</button>`;
+    } else {
+        paginationHTML += `<button class="page-btn prev-btn disabled" disabled>← Назад</button>`;
+    }
+    
+    // Номера страниц
+    for (let i = 1; i <= totalPages; i++) {
+        if (i === currentPage) {
+            paginationHTML += `<button class="page-btn page-number active" data-page="${i}">${i}</button>`;
+        } else {
+            paginationHTML += `<button class="page-btn page-number" data-page="${i}">${i}</button>`;
+        }
+    }
+    
+    // Кнопка "Вперед"
+    if (currentPage < totalPages) {
+        paginationHTML += `<button class="page-btn next-btn" data-page="${currentPage + 1}">Вперед →</button>`;
+    } else {
+        paginationHTML += `<button class="page-btn next-btn disabled" disabled>Вперед →</button>`;
+    }
+    
+    pagination.innerHTML = paginationHTML;
+    
+    // Добавляем обработчики для пагинации
+    setTimeout(() => {
+        const pageButtons = document.querySelectorAll('.page-btn:not(.disabled)');
+        pageButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const page = parseInt(button.getAttribute('data-page') || '1');
+                loadEvents(page);
             });
         });
     }, 100);
@@ -374,7 +369,25 @@ function renderEventDetail(event: Event): void {
 
 function renderNoAccessScreen(): void {
     elements.eventsList.style.display = 'none';
+    elements.pagination.style.display = 'none';
     elements.noAccessMessage.style.display = 'block';
+}
+
+function renderHeader(user: User | null): void {
+    if (!user) return;
+    
+    if (user.photo_url) {
+        elements.userAvatar.src = user.photo_url;
+        elements.userAvatar.style.display = 'block';
+        elements.avatarPlaceholderSmall.style.display = 'none';
+    } else {
+        const firstLetter = user.first_name ? user.first_name[0].toUpperCase() : 'U';
+        elements.avatarPlaceholderSmall.textContent = firstLetter;
+        elements.userAvatar.style.display = 'none';
+        elements.avatarPlaceholderSmall.style.display = 'flex';
+    }
+    
+    elements.userNameHeader.textContent = user.first_name || 'Пользователь';
 }
 
 function formatEventDate(dateString: string): string {
@@ -392,6 +405,12 @@ function escapeHtml(text: string): string {
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
+}
+
+function showProfile(): void {
+    if (!currentUser) return;
+    renderProfile(currentUser);
+    showScreen('profile');
 }
 
 function renderProfile(user: User | null): void {
@@ -476,12 +495,6 @@ function renderLinks(links: any): void {
     elements.profileLinks.innerHTML = linksHTML.join('');
 }
 
-function showProfile(): void {
-    if (!currentUser) return;
-    renderProfile(currentUser);
-    showScreen('profile');
-}
-
 function showEditProfile(): void {
     if (!currentUser) return;
     
@@ -563,11 +576,10 @@ async function saveProfile(): Promise<void> {
     }
 }
 
-function showScreen(screen: 'main' | 'profile' | 'edit' | 'events' | 'event-detail'): void {
+function showScreen(screen: 'main' | 'profile' | 'edit' | 'event-detail'): void {
     elements.mainScreen.style.display = screen === 'main' ? 'block' : 'none';
     elements.profileScreen.style.display = screen === 'profile' ? 'block' : 'none';
     elements.editProfileScreen.style.display = screen === 'edit' ? 'block' : 'none';
-    elements.eventsScreen.style.display = screen === 'events' ? 'block' : 'none';
     elements.eventDetailScreen.style.display = screen === 'event-detail' ? 'block' : 'none';
 }
 
@@ -577,7 +589,6 @@ function showLoading(show: boolean): void {
         elements.mainScreen.style.display = 'none';
         elements.profileScreen.style.display = 'none';
         elements.editProfileScreen.style.display = 'none';
-        elements.eventsScreen.style.display = 'none';
         elements.eventDetailScreen.style.display = 'none';
     } else {
         elements.loadingSection.classList.remove('show');
@@ -604,8 +615,7 @@ function setupEventListeners(): void {
     elements.avatarPlaceholderLarge.addEventListener('click', showEditProfile);
     elements.backToMainBtn.addEventListener('click', () => showScreen('main'));
     elements.backToProfileBtn.addEventListener('click', () => showScreen('profile'));
-    elements.backToMainFromEventsBtn.addEventListener('click', () => showScreen('main'));
-    elements.backToEventsBtn.addEventListener('click', () => showScreen('events'));
+    elements.backToMainFromProfileBtn.addEventListener('click', () => showScreen('main'));
     elements.saveProfileBtn.addEventListener('click', saveProfile);
 }
 
