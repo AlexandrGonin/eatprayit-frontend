@@ -111,6 +111,7 @@ html, body {
     z-index: 999;
     min-height: 60px;
     box-sizing: border-box;
+    flex-shrink: 0; /* Добавить эту строку */
 }
 
 .screen-title {
@@ -181,6 +182,7 @@ html, body {
     flex-direction: column;
     background: #1c1c1c;
     overflow-y: auto;
+    height: calc(100vh - 130px);
 }
 
 .events-list {
@@ -189,6 +191,7 @@ html, body {
     gap: 12px;
     padding: 16px 12px;
     flex: 1;
+    overflow-y: auto; 
 }
 
 .event-card {
