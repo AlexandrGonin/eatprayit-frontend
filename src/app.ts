@@ -317,14 +317,15 @@ function renderEvents(events: Event[]): void {
         return;
     }
     
-    const eventsHTML = events.map((event, index) => `
-        <div class="event-card" data-event-index="${index}">
-            <div class="event-content">
-                <div class="event-main">
-                    <h3 class="event-title">${escapeHtml(event.title)}</h3>
-                    <p class="event-short-desc">${escapeHtml(event.short_description)}</p>
-                </div>
-                <div class="event-details">
+const eventsHTML = events.map((event, index) => `
+    <div class="event-card" data-event-index="${index}">
+        <div class="event-content">
+            <div class="event-main">
+                <h3 class="event-title">${escapeHtml(event.title)}</h3>
+                <p class="event-short-desc">${escapeHtml(event.short_description)}</p>
+            </div>
+            <div class="event-details">
+                <div class="event-date-time-location">
                     <div class="event-date">
                         <span class="event-date-day">${formatEventDate(event.date)}</span>
                         <span class="event-date-month">${formatEventMonth(event.date)}</span>
@@ -336,7 +337,8 @@ function renderEvents(events: Event[]): void {
                 </div>
             </div>
         </div>
-    `).join('');
+    </div>
+`).join('');;
     
     if (currentPage === 1) {
         eventsList.innerHTML = eventsHTML;
