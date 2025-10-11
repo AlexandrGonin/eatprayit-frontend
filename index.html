@@ -25,31 +25,30 @@
         </header>
 
         <main class="main">
-            <!-- Main Events Screen -->
-            <div id="main-screen" class="events-screen">
-                <div class="screen-header">
-                    <button id="filter-btn" class="filter-header-button">Фильтры</button>
-                    <h2 class="screen-title">Мероприятия</h2>
-                    <div class="header-spacer"></div>
-                </div>
-                <div class="screen-content">
-                    <div class="events-list-container">
-                        <div id="events-list" class="events-list">
-                            <!-- События загружаются динамически -->
-                        </div>
-                    </div>
-                    <div id="no-access-message" class="no-access-message" style="display: none;">
-                        <div class="no-access-icon">🔒</div>
-                        <h3>Доступ к мероприятиям ограничен</h3>
-                        <p>Чтобы получать информацию об ивентах, необходимо перейти по реферальной ссылке от друга</p>
-                    </div>
-                    <div id="loading-more" class="loading-more" style="display: none;">
-                        <div class="loading-spinner small"></div>
-                        <p>Загрузка...</p>
-                    </div>
-                </div>
+<!-- Main Events Screen -->
+<div id="main-screen" class="events-screen" style="display: flex;">
+    <div class="screen-header">
+        <button id="filter-btn" class="filter-header-button">Фильтры</button>
+        <h2 class="screen-title">Мероприятия</h2>
+        <div class="header-spacer"></div>
+    </div>
+    <div class="screen-content">
+        <div class="events-list-container">
+            <div id="events-list" class="events-list">
+                <!-- События загружаются динамически -->
             </div>
-
+        </div>
+        <div id="no-access-message" class="no-access-message" style="display: none;">
+            <div class="no-access-icon">🔒</div>
+            <h3>Доступ к мероприятиям ограничен</h3>
+            <p>Чтобы получать информацию об ивентах, необходимо перейти по реферальной ссылке от друга</p>
+        </div>
+        <div id="loading-more" class="loading-more" style="display: none;">
+            <div class="loading-spinner small"></div>
+            <p>Загрузка...</p>
+        </div>
+    </div>
+</div>
             <!-- Event Detail Screen -->
             <div id="event-detail-screen" class="event-detail-screen" style="display: none;">
                 <div class="screen-header">
