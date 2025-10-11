@@ -19,6 +19,7 @@ html, body {
     line-height: 1.6;
     width: 100%;
     min-height: 100vh;
+    overflow: hidden;
 }
 
 .app {
@@ -91,18 +92,20 @@ html, body {
 
 /* Main Layout */
 .main {
-    padding-top: 70px;
+    padding-top: 70px; /* Отступ под фиксированный header */
     flex: 1;
     display: flex;
     flex-direction: column;
     background: #1c1c1c;
+    height: 100vh;
+    overflow: hidden;
 }
 
 /* Screen Components */
 .screen-header {
     background: #2d2d2d;
     border-bottom: 1px solid #404040;
-    padding: 12px 16px;
+    padding: 16px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -110,8 +113,7 @@ html, body {
     top: 0;
     z-index: 999;
     min-height: 60px;
-    box-sizing: border-box;
-    flex-shrink: 0; /* Добавить эту строку */
+    flex-shrink: 0;
 }
 
 .screen-title {
@@ -175,23 +177,27 @@ html, body {
     transform: translateY(0);
 }
 
-/* Events List */
+/* Screen Content Layout */
 .screen-content {
     flex: 1;
     display: flex;
     flex-direction: column;
     background: #1c1c1c;
+    overflow: hidden;
+    height: calc(100vh - 130px); /* header(70px) + screen-header(60px) */
+}
+
+/* Events List */
+.events-list-container {
+    flex: 1;
     overflow-y: auto;
-    height: calc(100vh - 130px);
+    padding: 16px 12px;
 }
 
 .events-list {
     display: flex;
     flex-direction: column;
     gap: 12px;
-    padding: 16px 12px;
-    flex: 1;
-    overflow-y: auto; 
 }
 
 .event-card {
@@ -245,8 +251,8 @@ html, body {
 
 .event-date-time-location {
     display: flex;
-    flex-direction: column;
-    gap: 8px;
+    align-items: flex-start;
+    gap: 12px;
 }
 
 .event-date {
@@ -258,7 +264,7 @@ html, body {
     border-radius: 12px;
     padding: 8px 12px;
     min-width: 55px;
-    align-self: flex-start;
+    flex-shrink: 0;
 }
 
 .event-date-day {
@@ -272,12 +278,14 @@ html, body {
     font-weight: 600;
     text-transform: lowercase;
     line-height: 1;
+    margin-top: 2px;
 }
 
 .event-time-location {
     display: flex;
     flex-direction: column;
     gap: 6px;
+    flex: 1;
 }
 
 .event-time {
@@ -299,9 +307,9 @@ html, body {
 
 /* Event Detail */
 .event-detail-container {
-    padding: 16px 12px;
     flex: 1;
     overflow-y: auto;
+    padding: 16px 12px;
 }
 
 .event-detail-card {
@@ -313,9 +321,9 @@ html, body {
 
 .event-detail-header {
     display: flex;
-    flex-direction: column;
-    gap: 16px;
+    justify-content: space-between;
     align-items: flex-start;
+    gap: 16px;
     margin-bottom: 20px;
 }
 
@@ -324,11 +332,11 @@ html, body {
     font-weight: 700;
     color: #ffffff;
     line-height: 1.3;
-    width: 100%;
+    flex: 1;
 }
 
 .event-detail-date-badge {
-    align-self: flex-end;
+    flex-shrink: 0;
 }
 
 .event-detail-date {
@@ -418,8 +426,9 @@ html, body {
 
 /* Profile */
 .profile-view {
-    padding: 0 12px 20px;
     flex: 1;
+    overflow-y: auto;
+    padding: 0 12px 20px;
 }
 
 .profile-avatar-section {
@@ -583,8 +592,9 @@ html, body {
 
 /* Edit Profile */
 .profile-edit-card {
-    padding: 0 12px 20px;
     flex: 1;
+    overflow-y: auto;
+    padding: 0 12px 20px;
 }
 
 .profile-edit-card h2 {
@@ -744,8 +754,9 @@ html, body {
 
 /* Filters */
 .filters-container {
-    padding: 16px 12px;
     flex: 1;
+    overflow-y: auto;
+    padding: 16px 12px;
 }
 
 .filters-section {
@@ -867,6 +878,12 @@ html, body {
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    position: fixed;
+    top: 70px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1001;
 }
 
 .loading-section.show {
@@ -937,25 +954,55 @@ html, body {
 /* Scrollbar */
 .events-screen .screen-content::-webkit-scrollbar,
 .event-detail-screen .screen-content::-webkit-scrollbar,
-.profile-screen .screen-content::-webkit-scrollbar {
+.profile-screen .screen-content::-webkit-scrollbar,
+.filters-screen .screen-content::-webkit-scrollbar {
     width: 4px;
 }
 
 .events-screen .screen-content::-webkit-scrollbar-track,
 .event-detail-screen .screen-content::-webkit-scrollbar-track,
-.profile-screen .screen-content::-webkit-scrollbar-track {
+.profile-screen .screen-content::-webkit-scrollbar-track,
+.filters-screen .screen-content::-webkit-scrollbar-track {
     background: #2d2d2d;
 }
 
 .events-screen .screen-content::-webkit-scrollbar-thumb,
 .event-detail-screen .screen-content::-webkit-scrollbar-thumb,
-.profile-screen .screen-content::-webkit-scrollbar-thumb {
+.profile-screen .screen-content::-webkit-scrollbar-thumb,
+.filters-screen .screen-content::-webkit-scrollbar-thumb {
     background: #007bff;
     border-radius: 2px;
 }
 
 .events-screen .screen-content::-webkit-scrollbar-thumb:hover,
 .event-detail-screen .screen-content::-webkit-scrollbar-thumb:hover,
-.profile-screen .screen-content::-webkit-scrollbar-thumb:hover {
+.profile-screen .screen-content::-webkit-scrollbar-thumb:hover,
+.filters-screen .screen-content::-webkit-scrollbar-thumb:hover {
     background: #0056b3;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+    .screen-header {
+        padding: 12px;
+    }
+    
+    .event-date-time-location {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .event-date {
+        align-self: flex-start;
+    }
+    
+    .event-detail-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+    
+    .event-detail-date-badge {
+        align-self: flex-end;
+    }
 }
