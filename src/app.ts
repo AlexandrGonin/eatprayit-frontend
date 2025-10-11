@@ -311,6 +311,11 @@ async function loadEvents(initialLoad = false): Promise<void> {
 
 function renderEvents(events: Event[]): void {
     const eventsList = elements.eventsList;
+    const eventsListContainer = document.querySelector('.events-list-container') as HTMLElement;
+    
+    if (eventsListContainer) {
+        eventsListContainer.style.display = 'block';
+    }
     
     if (events.length === 0) {
         renderNoEvents();
@@ -439,7 +444,10 @@ function renderEventDetail(event: Event): void {
 }
 
 function renderNoAccessScreen(): void {
-    elements.eventsList.style.display = 'none';
+    const eventsListContainer = document.querySelector('.events-list-container') as HTMLElement;
+    if (eventsListContainer) {
+        eventsListContainer.style.display = 'none';
+    }
     elements.noAccessMessage.style.display = 'block';
 }
 
@@ -659,11 +667,40 @@ async function saveProfile(): Promise<void> {
 }
 
 function showScreen(screen: 'main' | 'profile' | 'edit' | 'event-detail' | 'filters'): void {
-    elements.mainScreen.style.display = screen === 'main' ? 'flex' : 'none';
-    elements.profileScreen.style.display = screen === 'profile' ? 'flex' : 'none';
-    elements.editProfileScreen.style.display = screen === 'edit' ? 'flex' : 'none';
-    elements.eventDetailScreen.style.display = screen === 'event-detail' ? 'flex' : 'none';
-    elements.filtersScreen.style.display = screen === 'filters' ? 'flex' : 'none';
+    // Убираем классы для всех экранов
+    const screens = [
+        'events-screen',
+        'event-detail-screen', 
+        'profile-screen',
+        'edit-profile-screen',
+        'filters-screen'
+    ];
+    
+    screens.forEach(screenClass => {
+        const element = document.querySelector(`.${screenClass}`);
+        if (element) {
+            (element as HTMLElement).style.display = 'none';
+        }
+    });
+    
+    // Показываем нужный экран
+    switch (screen) {
+        case 'main':
+            (document.querySelector('.events-screen') as HTMLElement).style.display = 'flex';
+            break;
+        case 'event-detail':
+            (document.querySelector('.event-detail-screen') as HTMLElement).style.display = 'flex';
+            break;
+        case 'profile':
+            (document.querySelector('.profile-screen') as HTMLElement).style.display = 'flex';
+            break;
+        case 'edit':
+            (document.querySelector('.edit-profile-screen') as HTMLElement).style.display = 'flex';
+            break;
+        case 'filters':
+            (document.querySelector('.filters-screen') as HTMLElement).style.display = 'flex';
+            break;
+    }
 }
 
 function showLoading(show: boolean): void {

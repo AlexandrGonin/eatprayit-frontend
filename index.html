@@ -25,15 +25,18 @@
         </header>
 
         <main class="main">
-            <div id="main-screen" class="main-screen">
+            <!-- Main Events Screen -->
+            <div id="main-screen" class="events-screen">
                 <div class="screen-header">
                     <button id="filter-btn" class="filter-header-button">Фильтры</button>
                     <h2 class="screen-title">Мероприятия</h2>
                     <div class="header-spacer"></div>
                 </div>
                 <div class="screen-content">
-                    <div id="events-list" class="events-list">
-                        <!-- События загружаются динамически -->
+                    <div class="events-list-container">
+                        <div id="events-list" class="events-list">
+                            <!-- События загружаются динамически -->
+                        </div>
                     </div>
                     <div id="no-access-message" class="no-access-message" style="display: none;">
                         <div class="no-access-icon">🔒</div>
@@ -47,6 +50,7 @@
                 </div>
             </div>
 
+            <!-- Event Detail Screen -->
             <div id="event-detail-screen" class="event-detail-screen" style="display: none;">
                 <div class="screen-header">
                     <button id="back-to-main-btn" class="back-button">← Назад</button>
@@ -54,12 +58,15 @@
                     <div class="header-spacer"></div>
                 </div>
                 <div class="screen-content">
-                    <div id="event-detail-content" class="event-detail-content">
-                        <!-- Детали события загружаются динамически -->
+                    <div class="event-detail-container">
+                        <div id="event-detail-content" class="event-detail-content">
+                            <!-- Детали события загружаются динамически -->
+                        </div>
                     </div>
                 </div>
             </div>
 
+            <!-- Profile Screen -->
             <div id="profile-screen" class="profile-screen" style="display: none;">
                 <div class="screen-header">
                     <button id="back-to-main-from-profile" class="back-button">← Назад</button>
@@ -107,6 +114,7 @@
                 </div>
             </div>
 
+            <!-- Edit Profile Screen -->
             <div id="edit-profile-screen" class="edit-profile-screen" style="display: none;">
                 <div class="screen-header">
                     <button id="back-to-profile-btn" class="back-button">← Назад</button>
@@ -172,6 +180,7 @@
                 </div>
             </div>
 
+            <!-- Filters Screen -->
             <div id="filters-screen" class="filters-screen" style="display: none;">
                 <div class="screen-header">
                     <button id="back-to-main-from-filters" class="back-button">← Назад</button>
@@ -194,6 +203,7 @@
                 </div>
             </div>
 
+            <!-- Loading Screen -->
             <div id="loading-section" class="loading-section">
                 <div class="loading-spinner"></div>
                 <p>Загрузка...</p>
