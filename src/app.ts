@@ -32,7 +32,6 @@ interface Event {
     event_type?: string;
 }
 
-// Функция для безопасного получения элементов
 function getElement(id: string): HTMLElement {
     const element = document.getElementById(id);
     if (!element) {
@@ -42,13 +41,11 @@ function getElement(id: string): HTMLElement {
 }
 
 const elements = {
-    // Header
     userAvatar: document.getElementById('user-avatar') as HTMLImageElement,
     avatarPlaceholderSmall: document.getElementById('avatar-placeholder-small') as HTMLDivElement,
     userNameHeader: document.getElementById('user-name-header') as HTMLHeadingElement,
     userCoinsHeader: document.getElementById('user-coins-header') as HTMLDivElement,
     
-    // Screens
     mainScreen: getElement('main-screen'),
     profileScreen: getElement('profile-screen'),
     editProfileScreen: getElement('edit-profile-screen'),
@@ -56,7 +53,6 @@ const elements = {
     filtersScreen: getElement('filters-screen'),
     loadingSection: getElement('loading-section'),
     
-    // Buttons
     filterBtn: document.getElementById('filter-btn') as HTMLButtonElement,
     backToMainBtn: document.getElementById('back-to-main-btn') as HTMLButtonElement,
     backToMainFromProfile: document.getElementById('back-to-main-from-profile') as HTMLButtonElement,
@@ -66,7 +62,6 @@ const elements = {
     applyFilters: document.getElementById('apply-filters') as HTMLButtonElement,
     resetFilters: document.getElementById('reset-filters') as HTMLButtonElement,
     
-    // Profile
     userAvatarEdit: document.getElementById('user-avatar-edit') as HTMLImageElement,
     avatarPlaceholderEdit: document.getElementById('avatar-placeholder-edit') as HTMLDivElement,
     editPosition: document.getElementById('edit-position') as HTMLInputElement,
@@ -84,13 +79,11 @@ const elements = {
     profileCoins: document.getElementById('profile-coins') as HTMLParagraphElement,
     profileLinks: document.getElementById('profile-links') as HTMLDivElement,
     
-    // Events
     eventsList: document.getElementById('events-list') as HTMLDivElement,
     noAccessMessage: document.getElementById('no-access-message') as HTMLDivElement,
     loadingMore: document.getElementById('loading-more') as HTMLDivElement,
     eventDetailContent: document.getElementById('event-detail-content') as HTMLDivElement,
     
-    // Filters
     eventTypes: document.getElementById('event-types') as HTMLDivElement
 };
 
@@ -121,7 +114,6 @@ async function initializeApp(): Promise<void> {
             throw new Error('Не удалось получить данные пользователя из Telegram.');
         }
 
-        // Проверка доступа
         const accessCheck = await fetch(`${CONFIG.BACKEND_URL}/check-access`, {
             method: 'POST',
             headers: {
@@ -142,7 +134,6 @@ async function initializeApp(): Promise<void> {
             throw new Error('Пользователь не найден. Зарегистрируйтесь через Telegram бота.');
         }
 
-        // Авторизация
         const authResponse = await fetch(`${CONFIG.BACKEND_URL}/auth/telegram`, {
             method: 'POST',
             headers: {
@@ -158,11 +149,9 @@ async function initializeApp(): Promise<void> {
         const authData = await authResponse.json();
         currentUser = authData.user;
         
-        // Инициализация интерфейса
         renderHeader(currentUser);
         setupEventListeners();
         
-        // Загрузка мероприятий
         await loadEventTypes();
         await loadEvents(true);
         
@@ -308,6 +297,7 @@ async function loadEvents(initialLoad = false): Promise<void> {
         }
     }
 }
+
 function renderEvents(events: Event[]): void {
     const eventsList = elements.eventsList;
     const eventsListContainer = document.querySelector('.events-list-container') as HTMLElement;
@@ -324,20 +314,19 @@ function renderEvents(events: Event[]): void {
     const eventsHTML = events.map((event, index) => `
         <div class="event-card" data-event-index="${index}">
             <div class="event-content">
-                <div class="event-main">
-                    <h3 class="event-title">${escapeHtml(event.title)}</h3>
-                    <p class="event-short-desc">${escapeHtml(event.short_description)}</p>
+                <div class="event-date-badge">
+                    <span class="event-date-day">${formatEventDate(event.date)}</span>
+                    <span class="event-date-month">${formatEventMonth(event.date)}</span>
                 </div>
-                <div class="event-details">
-                    <div class="event-date-time-location">
-                        <div class="event-date">
-                            <span class="event-date-day">${formatEventDate(event.date)}</span>
-                            <span class="event-date-month">${formatEventMonth(event.date)}</span>
-                        </div>
-                        <div class="event-time-location">
-                            <div class="event-time">🕒 ${event.time.slice(0, 5)}</div>
-                            <div class="event-location">📍 ${escapeHtml(event.location)}</div>
-                        </div>
+                <div class="event-main">
+                    <div class="event-header">
+                        <h3 class="event-title">${escapeHtml(event.title)}</h3>
+                        ${event.event_type ? `<span class="event-type">${escapeHtml(event.event_type)}</span>` : ''}
+                    </div>
+                    <p class="event-short-desc">${escapeHtml(event.short_description)}</p>
+                    <div class="event-details">
+                        <div class="event-detail-item time">🕒 ${event.time.slice(0, 5)}</div>
+                        <div class="event-detail-item location">📍 ${escapeHtml(event.location)}</div>
                     </div>
                 </div>
             </div>
@@ -352,7 +341,6 @@ function renderEvents(events: Event[]): void {
     
     elements.noAccessMessage.style.display = 'none';
     
-    // Добавляем обработчики для новых карточек
     setTimeout(() => {
         const eventCards = document.querySelectorAll('.event-card');
         eventCards.forEach(card => {
@@ -363,7 +351,6 @@ function renderEvents(events: Event[]): void {
         });
     }, 100);
     
-    // Настраиваем бесконечный скролл
     setupInfiniteScroll();
 }
 
@@ -376,7 +363,6 @@ function setupInfiniteScroll(): void {
         });
     });
     
-    // Наблюдаем за последней карточкой
     const eventCards = document.querySelectorAll('.event-card');
     if (eventCards.length > 0) {
         observer.observe(eventCards[eventCards.length - 1]);
@@ -395,48 +381,41 @@ function renderEventDetail(event: Event): void {
     const eventDetailContent = elements.eventDetailContent;
     
     eventDetailContent.innerHTML = `
-        <div class="event-detail-card">
+        <div class="event-detail-hero">
             <div class="event-detail-header">
-                <h1 class="event-detail-title">${escapeHtml(event.title)}</h1>
                 <div class="event-detail-date-badge">
-                    <div class="event-detail-date">
-                        <span class="event-detail-day">${formatEventDate(event.date)}</span>
-                        <span class="event-detail-month">${formatEventMonth(event.date)}</span>
-                    </div>
+                    <span class="event-detail-day">${formatEventDate(event.date)}</span>
+                    <span class="event-detail-month">${formatEventMonth(event.date)}</span>
+                </div>
+                <div class="event-detail-title-section">
+                    <h1 class="event-detail-title">${escapeHtml(event.title)}</h1>
+                    ${event.event_type ? `<span class="event-detail-type">${escapeHtml(event.event_type)}</span>` : ''}
                 </div>
             </div>
             
-            <div class="event-detail-info">
-                <div class="event-detail-item">
-                    <span class="event-detail-icon">🕒</span>
-                    <div class="event-detail-text">
-                        <strong>Время</strong>
-                        <span>${event.time.slice(0, 5)}</span>
+            <div class="event-detail-info-grid">
+                <div class="event-detail-info-item">
+                    <span class="event-detail-info-icon">🕒</span>
+                    <div class="event-detail-info-content">
+                        <div class="event-detail-info-label">Время</div>
+                        <div class="event-detail-info-value">${event.time.slice(0, 5)}</div>
                     </div>
                 </div>
                 
-                <div class="event-detail-item">
-                    <span class="event-detail-icon">📍</span>
-                    <div class="event-detail-text">
-                        <strong>Место</strong>
-                        <span>${escapeHtml(event.location)}</span>
+                <div class="event-detail-info-item">
+                    <span class="event-detail-info-icon">📍</span>
+                    <div class="event-detail-info-content">
+                        <div class="event-detail-info-label">Место</div>
+                        <div class="event-detail-info-value">${escapeHtml(event.location)}</div>
                     </div>
                 </div>
-                
-                ${event.event_type ? `
-                <div class="event-detail-item">
-                    <span class="event-detail-icon">🎯</span>
-                    <div class="event-detail-text">
-                        <strong>Тип мероприятия</strong>
-                        <span>${escapeHtml(event.event_type)}</span>
-                    </div>
-                </div>
-                ` : ''}
             </div>
-            
-            <div class="event-detail-description">
-                <h3>Описание</h3>
-                <p>${escapeHtml(event.description || event.short_description)}</p>
+        </div>
+        
+        <div class="event-detail-content">
+            <div class="event-detail-section">
+                <h3 class="event-detail-section-title">Описание</h3>
+                <p class="event-detail-description">${escapeHtml(event.description || event.short_description)}</p>
             </div>
         </div>
     `;
@@ -457,10 +436,10 @@ function renderNoEvents(): void {
     }
     
     elements.eventsList.innerHTML = `
-        <div class="no-events">
+        <div class="no-events-state">
             <div class="no-events-icon">📅</div>
-            <h3>Нет мероприятий</h3>
-            <p>По выбранным фильтрам мероприятия не найдены</p>
+            <h3 class="no-events-title">Нет мероприятий</h3>
+            <p class="no-events-subtitle">По выбранным фильтрам мероприятия не найдены</p>
         </div>
     `;
 }
@@ -470,7 +449,6 @@ function showFilters(): void {
 }
 
 function applyFilters(): void {
-    // Собираем выбранные типы
     selectedEventTypes = [];
     const checkboxes = elements.eventTypes.querySelectorAll('input[type="checkbox"]:checked');
     checkboxes.forEach((checkbox: Element) => {
@@ -482,7 +460,6 @@ function applyFilters(): void {
     console.log('Применены фильтры:', selectedEventTypes);
     showScreen('main');
     
-    // Сбрасываем пагинацию и загружаем с фильтрами
     currentPage = 0;
     hasMoreEvents = true;
     loadEvents(true);
@@ -493,13 +470,11 @@ function resetFilters(): void {
     renderEventTypes();
     showScreen('main');
     
-    // Сбрасываем пагинацию и загружаем все события
     currentPage = 0;
     hasMoreEvents = true;
     loadEvents(true);
 }
 
-// Profile Functions
 function renderProfile(user: User | null): void {
     if (!user) return;
     
@@ -708,28 +683,23 @@ function showError(message: string): void {
 }
 
 function setupEventListeners(): void {
-    // Header buttons
     elements.filterBtn.addEventListener('click', () => showFilters());
     elements.userAvatar.addEventListener('click', () => showProfile());
     elements.avatarPlaceholderSmall.addEventListener('click', () => showProfile());
     
-    // Navigation
     elements.backToMainBtn.addEventListener('click', () => showScreen('main'));
     elements.backToMainFromProfile.addEventListener('click', () => showScreen('main'));
     elements.backToProfileBtn.addEventListener('click', () => showScreen('profile'));
     elements.backToMainFromFilters.addEventListener('click', () => showScreen('main'));
     
-    // Profile
     elements.profileAvatar.addEventListener('click', () => showEditProfile());
     elements.avatarPlaceholderLarge.addEventListener('click', () => showEditProfile());
     elements.saveProfileBtn.addEventListener('click', saveProfile);
     
-    // Filters
     elements.applyFilters.addEventListener('click', applyFilters);
     elements.resetFilters.addEventListener('click', resetFilters);
 }
 
-// Utility functions
 function formatEventDate(dateString: string): string {
     const date = new Date(dateString);
     return date.getDate().toString();
@@ -747,7 +717,6 @@ function escapeHtml(text: string): string {
     return div.innerHTML;
 }
 
-// Инициализация после загрузки DOM
 document.addEventListener('DOMContentLoaded', () => {
     initializeApp();
 });
