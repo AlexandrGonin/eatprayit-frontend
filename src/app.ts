@@ -671,40 +671,11 @@ async function saveProfile(): Promise<void> {
 }
 
 function showScreen(screen: 'main' | 'profile' | 'edit' | 'event-detail' | 'filters'): void {
-    // Убираем классы для всех экранов
-    const screens = [
-        'events-screen',
-        'event-detail-screen', 
-        'profile-screen',
-        'edit-profile-screen',
-        'filters-screen'
-    ];
-    
-    screens.forEach(screenClass => {
-        const element = document.querySelector(`.${screenClass}`);
-        if (element) {
-            (element as HTMLElement).style.display = 'none';
-        }
-    });
-    
-    // Показываем нужный экран
-    switch (screen) {
-        case 'main':
-            (document.querySelector('.events-screen') as HTMLElement).style.display = 'flex';
-            break;
-        case 'event-detail':
-            (document.querySelector('.event-detail-screen') as HTMLElement).style.display = 'flex';
-            break;
-        case 'profile':
-            (document.querySelector('.profile-screen') as HTMLElement).style.display = 'flex';
-            break;
-        case 'edit':
-            (document.querySelector('.edit-profile-screen') as HTMLElement).style.display = 'flex';
-            break;
-        case 'filters':
-            (document.querySelector('.filters-screen') as HTMLElement).style.display = 'flex';
-            break;
-    }
+    elements.mainScreen.style.display = screen === 'main' ? 'flex' : 'none';
+    elements.profileScreen.style.display = screen === 'profile' ? 'flex' : 'none';
+    elements.editProfileScreen.style.display = screen === 'edit' ? 'flex' : 'none';
+    elements.eventDetailScreen.style.display = screen === 'event-detail' ? 'flex' : 'none';
+    elements.filtersScreen.style.display = screen === 'filters' ? 'flex' : 'none';
 }
 
 function showLoading(show: boolean): void {
