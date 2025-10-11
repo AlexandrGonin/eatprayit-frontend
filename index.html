@@ -15,6 +15,7 @@
 </head>
 <body>
     <div class="app">
+        <!-- Header -->
         <header class="header">
             <div class="user-header">
                 <img id="user-avatar" class="avatar-small" src="" alt="Avatar" style="display: none;">
@@ -24,56 +25,56 @@
             </div>
         </header>
 
+        <!-- Main Content -->
         <main class="main">
-<!-- Main Events Screen -->
-<div id="main-screen" class="events-screen" style="display: flex;">
-    <div class="screen-header">
-        <button id="filter-btn" class="filter-header-button">Фильтры</button>
-        <h2 class="screen-title">Мероприятия</h2>
-        <div class="header-spacer"></div>
-    </div>
-    <div class="screen-content">
-        <div class="events-list-container">
-            <div id="events-list" class="events-list">
-                <!-- События загружаются динамически -->
+            <!-- Main Screen -->
+            <div id="main-screen" class="screen active">
+                <div class="screen-header">
+                    <button id="filter-btn" class="filter-header-button">Фильтры</button>
+                    <h2 class="screen-title">Мероприятия</h2>
+                    <div class="header-spacer"></div>
+                </div>
+                <div class="screen-content">
+                    <div id="events-container">
+                        <div id="events-list" class="events-list">
+                            <!-- Events will be loaded here -->
+                        </div>
+                        <div id="no-access-message" class="no-access-message" style="display: none;">
+                            <div class="no-access-icon">🔒</div>
+                            <h3>Доступ к мероприятиям ограничен</h3>
+                            <p>Чтобы получать информацию об ивентах, необходимо перейти по реферальной ссылке от друга</p>
+                        </div>
+                        <div id="loading-more" class="loading-more" style="display: none;">
+                            <div class="loading-spinner small"></div>
+                            <p>Загрузка...</p>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div id="no-access-message" class="no-access-message" style="display: none;">
-            <div class="no-access-icon">🔒</div>
-            <h3>Доступ к мероприятиям ограничен</h3>
-            <p>Чтобы получать информацию об ивентах, необходимо перейти по реферальной ссылке от друга</p>
-        </div>
-        <div id="loading-more" class="loading-more" style="display: none;">
-            <div class="loading-spinner small"></div>
-            <p>Загрузка...</p>
-        </div>
-    </div>
-</div>
+
             <!-- Event Detail Screen -->
-            <div id="event-detail-screen" class="event-detail-screen" style="display: none;">
+            <div id="event-detail-screen" class="screen">
                 <div class="screen-header">
                     <button id="back-to-main-btn" class="back-button">← Назад</button>
                     <h2 class="screen-title">Мероприятие</h2>
                     <div class="header-spacer"></div>
                 </div>
                 <div class="screen-content">
-                    <div class="event-detail-container">
-                        <div id="event-detail-content" class="event-detail-content">
-                            <!-- Детали события загружаются динамически -->
-                        </div>
+                    <div id="event-detail-content">
+                        <!-- Event details will be loaded here -->
                     </div>
                 </div>
             </div>
 
             <!-- Profile Screen -->
-            <div id="profile-screen" class="profile-screen" style="display: none;">
+            <div id="profile-screen" class="screen">
                 <div class="screen-header">
                     <button id="back-to-main-from-profile" class="back-button">← Назад</button>
                     <h2 class="screen-title">Профиль</h2>
                     <div class="header-spacer"></div>
                 </div>
                 <div class="screen-content">
-                    <div class="profile-view">
+                    <div class="profile-content">
                         <div class="profile-avatar-section">
                             <div class="profile-avatar-large">
                                 <img id="profile-avatar" class="avatar-large" src="" alt="Avatar" style="display: none;">
@@ -114,14 +115,14 @@
             </div>
 
             <!-- Edit Profile Screen -->
-            <div id="edit-profile-screen" class="edit-profile-screen" style="display: none;">
+            <div id="edit-profile-screen" class="screen">
                 <div class="screen-header">
                     <button id="back-to-profile-btn" class="back-button">← Назад</button>
                     <h2 class="screen-title">Редактировать</h2>
                     <div class="header-spacer"></div>
                 </div>
                 <div class="screen-content">
-                    <div class="profile-edit-card">
+                    <div class="edit-profile-content">
                         <h2>Редактировать профиль</h2>
                         
                         <div class="edit-avatar-block">
@@ -180,18 +181,18 @@
             </div>
 
             <!-- Filters Screen -->
-            <div id="filters-screen" class="filters-screen" style="display: none;">
+            <div id="filters-screen" class="screen">
                 <div class="screen-header">
                     <button id="back-to-main-from-filters" class="back-button">← Назад</button>
                     <h2 class="screen-title">Фильтры</h2>
                     <div class="header-spacer"></div>
                 </div>
                 <div class="screen-content">
-                    <div class="filters-container">
+                    <div class="filters-content">
                         <div class="filters-section">
                             <h3>Тип мероприятия</h3>
                             <div id="event-types" class="event-types">
-                                <!-- Типы событий загружаются динамически -->
+                                <!-- Event types will be loaded here -->
                             </div>
                         </div>
                         <div class="filters-actions">

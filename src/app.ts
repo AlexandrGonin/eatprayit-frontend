@@ -646,11 +646,28 @@ async function saveProfile(): Promise<void> {
 }
 
 function showScreen(screen: 'main' | 'profile' | 'edit' | 'event-detail' | 'filters'): void {
-    elements.mainScreen.style.display = screen === 'main' ? 'flex' : 'none';
-    elements.profileScreen.style.display = screen === 'profile' ? 'flex' : 'none';
-    elements.editProfileScreen.style.display = screen === 'edit' ? 'flex' : 'none';
-    elements.eventDetailScreen.style.display = screen === 'event-detail' ? 'flex' : 'none';
-    elements.filtersScreen.style.display = screen === 'filters' ? 'flex' : 'none';
+    // Hide all screens
+    const screens = document.querySelectorAll('.screen');
+    screens.forEach(screen => screen.classList.remove('active'));
+    
+    // Show target screen
+    switch (screen) {
+        case 'main':
+            document.getElementById('main-screen')?.classList.add('active');
+            break;
+        case 'event-detail':
+            document.getElementById('event-detail-screen')?.classList.add('active');
+            break;
+        case 'profile':
+            document.getElementById('profile-screen')?.classList.add('active');
+            break;
+        case 'edit':
+            document.getElementById('edit-profile-screen')?.classList.add('active');
+            break;
+        case 'filters':
+            document.getElementById('filters-screen')?.classList.add('active');
+            break;
+    }
 }
 
 function showLoading(show: boolean): void {
