@@ -76,7 +76,7 @@ const elements = {
     profileUsername: document.getElementById('profile-username') as HTMLParagraphElement,
     profilePosition: document.getElementById('profile-position') as HTMLParagraphElement,
     profileBio: document.getElementById('profile-bio') as HTMLParagraphElement,
-    profileCoins: document.getElementById('profile-coins') as HTMLParagraphElement,
+    profileCoinsBadge: document.getElementById('profile-coins-badge') as HTMLSpanElement,
     profileLinks: document.getElementById('profile-links') as HTMLDivElement,
     
     eventsList: document.getElementById('events-list') as HTMLDivElement,
@@ -181,7 +181,12 @@ function renderHeader(user: User | null): void {
     }
     
     elements.userNameHeader.textContent = user.first_name || 'Пользователь';
-    elements.userCoinsHeader.innerHTML = `🪙 ${user.coins || 0}`;
+    
+    // Обновляем счетчик монет в хедере
+    const coinsCount = elements.userCoinsHeader.querySelector('.coins-count') as HTMLSpanElement;
+    if (coinsCount) {
+        coinsCount.textContent = (user.coins || 0).toString();
+    }
 }
 
 async function loadEventTypes(): Promise<void> {
@@ -300,11 +305,6 @@ async function loadEvents(initialLoad = false): Promise<void> {
 
 function renderEvents(events: Event[]): void {
     const eventsList = elements.eventsList;
-    const eventsListContainer = document.querySelector('.events-list-container') as HTMLElement;
-    
-    if (eventsListContainer) {
-        eventsListContainer.style.display = 'block';
-    }
     
     if (events.length === 0) {
         renderNoEvents();
@@ -422,19 +422,11 @@ function renderEventDetail(event: Event): void {
 }
 
 function renderNoAccessScreen(): void {
-    const eventsListContainer = document.querySelector('.events-list-container') as HTMLElement;
-    if (eventsListContainer) {
-        eventsListContainer.style.display = 'none';
-    }
+    elements.eventsList.style.display = 'none';
     elements.noAccessMessage.style.display = 'block';
 }
 
 function renderNoEvents(): void {
-    const eventsListContainer = document.querySelector('.events-list-container') as HTMLElement;
-    if (eventsListContainer) {
-        eventsListContainer.style.display = 'block';
-    }
-    
     elements.eventsList.innerHTML = `
         <div class="no-events-state">
             <div class="no-events-icon">📅</div>
@@ -457,7 +449,6 @@ function applyFilters(): void {
         }
     });
     
-    console.log('Применены фильтры:', selectedEventTypes);
     showScreen('main');
     
     currentPage = 0;
@@ -493,7 +484,7 @@ function renderProfile(user: User | null): void {
     elements.profileUsername.textContent = user.username ? `@${user.username}` : '';
     elements.profilePosition.textContent = user.position || 'Должность не указана';
     elements.profileBio.textContent = user.bio || 'Пока ничего не рассказал о себе';
-    elements.profileCoins.textContent = `${user.coins || 0} монет`;
+    elements.profileCoinsBadge.textContent = (user.coins || 0).toString();
     
     renderLinks(user.links);
 }

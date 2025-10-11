@@ -21,7 +21,10 @@
                 <img id="user-avatar" class="avatar-small" src="" alt="Avatar" style="display: none;">
                 <div id="avatar-placeholder-small" class="avatar-placeholder-small"></div>
                 <h1 id="user-name-header" class="user-name-header"></h1>
-                <div id="user-coins-header" class="user-coins-header"></div>
+                <div id="user-coins-header" class="user-coins-header">
+                    <span class="coins-icon">💎</span>
+                    <span class="coins-count">0</span>
+                </div>
             </div>
         </header>
 
@@ -80,18 +83,16 @@
                                 <img id="profile-avatar" class="avatar-large" src="" alt="Avatar" style="display: none;">
                                 <div id="avatar-placeholder-large" class="avatar-placeholder-large"></div>
                             </div>
+                            <div class="profile-badge">
+                                <span class="badge-icon">💎</span>
+                                <span id="profile-coins-badge" class="badge-count">0</span>
+                            </div>
                         </div>
                         
                         <div class="profile-info-card">
                             <div class="profile-main-info">
                                 <h2 id="profile-name" class="profile-name"></h2>
                                 <p id="profile-username" class="profile-username"></p>
-                                <div class="profile-stats">
-                                    <div class="stat-item">
-                                        <span class="stat-icon">🪙</span>
-                                        <span id="profile-coins" class="stat-value"></span>
-                                    </div>
-                                </div>
                                 <p id="profile-position" class="profile-position"></p>
                             </div>
                             
@@ -103,7 +104,7 @@
                             </div>
                             
                             <div class="profile-section">
-                                <h3 class="section-title">Ссылки</h3>
+                                <h3 class="section-title">Социальные сети</h3>
                                 <div class="section-content">
                                     <div id="profile-links" class="profile-links">
                                     </div>
