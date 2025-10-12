@@ -29,6 +29,10 @@ interface Event {
     date: string;
     time: string;
     location: string;
+    location_coords?: { // ДОБАВЛЕНО: координаты
+        lat: number;
+        lng: number;
+    } | null;
     event_type?: string;
 }
 
@@ -327,6 +331,7 @@ function renderEvents(events: Event[]): void {
                     <div class="event-details">
                         <div class="event-detail-item time">🕒 ${event.time.slice(0, 5)}</div>
                         <div class="event-detail-item location">📍 ${escapeHtml(event.location)}</div>
+                        ${event.location_coords ? `<div class="event-detail-item location-coords">🗺️ Есть геолокация</div>` : ''}
                     </div>
                 </div>
             </div>
@@ -380,6 +385,26 @@ function showEventDetail(eventIndex: number): void {
 function renderEventDetail(event: Event): void {
     const eventDetailContent = elements.eventDetailContent;
     
+    // ДОБАВЛЕНО: Блок с геолокацией
+    const locationCoordsHTML = event.location_coords 
+        ? `
+            <div class="event-detail-info-item">
+                <span class="event-detail-info-icon">🗺️</span>
+                <div class="event-detail-info-content">
+                    <div class="event-detail-info-label">Геолокация</div>
+                    <div class="event-detail-info-value">
+                        <a href="https://maps.google.com/?q=${event.location_coords.lat},${event.location_coords.lng}" 
+                           target="_blank" 
+                           rel="noopener noreferrer"
+                           class="location-link">
+                            Открыть в картах
+                        </a>
+                    </div>
+                </div>
+            </div>
+        `
+        : '';
+    
     eventDetailContent.innerHTML = `
         <div class="event-detail-hero">
             <div class="event-detail-header">
@@ -409,6 +434,8 @@ function renderEventDetail(event: Event): void {
                         <div class="event-detail-info-value">${escapeHtml(event.location)}</div>
                     </div>
                 </div>
+                
+                ${locationCoordsHTML}
             </div>
         </div>
         

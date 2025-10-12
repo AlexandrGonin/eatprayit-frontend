@@ -1084,3 +1084,47 @@ html, body {
 .events-list::-webkit-scrollbar-thumb:hover {
     background: linear-gradient(135deg, #0056b3, #007bff);
 }
+
+/* Ссылка на карты в деталях события */
+.location-link {
+    color: #00a8ff;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.location-link:hover {
+    color: #007bff;
+    text-decoration: underline;
+}
+
+/* Иконка геолокации в списке событий */
+.event-detail-item.location-coords {
+    color: #00a8ff;
+    font-weight: 600;
+    font-size: 12px;
+}
+
+/* Адаптация грида для дополнительного элемента */
+.event-detail-info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+@media (max-width: 480px) {
+    .event-detail-info-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Улучшение отображения координат в админ-боте */
+.event-detail-info-item .event-detail-info-value {
+    word-break: break-word;
+}
+
+/* Стили для кнопки геометки в админ-боте */
+.event-type-checkbox input[type="checkbox"]:checked {
+    background: linear-gradient(135deg, #007bff, #00a8ff);
+    border-color: #007bff;
+}
