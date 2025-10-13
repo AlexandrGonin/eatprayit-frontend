@@ -1128,3 +1128,185 @@ html, body {
     background: linear-gradient(135deg, #007bff, #00a8ff);
     border-color: #007bff;
 }
+
+/* Теги в списке мероприятий */
+.event-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 8px;
+}
+
+.event-tag {
+    background: rgba(0, 123, 255, 0.2);
+    color: #00a8ff;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.event-tag-more {
+    background: rgba(108, 117, 125, 0.2);
+    color: #6c757d;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+/* Теги в деталях мероприятия */
+.event-detail-tags {
+    margin-bottom: 24px;
+}
+
+.tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.event-detail-tag {
+    background: linear-gradient(135deg, #007bff, #00a8ff);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 16px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* Чекбоксы тегов в фильтрах */
+.event-tag-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    background: linear-gradient(135deg, #1a1a1a 0%, #252525 100%);
+    border: 1px solid #333;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.event-tag-checkbox:hover {
+    border-color: #007bff;
+    transform: translateX(4px);
+}
+
+.event-tag-checkbox input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    border-radius: 6px;
+    border: 2px solid #333;
+    background: #1a1a1a;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.event-tag-checkbox input[type="checkbox"]:checked {
+    background: linear-gradient(135deg, #007bff, #00a8ff);
+    border-color: #007bff;
+}
+
+.event-tag-label {
+    font-size: 15px;
+    font-weight: 600;
+    color: #ffffff;
+    flex: 1;
+}
+
+/* Ссылка на мероприятие */
+.event-link {
+    color: #00a8ff;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.event-link:hover {
+    color: #007bff;
+    text-decoration: underline;
+}
+
+.event-detail-item.event-link {
+    color: #00a8ff;
+    font-weight: 600;
+    font-size: 12px;
+}
+
+/* Скроллинг для карточки мероприятия */
+.event-detail-container {
+    flex: 1;
+    overflow-y: auto;
+    background: #0a0a0a;
+    height: calc(100vh - 70px);
+}
+
+/* Адаптация грида для дополнительных элементов */
+.event-detail-info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+@media (max-width: 480px) {
+    .event-detail-info-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .event-tags {
+        gap: 4px;
+    }
+    
+    .event-tag {
+        font-size: 10px;
+        padding: 3px 6px;
+    }
+}
+
+/* Улучшение отображения длинных тегов */
+.event-tag {
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.event-detail-tag {
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.event-detail-container {
+    flex: 1;
+    overflow-y: auto;
+    background: #0a0a0a;
+    height: calc(100vh - 70px);
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Убедимся что контент внутри может скроллиться */
+.event-detail-content {
+    padding: 20px;
+}
+
+/* Улучшаем скроллбар для деталей мероприятия */
+.event-detail-container::-webkit-scrollbar {
+    width: 4px;
+}
+
+.event-detail-container::-webkit-scrollbar-track {
+    background: #1a1a1a;
+}
+
+.event-detail-container::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #007bff, #00a8ff);
+    border-radius: 2px;
+}
+
+.event-detail-container::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #0056b3, #007bff);
+}

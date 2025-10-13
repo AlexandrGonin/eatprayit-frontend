@@ -182,28 +182,27 @@
             </div>
 
             <!-- Filters Screen -->
-            <div id="filters-screen" class="screen">
-                <div class="screen-header">
-                    <button id="back-to-main-from-filters" class="back-button">← Назад</button>
-                    <h2 class="screen-title">Фильтры</h2>
-                    <div class="header-spacer"></div>
-                </div>
-                <div class="screen-content">
-                    <div class="filters-content">
-                        <div class="filters-section">
-                            <h3>Тип мероприятия</h3>
-                            <div id="event-types" class="event-types">
-                                <!-- Event types will be loaded here -->
-                            </div>
-                        </div>
-                        <div class="filters-actions">
-                            <button id="apply-filters" class="save-profile-btn">Применить фильтры</button>
-                            <button id="reset-filters" class="secondary-button">Сбросить фильтры</button>
-                        </div>
-                    </div>
+<div id="filters-screen" class="screen">
+    <div class="screen-header">
+        <button id="back-to-main-from-filters" class="back-button">← Назад</button>
+        <h2 class="screen-title">Фильтры</h2>
+        <div class="header-spacer"></div>
+    </div>
+    <div class="screen-content">
+        <div class="filters-content">
+            <div class="filters-section">
+                <h3>Теги мероприятий</h3>
+                <div id="event-tags" class="event-tags">
+                    <!-- Теги будут загружены здесь -->
                 </div>
             </div>
-
+            <div class="filters-actions">
+                <button id="apply-filters" class="save-profile-btn">Применить фильтры</button>
+                <button id="reset-filters" class="secondary-button">Сбросить фильтры</button>
+            </div>
+        </div>
+    </div>
+</div>
             <!-- Loading Screen -->
             <div id="loading-section" class="loading-section">
                 <div class="loading-spinner"></div>

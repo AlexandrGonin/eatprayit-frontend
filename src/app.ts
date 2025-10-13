@@ -29,17 +29,22 @@ interface Event {
     date: string;
     time: string;
     location: string;
-    location_coords?: { // ДОБАВЛЕНО: координаты
+    location_coords?: {
         lat: number;
         lng: number;
     } | null;
-    event_type?: string;
+    event_link?: string; // ДОБАВЛЕНО: ссылка на мероприятие
+    tags?: string[]; // ИЗМЕНЕНО: вместо event_type теперь теги
 }
 
 function getElement(id: string): HTMLElement {
     const element = document.getElementById(id);
     if (!element) {
-        throw new Error(`Element with id '${id}' not found`);
+        console.error(`Element with id '${id}' not found`);
+        // Возвращаем пустой div вместо ошибки
+        const emptyDiv = document.createElement('div');
+        emptyDiv.id = id;
+        return emptyDiv;
     }
     return element;
 }
@@ -88,13 +93,13 @@ const elements = {
     loadingMore: document.getElementById('loading-more') as HTMLDivElement,
     eventDetailContent: document.getElementById('event-detail-content') as HTMLDivElement,
     
-    eventTypes: document.getElementById('event-types') as HTMLDivElement
+    eventTags: document.getElementById('event-tags') as HTMLDivElement
 };
 
 let currentUser: User | null = null;
 let currentEvents: Event[] = [];
-let allEventTypes: string[] = [];
-let selectedEventTypes: string[] = [];
+let allEventTags: string[] = []; // ИЗМЕНЕНО: теперь теги
+let selectedEventTags: string[] = []; // ИЗМЕНЕНО: теперь теги
 let currentPage = 0;
 const EVENTS_PER_PAGE = 20;
 let isLoading = false;
@@ -156,7 +161,7 @@ async function initializeApp(): Promise<void> {
         renderHeader(currentUser);
         setupEventListeners();
         
-        await loadEventTypes();
+        await loadEventTags(); // ИЗМЕНЕНО: теперь теги
         await loadEvents(true);
         
         showLoading(false);
@@ -193,42 +198,42 @@ function renderHeader(user: User | null): void {
     }
 }
 
-async function loadEventTypes(): Promise<void> {
+async function loadEventTags(): Promise<void> {
     try {
         if (!currentUser) return;
         
-        const response = await fetch(`${CONFIG.BACKEND_URL}/events/types/${currentUser.telegram_id}`);
+        const response = await fetch(`${CONFIG.BACKEND_URL}/events/tags/${currentUser.telegram_id}`);
         
         if (!response.ok) {
-            throw new Error('Ошибка загрузки типов событий');
+            throw new Error('Ошибка загрузки тегов событий');
         }
         
         const data = await response.json();
-        allEventTypes = data.types || [];
-        renderEventTypes();
+        allEventTags = data.tags || [];
+        renderEventTags();
         
     } catch (error) {
-        console.error('Ошибка загрузки типов событий:', error);
-        showError('Не удалось загрузить типы мероприятий');
+        console.error('Ошибка загрузки тегов событий:', error);
+        showError('Не удалось загрузить теги мероприятий');
     }
 }
 
-function renderEventTypes(): void {
-    const eventTypesContainer = elements.eventTypes;
+function renderEventTags(): void {
+    const eventTagsContainer = elements.eventTags;
     
-    if (!allEventTypes || allEventTypes.length === 0) {
-        eventTypesContainer.innerHTML = '<p class="no-links">Типы мероприятий не найдены</p>';
+    if (!allEventTags || allEventTags.length === 0) {
+        eventTagsContainer.innerHTML = '<p class="no-links">Теги мероприятий не найдены</p>';
         return;
     }
     
-    const typesHTML = allEventTypes.map(type => `
-        <label class="event-type-checkbox">
-            <input type="checkbox" value="${escapeHtml(type)}" ${selectedEventTypes.includes(type) ? 'checked' : ''}>
-            <span class="event-type-label">${escapeHtml(type)}</span>
+    const tagsHTML = allEventTags.map(tag => `
+        <label class="event-tag-checkbox">
+            <input type="checkbox" value="${escapeHtml(tag)}" ${selectedEventTags.includes(tag) ? 'checked' : ''}>
+            <span class="event-tag-label">${escapeHtml(tag)}</span>
         </label>
     `).join('');
     
-    eventTypesContainer.innerHTML = typesHTML;
+    eventTagsContainer.innerHTML = tagsHTML;
 }
 
 async function loadEvents(initialLoad = false): Promise<void> {
@@ -255,9 +260,9 @@ async function loadEvents(initialLoad = false): Promise<void> {
             limit: EVENTS_PER_PAGE.toString()
         });
         
-        if (selectedEventTypes.length > 0) {
-            selectedEventTypes.forEach(type => {
-                params.append('types', type);
+        if (selectedEventTags.length > 0) {
+            selectedEventTags.forEach(tag => {
+                params.append('tags', tag);
             });
         }
         
@@ -315,7 +320,18 @@ function renderEvents(events: Event[]): void {
         return;
     }
     
-    const eventsHTML = events.map((event, index) => `
+    const eventsHTML = events.map((event, index) => {
+        // Отображаем максимум 5 тегов, остальные скрываем
+        const displayedTags = event.tags ? event.tags.slice(0, 5) : [];
+        const hiddenTagsCount = event.tags ? event.tags.length - 5 : 0;
+        const tagsHTML = displayedTags.length > 0 
+            ? `<div class="event-tags">
+                 ${displayedTags.map(tag => `<span class="event-tag">${escapeHtml(tag)}</span>`).join('')}
+                 ${hiddenTagsCount > 0 ? `<span class="event-tag-more">+${hiddenTagsCount}</span>` : ''}
+               </div>`
+            : '';
+
+        return `
         <div class="event-card" data-event-index="${index}">
             <div class="event-content">
                 <div class="event-date-badge">
@@ -325,18 +341,20 @@ function renderEvents(events: Event[]): void {
                 <div class="event-main">
                     <div class="event-header">
                         <h3 class="event-title">${escapeHtml(event.title)}</h3>
-                        ${event.event_type ? `<span class="event-type">${escapeHtml(event.event_type)}</span>` : ''}
                     </div>
+                    ${tagsHTML}
                     <p class="event-short-desc">${escapeHtml(event.short_description)}</p>
                     <div class="event-details">
                         <div class="event-detail-item time">🕒 ${event.time.slice(0, 5)}</div>
                         <div class="event-detail-item location">📍 ${escapeHtml(event.location)}</div>
                         ${event.location_coords ? `<div class="event-detail-item location-coords">🗺️ Есть геолокация</div>` : ''}
+                        ${event.event_link ? `<div class="event-detail-item event-link">🔗 Есть ссылка</div>` : ''}
                     </div>
                 </div>
             </div>
         </div>
-    `).join('');
+        `;
+    }).join('');
     
     if (currentPage === 1) {
         eventsList.innerHTML = eventsHTML;
@@ -385,6 +403,36 @@ function showEventDetail(eventIndex: number): void {
 function renderEventDetail(event: Event): void {
     const eventDetailContent = elements.eventDetailContent;
     
+    // ДОБАВЛЕНО: Блок с тегами
+    const tagsHTML = event.tags && event.tags.length > 0 
+        ? `<div class="event-detail-tags">
+             <h3 class="event-detail-section-title">Теги</h3>
+             <div class="tags-container">
+               ${event.tags.map(tag => `<span class="event-detail-tag">${escapeHtml(tag)}</span>`).join('')}
+             </div>
+           </div>`
+        : '';
+
+    // ДОБАВЛЕНО: Блок с ссылкой на мероприятие
+    const eventLinkHTML = event.event_link 
+        ? `
+            <div class="event-detail-info-item">
+                <span class="event-detail-info-icon">🔗</span>
+                <div class="event-detail-info-content">
+                    <div class="event-detail-info-label">Ссылка на мероприятие</div>
+                    <div class="event-detail-info-value">
+                        <a href="${event.event_link}" 
+                           target="_blank" 
+                           rel="noopener noreferrer"
+                           class="event-link">
+                            Перейти на сайт мероприятия
+                        </a>
+                    </div>
+                </div>
+            </div>
+        `
+        : '';
+
     // ДОБАВЛЕНО: Блок с геолокацией
     const locationCoordsHTML = event.location_coords 
         ? `
@@ -406,43 +454,47 @@ function renderEventDetail(event: Event): void {
         : '';
     
     eventDetailContent.innerHTML = `
-        <div class="event-detail-hero">
-            <div class="event-detail-header">
-                <div class="event-detail-date-badge">
-                    <span class="event-detail-day">${formatEventDate(event.date)}</span>
-                    <span class="event-detail-month">${formatEventMonth(event.date)}</span>
+        <div class="event-detail-container">
+            <div class="event-detail-hero">
+                <div class="event-detail-header">
+                    <div class="event-detail-date-badge">
+                        <span class="event-detail-day">${formatEventDate(event.date)}</span>
+                        <span class="event-detail-month">${formatEventMonth(event.date)}</span>
+                    </div>
+                    <div class="event-detail-title-section">
+                        <h1 class="event-detail-title">${escapeHtml(event.title)}</h1>
+                    </div>
                 </div>
-                <div class="event-detail-title-section">
-                    <h1 class="event-detail-title">${escapeHtml(event.title)}</h1>
-                    ${event.event_type ? `<span class="event-detail-type">${escapeHtml(event.event_type)}</span>` : ''}
+                
+                <div class="event-detail-info-grid">
+                    <div class="event-detail-info-item">
+                        <span class="event-detail-info-icon">🕒</span>
+                        <div class="event-detail-info-content">
+                            <div class="event-detail-info-label">Время</div>
+                            <div class="event-detail-info-value">${event.time.slice(0, 5)}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="event-detail-info-item">
+                        <span class="event-detail-info-icon">📍</span>
+                        <div class="event-detail-info-content">
+                            <div class="event-detail-info-label">Место</div>
+                            <div class="event-detail-info-value">${escapeHtml(event.location)}</div>
+                        </div>
+                    </div>
+                    
+                    ${eventLinkHTML}
+                    ${locationCoordsHTML}
                 </div>
             </div>
             
-            <div class="event-detail-info-grid">
-                <div class="event-detail-info-item">
-                    <span class="event-detail-info-icon">🕒</span>
-                    <div class="event-detail-info-content">
-                        <div class="event-detail-info-label">Время</div>
-                        <div class="event-detail-info-value">${event.time.slice(0, 5)}</div>
-                    </div>
+            <div class="event-detail-content">
+                <div class="event-detail-section">
+                    <h3 class="event-detail-section-title">Описание</h3>
+                    <p class="event-detail-description">${escapeHtml(event.description || event.short_description)}</p>
                 </div>
                 
-                <div class="event-detail-info-item">
-                    <span class="event-detail-info-icon">📍</span>
-                    <div class="event-detail-info-content">
-                        <div class="event-detail-info-label">Место</div>
-                        <div class="event-detail-info-value">${escapeHtml(event.location)}</div>
-                    </div>
-                </div>
-                
-                ${locationCoordsHTML}
-            </div>
-        </div>
-        
-        <div class="event-detail-content">
-            <div class="event-detail-section">
-                <h3 class="event-detail-section-title">Описание</h3>
-                <p class="event-detail-description">${escapeHtml(event.description || event.short_description)}</p>
+                ${tagsHTML}
             </div>
         </div>
     `;
@@ -468,11 +520,12 @@ function showFilters(): void {
 }
 
 function applyFilters(): void {
-    selectedEventTypes = [];
-    const checkboxes = elements.eventTypes.querySelectorAll('input[type="checkbox"]:checked');
+    selectedEventTags = [];
+    const checkboxes = elements.eventTags.querySelectorAll('input[type="checkbox"]:checked');
     checkboxes.forEach((checkbox: Element) => {
-        if (checkbox instanceof HTMLInputElement) {
-            selectedEventTypes.push(checkbox.value);
+        const inputElement = checkbox as HTMLInputElement;
+        if (inputElement.checked) {
+            selectedEventTags.push(inputElement.value);
         }
     });
     
@@ -484,8 +537,15 @@ function applyFilters(): void {
 }
 
 function resetFilters(): void {
-    selectedEventTypes = [];
-    renderEventTypes();
+    selectedEventTags = [];
+    
+    // Сбрасываем все чекбоксы
+    const checkboxes = elements.eventTags.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach((checkbox: Element) => {
+        const inputElement = checkbox as HTMLInputElement;
+        inputElement.checked = false;
+    });
+    
     showScreen('main');
     
     currentPage = 0;
